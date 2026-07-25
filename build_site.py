@@ -5,6 +5,7 @@ Publish a book's podcast audio to GitHub Releases and refresh manifest.json.
 Usage:
     python build_site.py "Show-your-work"                 # one book
     python build_site.py --all                            # every book under BOOKS_ROOT
+    python build_site.py --all --no-shrink                # upload already-compressed files as-is
 
 Audio (GBs) goes to Releases (one release per book, tag=book-<slug>); the repo
 only holds index.html + manifest.json. Idempotent: re-running re-uploads with
@@ -69,7 +70,7 @@ def audio_files(book_dir: Path, lang: str) -> list[Path]:
     return sorted(d.glob("*.m4a"), key=lambda p: (not p.stem.startswith("whole_book"), p.name))
 
 
-def publish_book(book_name: str, repo: str) -> dict | None:
+def publish_book(book_name: str, repo: str, do_shrink: bool = True) -> dict | None:
     book_dir = BOOKS_ROOT / book_name
     files = {lang: audio_files(book_dir, lang) for lang in LANGS}
     if not any(files.values()):
@@ -89,11 +90,14 @@ def publish_book(book_name: str, repo: str) -> dict | None:
 
     all_paths = [p for ps in files.values() for p in ps]
     with tempfile.TemporaryDirectory() as tmp:
-        print(f"  shrinking {len(all_paths)} file(s) to 64k mono AAC ...")
-        shrunk = [shrink(p, Path(tmp)) for p in all_paths]
+        if do_shrink:
+            print(f"  shrinking {len(all_paths)} file(s) to 64k mono AAC ...")
+            uploads = [shrink(p, Path(tmp)) for p in all_paths]
+        else:
+            uploads = all_paths  # already compressed — upload as-is (lossless)
         print(f"  uploading to release {tag} ...")
         subprocess.run(
-            ["gh", "release", "upload", tag, "--repo", repo, "--clobber", *map(str, shrunk)],
+            ["gh", "release", "upload", tag, "--repo", repo, "--clobber", *map(str, uploads)],
             check=True,
         )
 
@@ -113,6 +117,8 @@ def load_manifest() -> dict:
 
 def main() -> None:
     args = sys.argv[1:]
+    do_shrink = "--no-shrink" not in args
+    args = [a for a in args if a != "--no-shrink"]
     if not args:
         sys.exit(__doc__)
     repo = owner_repo()
@@ -125,7 +131,7 @@ def main() -> None:
     manifest = load_manifest()
     by_slug = {b["slug"]: b for b in manifest["books"]}
     for name in names:
-        entry = publish_book(name, repo)
+        entry = publish_book(name, repo, do_shrink)
         if entry:
             by_slug[entry["slug"]] = entry
 
