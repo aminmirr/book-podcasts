@@ -13,5 +13,7 @@ python build_site.py --all              # every book with audio
 git add manifest.json && git commit -m "publish" && git push
 ```
 
-`build_site.py` uploads each book's `.m4a` files as Release assets and rewrites
-its `manifest.json` entry. Then commit the manifest — the audio never enters git.
+`build_site.py` transcodes each book's `.m4a` files to 64k mono AAC (transparent
+for speech, ~4× smaller than NotebookLM's 256k stereo), uploads them as Release
+assets, and rewrites its `manifest.json` entry. Then commit the manifest — the
+audio never enters git. Requires `ffmpeg`.
