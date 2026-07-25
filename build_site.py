@@ -15,6 +15,7 @@ import json
 import re
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 BOOKS_ROOT = Path.home() / "Downloads" / "notebookLM"
@@ -48,6 +49,18 @@ def episode_title(filename: str) -> str:
     return stem.replace("-", " ").strip() or filename
 
 
+def shrink(src: Path, dst_dir: Path) -> Path:
+    """Transcode to 64k mono AAC (transparent for speech, ~4x smaller). Keeps the
+    filename so the release asset name / URL stays stable."""
+    dst = dst_dir / src.name
+    subprocess.run(
+        ["ffmpeg", "-y", "-v", "error", "-i", str(src),
+         "-c:a", "aac", "-b:a", "64k", "-ac", "1", "-movflags", "+faststart", str(dst)],
+        check=True,
+    )
+    return dst
+
+
 def audio_files(book_dir: Path, lang: str) -> list[Path]:
     d = book_dir / "output_podcast" / lang
     if not d.is_dir():
@@ -75,11 +88,14 @@ def publish_book(book_name: str, repo: str) -> dict | None:
     )
 
     all_paths = [p for ps in files.values() for p in ps]
-    print(f"  uploading {len(all_paths)} file(s) to release {tag} ...")
-    subprocess.run(
-        ["gh", "release", "upload", tag, "--repo", repo, "--clobber", *map(str, all_paths)],
-        check=True,
-    )
+    with tempfile.TemporaryDirectory() as tmp:
+        print(f"  shrinking {len(all_paths)} file(s) to 64k mono AAC ...")
+        shrunk = [shrink(p, Path(tmp)) for p in all_paths]
+        print(f"  uploading to release {tag} ...")
+        subprocess.run(
+            ["gh", "release", "upload", tag, "--repo", repo, "--clobber", *map(str, shrunk)],
+            check=True,
+        )
 
     base = f"https://github.com/{repo}/releases/download/{tag}"
     episodes = {
