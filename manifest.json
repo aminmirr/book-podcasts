@@ -1,0 +1,58 @@
+{
+  "books": [
+    {
+      "slug": "show-your-work",
+      "title": "Show your work",
+      "episodes": {
+        "English": [
+          {
+            "title": "Full-book overview",
+            "url": "https://github.com/mirlohiwork-ops/book-podcasts/releases/download/book-show-your-work/whole_book_en.m4a"
+          },
+          {
+            "title": "A New Way of Operating",
+            "url": "https://github.com/mirlohiwork-ops/book-podcasts/releases/download/book-show-your-work/00-A-New-Way-of-Operating_en.m4a"
+          },
+          {
+            "title": "Think Process Not Product",
+            "url": "https://github.com/mirlohiwork-ops/book-podcasts/releases/download/book-show-your-work/01-2-Think-Process-Not-Product_en.m4a"
+          },
+          {
+            "title": "Open Up Your Cabinet of Curiosities",
+            "url": "https://github.com/mirlohiwork-ops/book-podcasts/releases/download/book-show-your-work/02-4-Open-Up-Your-Cabinet-of-Curiosities_en.m4a"
+          },
+          {
+            "title": "Teach What You Know",
+            "url": "https://github.com/mirlohiwork-ops/book-podcasts/releases/download/book-show-your-work/03-6-Teach-What-You-Know_en.m4a"
+          },
+          {
+            "title": "Learn to Take a Punch",
+            "url": "https://github.com/mirlohiwork-ops/book-podcasts/releases/download/book-show-your-work/04-8-Learn-to-Take-a-Punch_en.m4a"
+          },
+          {
+            "title": "Stick Around",
+            "url": "https://github.com/mirlohiwork-ops/book-podcasts/releases/download/book-show-your-work/05-10-Stick-Around_en.m4a"
+          }
+        ],
+        "Persian": [
+          {
+            "title": "Full-book overview",
+            "url": "https://github.com/mirlohiwork-ops/book-podcasts/releases/download/book-show-your-work/whole_book_fa.m4a"
+          },
+          {
+            "title": "Open Up Your Cabinet of Curiosities",
+            "url": "https://github.com/mirlohiwork-ops/book-podcasts/releases/download/book-show-your-work/02-4-Open-Up-Your-Cabinet-of-Curiosities_fa.m4a"
+          },
+          {
+            "title": "Teach What You Know",
+            "url": "https://github.com/mirlohiwork-ops/book-podcasts/releases/download/book-show-your-work/03-6-Teach-What-You-Know_fa.m4a"
+          },
+          {
+            "title": "Learn to Take a Punch",
+            "url": "https://github.com/mirlohiwork-ops/book-podcasts/releases/download/book-show-your-work/04-8-Learn-to-Take-a-Punch_fa.m4a"
+          }
+        ]
+      }
+    }
+  ]
+}
