@@ -130,21 +130,36 @@ def load_manifest() -> dict:
 
 
 META = SITE_DIR / "books.meta.json"
-META_FIELDS = ("title_en", "title_fa", "author", "cover", "note_en", "note_fa")
+
+
+def chapter_key(url_or_name: str) -> str:
+    """Stable per-chapter key shared by the EN and FA files (drops _en/_fa + .m4a)."""
+    name = url_or_name.rsplit("/", 1)[-1]
+    stem = name[:-4] if name.endswith(".m4a") else name
+    return re.sub(r"_(en|fa)$", "", stem)
 
 
 def seed_meta(manifest: dict) -> None:
-    """Ensure books.meta.json has a (hand-editable) stub per book. Adds missing
-    slugs only — NEVER overwrites existing entries, so edits always survive."""
+    """Ensure books.meta.json has hand-editable stubs (book fields, up to-3 categories,
+    and a per-chapter title map). Uses setdefault everywhere — it only ADDS missing
+    keys and NEVER overwrites an existing value, so your edits always survive a republish."""
     meta = json.loads(META.read_text()) if META.exists() else {}
-    added = 0
     for b in manifest["books"]:
-        if b["slug"] not in meta:
-            meta[b["slug"]] = {"title_en": b["title"], **{k: "" for k in META_FIELDS[1:]}}
-            added += 1
-    if added or not META.exists():
-        META.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n")
-    print(f"books.meta.json: {len(meta)} book(s), {added} new stub(s) (existing edits untouched)")
+        e = meta.setdefault(b["slug"], {})
+        e.setdefault("title_en", b["title"])
+        for k in ("title_fa", "author", "cover", "note_en", "note_fa"):
+            e.setdefault(k, "")
+        e.setdefault("categories", [])          # up to 3 strings
+        chs = e.setdefault("chapters", {})       # chapter_key -> {title_en, title_fa}
+        for eps in b["episodes"].values():
+            for ep in eps:
+                if "whole_book" in ep["url"]:
+                    continue
+                c = chs.setdefault(chapter_key(ep["url"]), {})
+                c.setdefault("title_en", ep["title"])
+                c.setdefault("title_fa", "")
+    META.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n")
+    print(f"books.meta.json: {len(meta)} book(s) (existing edits untouched)")
 
 
 def main() -> None:

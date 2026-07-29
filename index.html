@@ -82,6 +82,28 @@ html[data-lang="fa"] .stat b{ font-family:'Vazirmatn',sans-serif; font-weight:80
 .book-note{ margin-top:14px; max-width:60ch; font-size:.95rem;
   color:color-mix(in srgb,var(--paper) 74%,var(--ink)); }
 
+/* categories — filter bar + per-book chips */
+.cats{ display:flex; flex-wrap:wrap; gap:9px; padding-block:8px 0; }
+.cats[hidden]{ display:none; }
+.cat{ font:inherit; font-size:.8rem; cursor:pointer; background:none;
+  color:var(--haze); border:1px solid var(--line); border-radius:999px;
+  padding:6px 14px; transition:color .2s,border-color .2s,background .2s; }
+.cat:hover{ color:var(--paper); border-color:var(--haze); }
+.cat[aria-pressed="true"]{ color:var(--ink); background:var(--accent); border-color:var(--accent); }
+.cat:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+html[data-lang="fa"] .cat{ font-family:'Vazirmatn',sans-serif; }
+.book-cats{ display:flex; flex-wrap:wrap; gap:7px; margin-top:14px; }
+.book-cats .cat{ font-size:.72rem; padding:4px 11px; }
+
+/* whole-book: play + download side by side */
+.book-side{ display:flex; gap:10px; align-items:center; }
+.whole-dl{ display:inline-flex; align-items:center; justify-content:center;
+  width:40px; height:40px; flex:none; color:var(--haze); text-decoration:none;
+  border:1px solid var(--line); border-radius:999px; transition:color .2s,border-color .2s; }
+.whole-dl:hover{ color:var(--accent); border-color:var(--accent); }
+.whole-dl:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+.whole-dl svg{ width:14px; height:14px; fill:currentColor; }
+
 .whole{ display:inline-flex; align-items:center; justify-content:center; gap:10px;
   font:inherit; font-size:.9rem; cursor:pointer; white-space:nowrap;
   background:none; color:var(--paper); border:1px solid var(--line);
@@ -197,6 +219,7 @@ footer a:hover{ color:var(--paper); }
     </div>
   </section>
 
+  <nav class="cats" id="cats" role="group" aria-label="Categories" hidden></nav>
   <main><div id="list"></div><div class="msg" id="msg" data-i18n="loading"></div></main>
 
   <footer class="mono">
@@ -225,6 +248,7 @@ fa:{ mark:"خلاصه‌های صوتی",
   standfirst:"خلاصه‌های صوتیِ ساخته‌شده با هوش مصنوعی (NotebookLM). یک اپیزودِ کامل برای مرور کل کتاب، و یک اپیزود جدا برای هر فصل وقتی می‌خواهی عمیق‌تر بروی. جای خواندنِ خودِ کتاب را نمی‌گیرد.",
   sBooks:"کتاب", sEps:"اپیزود", sListen:"زمان شنیدن",
   whole:"نسخه‌ی کامل", chapters:"فصل", showToc:"فهرست فصل‌ها", hideToc:"بستن فهرست",
+  all:"همه", dlWhole:"دانلود نسخه‌ی کامل",
   play:"پخش", pause:"توقف", prev:"قبلی", next:"بعدی", close:"بستن", download:"دانلود",
   missing:"هنوز آماده نیست",
   loading:"در حال بارگذاری…",
@@ -239,6 +263,7 @@ en:{ mark:"Audio summaries",
   standfirst:"AI-generated audio summaries (made with NotebookLM). One full episode to get the whole book, and a separate episode per chapter when you want to go deeper. Not a substitute for reading the book itself.",
   sBooks:"books", sEps:"episodes", sListen:"listening time",
   whole:"Full summary", chapters:"chapters", showToc:"Chapter list", hideToc:"Hide chapters",
+  all:"All", dlWhole:"Download full summary",
   play:"Play", pause:"Pause", prev:"Previous", next:"Next", close:"Close", download:"Download",
   missing:"Not ready yet",
   loading:"Loading…",
@@ -263,6 +288,15 @@ const num = n => LANG==="fa" ? n.toLocaleString("fa-IR") : n.toLocaleString("en-
 const esc = s => String(s??"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const langKey = ()=> LANG==="fa" ? "Persian" : "English";
 const isWhole = ep => /whole_book/.test(ep.url);
+const chapKey = url => url.split("/").pop().replace(/\.m4a$/,"").replace(/_(en|fa)$/,"");
+function chTitle(slug, ep){
+  const chs = META[slug] && META[slug].chapters;
+  const ov = chs && chs[chapKey(ep.url)];
+  if(ov){ return (LANG==="fa" ? ov.title_fa : ov.title_en) || ov.title_en || ep.title; }
+  return ep.title;
+}
+const bookCats = slug => (META[slug] && META[slug].categories) || [];
+let CAT = null;   // active category filter
 
 function dur(secs){
   const mins = Math.round((secs||0)/60);
@@ -285,6 +319,7 @@ function clock(s){
 const ICON_PLAY='<svg viewBox="0 0 16 16"><path d="M3 1.5v13l11-6.5z"/></svg>';
 const ICON_PAUSE='<svg viewBox="0 0 16 16"><path d="M3 1.5h4v13H3zM9 1.5h4v13H9z"/></svg>';
 const ICON_CHEV='<svg viewBox="0 0 16 16"><path d="M8 11 2 4h12z"/></svg>';
+const ICON_DL='<svg viewBox="0 0 16 16"><path d="M7.2 1h1.6v7.1l2.5-2.5 1.1 1.1L8 11.3 3.6 6.8l1.1-1.1 2.5 2.5zM3 13h10v1.5H3z"/></svg>';
 
 /* split a book's episodes for the current language into {full, chapters[]} */
 function split(book){
@@ -320,11 +355,31 @@ function render(){
   $("#sListen").textContent=dur(listen);
   $("#stats").hidden=false; $("#msg").hidden=true;
 
+  renderCats(books);
+  const shown = CAT ? books.filter(b=>bookCats(b.slug).includes(CAT)) : books;
+
   const open = new Set($$(".toc-toggle[aria-expanded='true']").map(b=>b.dataset.slug));
   for(const k in refs) delete refs[k];
   $("#list").innerHTML="";
-  books.forEach(b=>$("#list").append(bookEl(b, open.has(b.slug))));
+  shown.forEach(b=>$("#list").append(bookEl(b, open.has(b.slug))));
   paintSpines();
+}
+
+function renderCats(books){
+  const all = [...new Set(books.flatMap(b=>bookCats(b.slug)))].sort((a,b)=>a.localeCompare(b));
+  const nav = $("#cats");
+  if(!all.length){ nav.hidden=true; nav.innerHTML=""; return; }
+  nav.hidden=false;
+  const chip = (label,val,on)=>{
+    const b=document.createElement("button");
+    b.type="button"; b.className="cat"; b.textContent=label;
+    b.setAttribute("aria-pressed",String(on));
+    b.addEventListener("click",()=>{ CAT = (CAT===val)?null:val; render(); });
+    return b;
+  };
+  nav.innerHTML="";
+  nav.append(chip(t().all,null,CAT===null));
+  all.forEach(c=>nav.append(chip(c,c,CAT===c)));
 }
 
 function bookEl(b, openToc){
@@ -348,6 +403,7 @@ function bookEl(b, openToc){
           ${titleFa?`<p class="book-title-fa">${esc(titleFa)}</p>`:""}
           ${author?`<p class="book-author">${esc(author)}</p>`:""}
           ${note?`<p class="book-note">${esc(note)}</p>`:""}
+          <div class="book-cats"></div>
         </div>
       </div>
       <div class="book-side"></div>
@@ -365,7 +421,19 @@ function bookEl(b, openToc){
 
   const R = refs[b.slug] = { segs:[], fills:[], chs:[], whole:null };
 
-  // whole-book button
+  // per-book category chips (clickable → filter)
+  const catBox=$(".book-cats",el), cats=bookCats(b.slug).slice(0,3);
+  if(cats.length){
+    cats.forEach(c=>{
+      const cb=document.createElement("button");
+      cb.type="button"; cb.className="cat"; cb.textContent=c;
+      cb.setAttribute("aria-pressed",String(CAT===c));
+      cb.addEventListener("click",()=>{ CAT=(CAT===c)?null:c; render(); scrollTo({top:0,behavior:"smooth"}); });
+      catBox.append(cb);
+    });
+  } else catBox.remove();
+
+  // whole-book: play + download
   const side=$(".book-side",el);
   if(full){
     const w=document.createElement("button");
@@ -376,6 +444,10 @@ function bookEl(b, openToc){
       start([mkTrack(b,"full",full,0)],0);
     });
     side.append(w); R.whole=w;
+    const dl=document.createElement("a");
+    dl.className="whole-dl"; dl.href=full.url; dl.setAttribute("download","");
+    dl.title=L.dlWhole; dl.setAttribute("aria-label",L.dlWhole); dl.innerHTML=ICON_DL;
+    side.append(dl);
   } else {
     side.innerHTML=`<span class="mono missing">${esc(L.missing)}</span>`;
   }
@@ -384,10 +456,11 @@ function bookEl(b, openToc){
   const spine=$(".spine",el), toc=$(".toc",el);
   const tracks=chapters.map((c,i)=>mkTrack(b,"chapter",c,i));
   chapters.forEach((c,i)=>{
+    const title=chTitle(b.slug,c);
     const seg=document.createElement("button");
     seg.type="button"; seg.className="seg";
     seg.style.flexGrow=String(Math.max((c.seconds||60)/60,1));
-    seg.title=`${L.chShort} ${num(i+1)} — ${c.title||""} · ${dur(c.seconds)}`;
+    seg.title=`${L.chShort} ${num(i+1)} — ${title}`;   // hover: no duration
     seg.setAttribute("aria-label",seg.title);
     seg.innerHTML=`<span class="seg-fill"></span>`;
     seg.addEventListener("click",()=>start(tracks,i));
@@ -397,7 +470,7 @@ function bookEl(b, openToc){
     const row=document.createElement("button");
     row.type="button"; row.className="ch";
     row.innerHTML=`<span class="ch-n">${String(i+1).padStart(2,"0")}</span>
-      <span class="ch-t">${esc(c.title||"")}</span>
+      <span class="ch-t">${esc(title)}</span>
       <span class="ch-d mono">${dur(c.seconds)}</span>
       <a class="ch-dl mono" href="${esc(c.url)}" download title="${esc(L.download)}">↓</a>`;
     row.addEventListener("click",e=>{ if(e.target.closest(".ch-dl")) return; start(tracks,i); });
@@ -420,7 +493,7 @@ function bookEl(b, openToc){
 function mkTrack(b,kind,ep,idx){
   return { slug:b.slug, kind, idx,
     book:(META[b.slug]&&META[b.slug].title_en)||b.title||b.slug,
-    label: kind==="full" ? t().whole : `${t().chShort} ${num(idx+1)} — ${ep.title||""}`,
+    label: kind==="full" ? t().whole : `${t().chShort} ${num(idx+1)} — ${chTitle(b.slug,ep)}`,
     src:ep.url };
 }
 

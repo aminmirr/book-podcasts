@@ -5,7 +5,33 @@
     "author": "Bart den Haak",
     "cover": "",
     "note_en": "",
-    "note_fa": ""
+    "note_fa": "",
+    "categories": [
+      "Business",
+      "Management"
+    ],
+    "chapters": {
+      "00-Testimonials": {
+        "title_en": "Testimonials",
+        "title_fa": ""
+      },
+      "01-Part-I-The-Foundation-and-Beyond": {
+        "title_en": "Part I The Foundation and Beyond",
+        "title_fa": ""
+      },
+      "02-Part-II-Running-Successful-OKR-Workshops": {
+        "title_en": "Part II Running Successful OKR Workshops",
+        "title_fa": ""
+      },
+      "03-Part-III-How-to-Move-the-Needle": {
+        "title_en": "Part III How to Move the Needle",
+        "title_fa": ""
+      },
+      "04-Conclusion": {
+        "title_en": "Conclusion",
+        "title_fa": ""
+      }
+    }
   },
   "charles-wheelan-naked-statistics-stripping-the-dread-from-th": {
     "title_en": "Naked Statistics",
@@ -13,7 +39,61 @@
     "author": "Charles Wheelan",
     "cover": "",
     "note_en": "",
-    "note_fa": ""
+    "note_fa": "",
+    "categories": [
+      "Statistics",
+      "Data"
+    ],
+    "chapters": {
+      "00-Dedication": {
+        "title_en": "Dedication",
+        "title_fa": ""
+      },
+      "01-1-Whats-the-Point": {
+        "title_en": "Whats the Point",
+        "title_fa": ""
+      },
+      "02-3-Deceptive-Description-Hes-got-a-great-personality-and-othe": {
+        "title_en": "Deceptive Description Hes got a great personality and othe",
+        "title_fa": ""
+      },
+      "03-4-Correlation-How-does-Netflix-know-what-movies-I-like": {
+        "title_en": "Correlation How does Netflix know what movies I like",
+        "title_fa": ""
+      },
+      "04-5½-The-Monty-Hall-Problem": {
+        "title_en": "The Monty Hall Problem",
+        "title_fa": ""
+      },
+      "05-7-The-Importance-of-Data-Garbage-in-garbage-out": {
+        "title_en": "The Importance of Data Garbage in garbage out",
+        "title_fa": ""
+      },
+      "06-9-Inference-Why-my-statistics-professor-thought-I-might-have": {
+        "title_en": "Inference Why my statistics professor thought I might have",
+        "title_fa": ""
+      },
+      "07-10-Polling-How-we-know-that-64-percent-of-Americans-support-": {
+        "title_en": "Polling How we know that 64 percent of Americans support",
+        "title_fa": ""
+      },
+      "08-12-Common-Regression-Mistakes-The-mandatory-warning-label": {
+        "title_en": "Common Regression Mistakes The mandatory warning label",
+        "title_fa": ""
+      },
+      "09-Conclusion-Five-questions-that-statistics-can-help-answer": {
+        "title_en": "Conclusion Five questions that statistics can help answer",
+        "title_fa": ""
+      },
+      "10-Notes": {
+        "title_en": "Notes",
+        "title_fa": ""
+      },
+      "11-Also-by-Charles-Wheelan": {
+        "title_en": "Also by Charles Wheelan",
+        "title_fa": ""
+      }
+    }
   },
   "chris-brooks-introductory-econometrics-for-finance-2008": {
     "title_en": "Introductory Econometrics for Finance",
@@ -21,7 +101,81 @@
     "author": "Chris Brooks",
     "cover": "",
     "note_en": "",
-    "note_fa": ""
+    "note_fa": "",
+    "categories": [
+      "Finance",
+      "Statistics"
+    ],
+    "chapters": {
+      "00-Half-title": {
+        "title_en": "Half title",
+        "title_fa": ""
+      },
+      "01-Figures": {
+        "title_en": "Figures",
+        "title_fa": ""
+      },
+      "02-Boxes": {
+        "title_en": "Boxes",
+        "title_fa": ""
+      },
+      "03-1-Introduction": {
+        "title_en": "Introduction",
+        "title_fa": ""
+      },
+      "04-2-A-brief-overview-of-the-classical-linear-regression-model": {
+        "title_en": "A brief overview of the classical linear regression model",
+        "title_fa": ""
+      },
+      "05-3-Further-development-and-analysis-of-the-classical-linear-r": {
+        "title_en": "Further development and analysis of the classical linear r",
+        "title_fa": ""
+      },
+      "06-4-Classical-linear-regression-model-assumptions-and-diagnost": {
+        "title_en": "Classical linear regression model assumptions and diagnost",
+        "title_fa": ""
+      },
+      "07-5-Univariate-time-series-modelling-and-forecasting": {
+        "title_en": "Univariate time series modelling and forecasting",
+        "title_fa": ""
+      },
+      "08-6-Multivariate-models": {
+        "title_en": "Multivariate models",
+        "title_fa": ""
+      },
+      "09-7-Modelling-long-run-relationships-in-finance": {
+        "title_en": "Modelling long run relationships in finance",
+        "title_fa": ""
+      },
+      "11-9-Switching-models": {
+        "title_en": "Switching models",
+        "title_fa": ""
+      },
+      "12-10-Panel-data": {
+        "title_en": "Panel data",
+        "title_fa": ""
+      },
+      "14-12-Simulation-methods": {
+        "title_en": "Simulation methods",
+        "title_fa": ""
+      },
+      "15-13-Conducting-empirical-research-or-doing-a-project-or-disse": {
+        "title_en": "Conducting empirical research or doing a project or disse",
+        "title_fa": ""
+      },
+      "10-8-Modelling-volatility-and-correlation": {
+        "title_en": "Modelling volatility and correlation",
+        "title_fa": ""
+      },
+      "13-11-Limited-dependent-variable-models": {
+        "title_en": "Limited dependent variable models",
+        "title_fa": ""
+      },
+      "16-14-Recent-and-future-developments-in-the-modelling-of-financ": {
+        "title_en": "Recent and future developments in the modelling of financ",
+        "title_fa": ""
+      }
+    }
   },
   "honeybee-democracy-thomas-seeley-pdf": {
     "title_en": "Honeybee Democracy",
@@ -29,7 +183,45 @@
     "author": "Thomas D. Seeley",
     "cover": "",
     "note_en": "",
-    "note_fa": ""
+    "note_fa": "",
+    "categories": [
+      "Science",
+      "Nature"
+    ],
+    "chapters": {
+      "02-3-Dream-Home-for-Honeybees": {
+        "title_en": "Dream Home for Honeybees",
+        "title_fa": ""
+      },
+      "03-4-Scout-Bees-Debate": {
+        "title_en": "Scout Bees Debate",
+        "title_fa": ""
+      },
+      "05-6-Building-a-Consensus": {
+        "title_en": "Building a Consensus",
+        "title_fa": ""
+      },
+      "06-7-Initiating-the-Move-to-New-Home": {
+        "title_en": "Initiating the Move to New Home",
+        "title_fa": ""
+      },
+      "07-8-Steering-the-Flying-Swarm": {
+        "title_en": "Steering the Flying Swarm",
+        "title_fa": ""
+      },
+      "08-9-Swarm-as-Cognitive-Entity": {
+        "title_en": "Swarm as Cognitive Entity",
+        "title_fa": ""
+      },
+      "09-10-Swarm-Smarts": {
+        "title_en": "Swarm Smarts",
+        "title_fa": ""
+      },
+      "10-Notes": {
+        "title_en": "Notes",
+        "title_fa": ""
+      }
+    }
   },
   "parmenter-david-key-performance-indicators-developing-implem": {
     "title_en": "Key Performance Indicators",
@@ -37,7 +229,25 @@
     "author": "David Parmenter",
     "cover": "",
     "note_en": "",
-    "note_fa": ""
+    "note_fa": "",
+    "categories": [
+      "Business",
+      "Management"
+    ],
+    "chapters": {
+      "00-Part-I-Setting-the-Scene": {
+        "title_en": "Part I Setting the Scene",
+        "title_fa": ""
+      },
+      "01-Part-II-Winning-KPI-Methodology": {
+        "title_en": "Part II Winning KPI Methodology",
+        "title_fa": ""
+      },
+      "02-Part-III-Chief-Measurement-Officers-Toolkit": {
+        "title_en": "Part III Chief Measurement Officers Toolkit",
+        "title_fa": ""
+      }
+    }
   },
   "show-your-work": {
     "title_en": "Show Your Work!",
@@ -45,7 +255,37 @@
     "author": "Austin Kleon",
     "cover": "",
     "note_en": "",
-    "note_fa": ""
+    "note_fa": "",
+    "categories": [
+      "Creativity",
+      "Career"
+    ],
+    "chapters": {
+      "00-A-New-Way-of-Operating": {
+        "title_en": "A New Way of Operating",
+        "title_fa": ""
+      },
+      "01-2-Think-Process-Not-Product": {
+        "title_en": "Think Process Not Product",
+        "title_fa": ""
+      },
+      "02-4-Open-Up-Your-Cabinet-of-Curiosities": {
+        "title_en": "Open Up Your Cabinet of Curiosities",
+        "title_fa": ""
+      },
+      "03-6-Teach-What-You-Know": {
+        "title_en": "Teach What You Know",
+        "title_fa": ""
+      },
+      "04-8-Learn-to-Take-a-Punch": {
+        "title_en": "Learn to Take a Punch",
+        "title_fa": ""
+      },
+      "05-10-Stick-Around": {
+        "title_en": "Stick Around",
+        "title_fa": ""
+      }
+    }
   },
   "dokumenpub-die-with-zero-9780358100515-2019033906-2019033907": {
     "title_en": "Die with Zero",
@@ -53,6 +293,44 @@
     "author": "Bill Perkins",
     "cover": "",
     "note_en": "",
-    "note_fa": ""
+    "note_fa": "",
+    "categories": [
+      "Personal Finance",
+      "Life"
+    ],
+    "chapters": {
+      "00-Dedication": {
+        "title_en": "Dedication",
+        "title_fa": ""
+      },
+      "01-Optimize-Your-Life": {
+        "title_en": "Optimize Your Life",
+        "title_fa": ""
+      },
+      "02-Why-Die-with-Zero": {
+        "title_en": "Why Die with Zero",
+        "title_fa": ""
+      },
+      "03-Balance-Your-Life": {
+        "title_en": "Balance Your Life",
+        "title_fa": ""
+      },
+      "04-Start-to-Time-Bucket-Your-Life": {
+        "title_en": "Start to Time Bucket Your Life",
+        "title_fa": ""
+      },
+      "05-Be-BoldNot-Foolish": {
+        "title_en": "Be BoldNot Foolish",
+        "title_fa": ""
+      },
+      "06-Notes": {
+        "title_en": "Notes",
+        "title_fa": ""
+      },
+      "07-Connect-with-HMH": {
+        "title_en": "Connect with HMH",
+        "title_fa": ""
+      }
+    }
   }
 }
