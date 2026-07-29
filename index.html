@@ -1,62 +1,505 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl" data-lang="fa">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Book Podcasts</title>
+<title>خلاصه‌های صوتی کتاب</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,500;1,6..72,300&family=Vazirmatn:wght@300;500;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#0f1115; --card:#1a1d24; --fg:#e8e8ea; --mut:#9aa0aa; --acc:#6ea8fe; }
-  * { box-sizing:border-box; }
-  body { margin:0; font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-         background:var(--bg); color:var(--fg); }
-  header { padding:2rem 1rem 1rem; text-align:center; }
-  header h1 { margin:0; font-size:1.6rem; }
-  header p { margin:.4rem 0 0; color:var(--mut); }
-  main { max-width:820px; margin:0 auto; padding:1rem; }
-  .book { background:var(--card); border-radius:12px; padding:1rem 1.25rem; margin:1rem 0; }
-  .book > summary { font-size:1.15rem; font-weight:600; cursor:pointer; list-style:none; }
-  .book > summary::-webkit-details-marker { display:none; }
-  .book > summary::before { content:"▸ "; color:var(--acc); }
-  .book[open] > summary::before { content:"▾ "; }
-  .lang { margin:1rem 0 .25rem; color:var(--acc); font-weight:600; font-size:.85rem;
-          text-transform:uppercase; letter-spacing:.05em; }
-  .ep { padding:.6rem 0; border-top:1px solid #2a2e37; }
-  .ep .t { margin:0 0 .35rem; font-size:.95rem; }
-  .ep audio { width:100%; height:36px; }
-  .fa .t, .fa audio { direction:rtl; }
-  footer { text-align:center; color:var(--mut); padding:2rem 1rem; font-size:.85rem; }
-  a { color:var(--acc); }
+:root{
+  --ink:#0E1519; --ink-raise:#141E24; --line:#23313A;
+  --paper:#EDEAE3; --haze:#7E909C;
+  --verdigris:#57A99B; --saffron:#E0A458;
+  --accent:var(--verdigris);
+  --gutter:clamp(20px,5vw,64px);
+  --bar-h:76px;
+}
+html[data-lang="fa"]{ --accent:var(--saffron); }
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ background:var(--ink); scroll-behavior:smooth; }
+body{
+  background:var(--ink); color:var(--paper);
+  font-family:'Vazirmatn',system-ui,sans-serif; font-weight:300; line-height:1.7;
+  -webkit-font-smoothing:antialiased; padding-bottom:var(--bar-h);
+}
+body.has-player{ padding-bottom:calc(var(--bar-h) + 24px); }
+.wrap{ max-width:1000px; margin-inline:auto; padding-inline:var(--gutter); }
+
+.mono{ font-family:'JetBrains Mono',ui-monospace,monospace; font-weight:400;
+  font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; }
+html[data-lang="fa"] .mono{ font-family:'Vazirmatn',sans-serif; letter-spacing:0;
+  text-transform:none; font-size:.78rem; }
+.num{ font-family:'JetBrains Mono',monospace; font-variant-numeric:tabular-nums; }
+
+/* masthead */
+.masthead{ display:flex; align-items:center; justify-content:space-between; gap:16px; padding-block:26px 0; }
+.mark{ display:flex; align-items:center; gap:10px; color:var(--haze); }
+.mark-dot{ width:9px; height:9px; border-radius:50%; background:var(--accent); transition:background .45s ease; }
+.langswitch{ display:flex; border:1px solid var(--line); border-radius:999px; overflow:hidden; background:var(--ink-raise); }
+.langswitch button{ font:inherit; background:none; border:0; cursor:pointer; color:var(--haze);
+  padding:7px 16px; font-size:.8rem; transition:color .2s,background .2s; }
+.langswitch button[aria-pressed="true"]{ color:var(--ink); background:var(--accent); }
+.langswitch button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+/* hero */
+.hero{ padding-block:clamp(52px,10vw,100px) clamp(36px,6vw,64px); }
+.eyebrow{ color:var(--haze); margin-bottom:22px; }
+.headline{ font-family:'Newsreader',Georgia,serif; font-weight:300;
+  font-size:clamp(2.2rem,6vw,4.2rem); line-height:1.07; letter-spacing:-.015em;
+  max-width:18ch; text-wrap:balance; }
+html[data-lang="fa"] .headline{ font-family:'Vazirmatn',sans-serif; font-weight:800;
+  font-size:clamp(1.8rem,5vw,3.3rem); line-height:1.34; letter-spacing:-.01em; max-width:22ch; }
+.headline em{ font-style:italic; color:var(--accent); transition:color .45s ease; }
+html[data-lang="fa"] .headline em{ font-style:normal; }
+.standfirst{ color:var(--haze); margin-top:22px; max-width:52ch; font-size:1.02rem; }
+
+.stats{ display:flex; flex-wrap:wrap; gap:14px 44px; margin-top:clamp(36px,6vw,56px);
+  padding-top:26px; border-top:1px solid var(--line); }
+.stat b{ display:block; font-family:'JetBrains Mono',monospace; font-variant-numeric:tabular-nums;
+  font-weight:500; font-size:1.5rem; color:var(--paper); line-height:1.3; }
+html[data-lang="fa"] .stat b{ font-family:'Vazirmatn',sans-serif; font-weight:800; }
+.stat span{ color:var(--haze); }
+.stat.is-key b{ color:var(--accent); transition:color .45s ease; }
+
+/* book */
+.book{ padding-block:clamp(30px,4.5vw,44px); border-bottom:1px solid var(--line); }
+.book-top{ display:grid; grid-template-columns:1fr auto; gap:20px 28px; align-items:start; }
+.book-title{ font-family:'Newsreader',Georgia,serif; font-weight:500;
+  font-size:clamp(1.35rem,3vw,1.95rem); line-height:1.2; letter-spacing:-.01em; }
+html[data-lang="fa"] .book-title{ font-family:'Vazirmatn',sans-serif; font-weight:800; line-height:1.45; letter-spacing:0; }
+.book-note{ margin-top:12px; max-width:60ch; font-size:.95rem;
+  color:color-mix(in srgb,var(--paper) 74%,var(--ink)); }
+
+.whole{ display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  font:inherit; font-size:.9rem; cursor:pointer; white-space:nowrap;
+  background:none; color:var(--paper); border:1px solid var(--line);
+  border-radius:999px; padding:11px 20px; transition:border-color .2s,color .2s,background .2s; }
+.whole:hover{ border-color:var(--accent); color:var(--accent); }
+.whole:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+.whole[data-on="1"]{ background:var(--accent); border-color:var(--accent); color:var(--ink); }
+.whole svg{ width:12px; height:12px; flex:none; fill:currentColor; }
+.whole small{ opacity:.6; font-size:.8em; }
+
+/* the spine — width of each segment ∝ chapter length */
+.spine-wrap{ margin-top:26px; }
+.spine{ display:flex; gap:2px; height:26px; align-items:stretch; }
+.seg{ position:relative; flex:1 1 0; min-width:7px; padding:0; border:0; cursor:pointer;
+  background:color-mix(in srgb,var(--accent) 17%,transparent);
+  border-radius:2px; overflow:hidden; transition:background .2s ease; }
+.seg:hover{ background:color-mix(in srgb,var(--accent) 40%,transparent); }
+.seg:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+.seg[data-done="1"]{ background:color-mix(in srgb,var(--accent) 34%,transparent); }
+.seg[data-now="1"]{ background:color-mix(in srgb,var(--accent) 22%,transparent); }
+.seg-fill{ position:absolute; inset-block:0; inset-inline-start:0; width:0; background:var(--accent); }
+
+.spine-meta{ display:flex; justify-content:space-between; align-items:center;
+  gap:16px; margin-top:12px; color:var(--haze); }
+.toc-toggle{ font:inherit; background:none; border:0; cursor:pointer; color:var(--haze);
+  display:inline-flex; align-items:center; gap:7px; padding:4px 0; }
+.toc-toggle:hover{ color:var(--paper); }
+.toc-toggle:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+.toc-toggle svg{ width:10px; height:10px; fill:currentColor; transition:transform .25s ease; }
+.toc-toggle[aria-expanded="true"] svg{ transform:rotate(180deg); }
+
+/* chapter list */
+.toc{ margin-top:20px; border-top:1px solid var(--line); }
+.toc[hidden]{ display:none; }
+.ch{ display:grid; grid-template-columns:auto 1fr auto auto; align-items:center;
+  gap:16px; padding-block:11px; border-bottom:1px solid color-mix(in srgb,var(--line) 55%,transparent);
+  background:none; border-inline:0; border-top:0; width:100%; text-align:start;
+  font:inherit; color:var(--paper); cursor:pointer; transition:color .2s; }
+.ch:hover{ color:var(--accent); }
+.ch:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
+.ch-n{ color:var(--haze); font-family:'JetBrains Mono',monospace; font-size:.78rem; font-variant-numeric:tabular-nums; }
+.ch[data-now="1"] .ch-n, .ch[data-now="1"]{ color:var(--accent); }
+.ch-t{ min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:.96rem; }
+.ch-d{ color:var(--haze); font-size:.8rem; white-space:nowrap; }
+.ch-dl{ color:var(--haze); text-decoration:none; font-size:.75rem; padding-inline:6px; }
+.ch-dl:hover{ color:var(--paper); }
+.missing{ color:var(--haze); }
+
+/* sticky player */
+.player{ position:fixed; inset-inline:0; bottom:0; z-index:20;
+  background:color-mix(in srgb,var(--ink-raise) 92%,transparent);
+  backdrop-filter:blur(14px); border-top:1px solid var(--line);
+  transform:translateY(110%); transition:transform .35s cubic-bezier(.16,1,.3,1); }
+.player.on{ transform:none; }
+.player-scrub{ height:3px; background:var(--line); cursor:pointer; position:relative; }
+.player-scrub-fill{ position:absolute; inset-block:0; inset-inline-start:0; width:0; background:var(--accent); }
+.player-body{ max-width:1000px; margin-inline:auto; padding:12px var(--gutter);
+  display:flex; align-items:center; gap:16px; height:calc(var(--bar-h) - 3px); }
+.pbtn{ font:inherit; background:none; border:0; cursor:pointer; color:var(--haze);
+  padding:8px; display:inline-flex; border-radius:50%; transition:color .2s; }
+.pbtn:hover{ color:var(--paper); }
+.pbtn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+.pbtn[disabled]{ opacity:.3; cursor:default; }
+.pbtn svg{ width:15px; height:15px; fill:currentColor; }
+.pbtn.main{ color:var(--ink); background:var(--accent); padding:11px; }
+.pbtn.main:hover{ color:var(--ink); filter:brightness(1.1); }
+html[dir="rtl"] .pbtn.flip svg{ transform:scaleX(-1); }
+.pnow{ flex:1; min-width:0; }
+.pnow b{ display:block; font-weight:500; font-size:.92rem; overflow:hidden;
+  text-overflow:ellipsis; white-space:nowrap; }
+.pnow span{ color:var(--haze); font-size:.78rem; overflow:hidden;
+  text-overflow:ellipsis; white-space:nowrap; display:block; }
+.ptime{ color:var(--haze); font-family:'JetBrains Mono',monospace;
+  font-variant-numeric:tabular-nums; font-size:.75rem; white-space:nowrap; }
+
+.msg{ padding-block:80px; color:var(--haze); text-align:center; }
+.err{ color:var(--saffron); }
+footer{ padding-block:52px 64px; color:var(--haze); display:flex; flex-wrap:wrap;
+  gap:10px 24px; justify-content:space-between; }
+footer a{ color:var(--haze); text-decoration:none; border-bottom:1px solid var(--line); }
+footer a:hover{ color:var(--paper); }
+
+@media (max-width:680px){
+  .book-top{ grid-template-columns:1fr; }
+  .whole{ width:100%; }
+  .ch{ grid-template-columns:auto 1fr auto; }
+  .ch-dl{ display:none; }
+  .ptime{ display:none; }
+  .pnow span{ display:none; }
+}
+@media (prefers-reduced-motion:reduce){ *{ transition-duration:.01ms !important; } html{ scroll-behavior:auto; } }
 </style>
 </head>
 <body>
-<header>
-  <h1>📚 Book Podcasts</h1>
-  <p>AI-generated audio summaries, chapter by chapter — English & Persian.</p>
-</header>
-<main id="app">Loading…</main>
-<footer>Audio hosted on GitHub Releases · generated with NotebookLM</footer>
+<div class="wrap">
+  <header class="masthead">
+    <div class="mark"><span class="mark-dot" aria-hidden="true"></span><span class="mono" data-i18n="mark"></span></div>
+    <div class="langswitch" role="group" aria-label="Language">
+      <button type="button" data-setlang="fa" aria-pressed="true">فارسی</button>
+      <button type="button" data-setlang="en" aria-pressed="false">English</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <p class="eyebrow mono" data-i18n="eyebrow"></p>
+    <h1 class="headline" id="headline"></h1>
+    <p class="standfirst" data-i18n="standfirst"></p>
+    <div class="stats" id="stats" hidden>
+      <div class="stat"><b id="sBooks"></b><span class="mono" data-i18n="sBooks"></span></div>
+      <div class="stat"><b id="sEps"></b><span class="mono" data-i18n="sEps"></span></div>
+      <div class="stat is-key"><b id="sListen"></b><span class="mono" data-i18n="sListen"></span></div>
+    </div>
+  </section>
+
+  <main><div id="list"></div><div class="msg" id="msg" data-i18n="loading"></div></main>
+
+  <footer class="mono">
+    <span data-i18n="footnote"></span>
+    <a id="repoLink" href="https://github.com/aminmirr/book-podcasts" target="_blank" rel="noopener">GitHub</a>
+  </footer>
+</div>
+
+<div class="player" id="player" role="region" aria-label="Player">
+  <div class="player-scrub" id="scrub"><div class="player-scrub-fill" id="scrubFill"></div></div>
+  <div class="player-body">
+    <button type="button" class="pbtn flip" id="prev" data-i18n-label="prev"><svg viewBox="0 0 16 16"><path d="M13 2v12L5 8zM3 2h1.6v12H3z"/></svg></button>
+    <button type="button" class="pbtn main" id="toggle" data-i18n-label="play"><svg viewBox="0 0 16 16"><path d="M3 1.5v13l11-6.5z"/></svg></button>
+    <button type="button" class="pbtn flip" id="next" data-i18n-label="next"><svg viewBox="0 0 16 16"><path d="M3 2v12l8-6zM11.4 2H13v12h-1.6z"/></svg></button>
+    <div class="pnow"><b id="pTitle"></b><span id="pSub"></span></div>
+    <div class="ptime"><span id="pCur">0:00</span> / <span id="pDur">0:00</span></div>
+    <button type="button" class="pbtn" id="close" data-i18n-label="close"><svg viewBox="0 0 16 16"><path d="M12.7 4.4 9.1 8l3.6 3.6-1.1 1.1L8 9.1l-3.6 3.6-1.1-1.1L6.9 8 3.3 4.4l1.1-1.1L8 6.9l3.6-3.6z"/></svg></button>
+  </div>
+</div>
+
 <script>
-const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-fetch('manifest.json?' + Date.now())
-  .then(r => r.json())
-  .then(m => {
-    const app = document.getElementById('app');
-    if (!m.books || !m.books.length) { app.textContent = 'No books published yet.'; return; }
-    app.innerHTML = m.books.map(b => {
-      const langs = Object.entries(b.episodes).map(([lang, eps]) => {
-        const rtl = lang === 'Persian' ? ' fa' : '';
-        const items = eps.map(e => `
-          <div class="ep${rtl}">
-            <p class="t">${esc(e.title)}</p>
-            <audio controls preload="none" src="${esc(e.url)}"></audio>
-          </div>`).join('');
-        return `<div class="lang">${esc(lang)}</div>${items}`;
-      }).join('');
-      return `<details class="book"><summary>${esc(b.title)}</summary>${langs}</details>`;
-    }).join('');
-    if (m.books.length === 1) app.querySelector('details').open = true;
-  })
-  .catch(e => { document.getElementById('app').textContent = 'Failed to load manifest: ' + e; });
+const T = {
+fa:{ mark:"خلاصه‌های صوتی",
+  eyebrow:"کتابخانه‌ی شنیدنی · ساخته‌شده با NotebookLM",
+  headline:'هر کتاب یک‌بار <em>کامل</em>، یک‌بار <em>فصل به فصل</em>.',
+  standfirst:"خلاصه‌های صوتیِ ساخته‌شده با هوش مصنوعی (NotebookLM). یک اپیزودِ کامل برای مرور کل کتاب، و یک اپیزود جدا برای هر فصل وقتی می‌خواهی عمیق‌تر بروی. جای خواندنِ خودِ کتاب را نمی‌گیرد.",
+  sBooks:"کتاب", sEps:"اپیزود", sListen:"زمان شنیدن",
+  whole:"نسخه‌ی کامل", chapters:"فصل", showToc:"فهرست فصل‌ها", hideToc:"بستن فهرست",
+  play:"پخش", pause:"توقف", prev:"قبلی", next:"بعدی", close:"بستن", download:"دانلود",
+  missing:"هنوز آماده نیست",
+  loading:"در حال بارگذاری…",
+  error:"فهرست بارگذاری نشد. بررسی کن که فایل manifest.json کنار همین صفحه باشد.",
+  empty:"هنوز کتابی اضافه نشده.",
+  notfound:"فایل صوتی پیدا نشد",
+  footnote:"صدا با NotebookLM · میزبانی روی GitHub Releases",
+  hour:"ساعت", minute:"دقیقه", chShort:"فصل" },
+en:{ mark:"Audio summaries",
+  eyebrow:"A listening library · made with NotebookLM",
+  headline:'Every book once <em>whole</em>, then <em>chapter by chapter</em>.',
+  standfirst:"AI-generated audio summaries (made with NotebookLM). One full episode to get the whole book, and a separate episode per chapter when you want to go deeper. Not a substitute for reading the book itself.",
+  sBooks:"books", sEps:"episodes", sListen:"listening time",
+  whole:"Full summary", chapters:"chapters", showToc:"Chapter list", hideToc:"Hide chapters",
+  play:"Play", pause:"Pause", prev:"Previous", next:"Next", close:"Close", download:"Download",
+  missing:"Not ready yet",
+  loading:"Loading…",
+  error:"Couldn't load the list. Check that manifest.json sits next to this page.",
+  empty:"No books yet.",
+  notfound:"Audio file not found",
+  footnote:"Audio by NotebookLM · hosted on GitHub Releases",
+  hour:"h", minute:"min", chShort:"Ch." }
+};
+
+let LANG = localStorage.getItem("abs-lang") || "fa";
+let DATA = null;
+const audio = new Audio();
+let queue = [], qi = -1;
+const refs = {};   // slug -> { segs:[], fills:[], whole, chs:[] }
+
+const $  = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+const t  = ()=>T[LANG];
+const num = n => LANG==="fa" ? n.toLocaleString("fa-IR") : n.toLocaleString("en-US");
+const esc = s => String(s??"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const langKey = ()=> LANG==="fa" ? "Persian" : "English";
+const isWhole = ep => /whole_book/.test(ep.url);
+
+function dur(secs){
+  const mins = Math.round((secs||0)/60);
+  const h=Math.floor(mins/60), m=mins%60, L=t();
+  if(LANG==="fa"){
+    if(h&&m) return `${num(h)} ${L.hour} و ${num(m)} ${L.minute}`;
+    if(h) return `${num(h)} ${L.hour}`;
+    return `${num(m)} ${L.minute}`;
+  }
+  if(h&&m) return `${h}${L.hour} ${m}${L.minute}`;
+  if(h) return `${h}${L.hour}`;
+  return `${m} ${L.minute}`;
+}
+function clock(s){
+  if(!isFinite(s)) return "0:00";
+  const m=Math.floor(s/60), r=Math.floor(s%60);
+  return `${m}:${String(r).padStart(2,"0")}`;
+}
+
+const ICON_PLAY='<svg viewBox="0 0 16 16"><path d="M3 1.5v13l11-6.5z"/></svg>';
+const ICON_PAUSE='<svg viewBox="0 0 16 16"><path d="M3 1.5h4v13H3zM9 1.5h4v13H9z"/></svg>';
+const ICON_CHEV='<svg viewBox="0 0 16 16"><path d="M8 11 2 4h12z"/></svg>';
+
+/* split a book's episodes for the current language into {full, chapters[]} */
+function split(book){
+  const eps = (book.episodes && book.episodes[langKey()]) || [];
+  return { full: eps.find(isWhole) || null,
+           chapters: eps.filter(e=>!isWhole(e)) };
+}
+
+/* ---------------- render ---------------- */
+function render(){
+  const L=t();
+  document.documentElement.lang=LANG;
+  document.documentElement.dir=LANG==="fa"?"rtl":"ltr";
+  document.documentElement.dataset.lang=LANG;
+  document.title = LANG==="fa" ? "خلاصه‌های صوتی کتاب" : "Audio Book Summaries";
+  $$("[data-i18n]").forEach(e=>e.textContent=L[e.dataset.i18n]||"");
+  $$("[data-i18n-label]").forEach(e=>e.setAttribute("aria-label",L[e.dataset.i18nLabel]||""));
+  $("#headline").innerHTML=L.headline;
+  $$("[data-setlang]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.setlang===LANG)));
+  if(!DATA) return;
+
+  const books=DATA.books||[];
+  if(!books.length){ $("#msg").textContent=L.empty; return; }
+
+  let eps=0, listen=0;
+  books.forEach(b=>{
+    const {full,chapters}=split(b);
+    if(full){ eps++; listen += full.seconds||0; }
+    chapters.forEach(c=>{ eps++; listen += c.seconds||0; });
+  });
+  $("#sBooks").textContent=num(books.length);
+  $("#sEps").textContent=num(eps);
+  $("#sListen").textContent=dur(listen);
+  $("#stats").hidden=false; $("#msg").hidden=true;
+
+  const open = new Set($$(".toc-toggle[aria-expanded='true']").map(b=>b.dataset.slug));
+  for(const k in refs) delete refs[k];
+  $("#list").innerHTML="";
+  books.forEach(b=>$("#list").append(bookEl(b, open.has(b.slug))));
+  paintSpines();
+}
+
+function bookEl(b, openToc){
+  const L=t(), {full,chapters}=split(b);
+  const el=document.createElement("article"); el.className="book";
+  const chMin=chapters.reduce((s,c)=>s+(c.seconds||0),0);
+
+  el.innerHTML=`
+    <div class="book-top">
+      <div>
+        <h2 class="book-title">${esc(b.title||b.slug)}</h2>
+      </div>
+      <div class="book-side"></div>
+    </div>
+    <div class="spine-wrap">
+      <div class="spine" role="group" aria-label="${esc(L.chapters)}"></div>
+      <div class="spine-meta">
+        <button type="button" class="toc-toggle mono" data-slug="${esc(b.slug)}" aria-expanded="${openToc}">
+          ${ICON_CHEV}<span class="toc-label"></span>
+        </button>
+        <span class="mono">${num(chapters.length)} ${L.chapters} · ${dur(chMin)}</span>
+      </div>
+      <div class="toc" ${openToc?"":"hidden"}></div>
+    </div>`;
+
+  const R = refs[b.slug] = { segs:[], fills:[], chs:[], whole:null };
+
+  // whole-book button
+  const side=$(".book-side",el);
+  if(full){
+    const w=document.createElement("button");
+    w.type="button"; w.className="whole"; w.dataset.on="0";
+    w.innerHTML=`${ICON_PLAY}<span>${esc(L.whole)}</span><small>${dur(full.seconds)}</small>`;
+    w.addEventListener("click",()=>{
+      if(cur()?.slug===b.slug && cur()?.kind==="full"){ audio.paused?audio.play():audio.pause(); return; }
+      start([mkTrack(b,"full",full,0)],0);
+    });
+    side.append(w); R.whole=w;
+  } else {
+    side.innerHTML=`<span class="mono missing">${esc(L.missing)}</span>`;
+  }
+
+  // spine + toc, segment width ∝ chapter length
+  const spine=$(".spine",el), toc=$(".toc",el);
+  const tracks=chapters.map((c,i)=>mkTrack(b,"chapter",c,i));
+  chapters.forEach((c,i)=>{
+    const seg=document.createElement("button");
+    seg.type="button"; seg.className="seg";
+    seg.style.flexGrow=String(Math.max((c.seconds||60)/60,1));
+    seg.title=`${L.chShort} ${num(i+1)} — ${c.title||""} · ${dur(c.seconds)}`;
+    seg.setAttribute("aria-label",seg.title);
+    seg.innerHTML=`<span class="seg-fill"></span>`;
+    seg.addEventListener("click",()=>start(tracks,i));
+    spine.append(seg);
+    R.segs.push(seg); R.fills.push($(".seg-fill",seg));
+
+    const row=document.createElement("button");
+    row.type="button"; row.className="ch";
+    row.innerHTML=`<span class="ch-n">${String(i+1).padStart(2,"0")}</span>
+      <span class="ch-t">${esc(c.title||"")}</span>
+      <span class="ch-d mono">${dur(c.seconds)}</span>
+      <a class="ch-dl mono" href="${esc(c.url)}" download title="${esc(L.download)}">↓</a>`;
+    row.addEventListener("click",e=>{ if(e.target.closest(".ch-dl")) return; start(tracks,i); });
+    toc.append(row); R.chs.push(row);
+  });
+
+  const tog=$(".toc-toggle",el);
+  const setLabel=()=>$(".toc-label",tog).textContent =
+    tog.getAttribute("aria-expanded")==="true" ? L.hideToc : L.showToc;
+  setLabel();
+  tog.addEventListener("click",()=>{
+    const on=tog.getAttribute("aria-expanded")==="true";
+    tog.setAttribute("aria-expanded",String(!on));
+    toc.hidden=on; setLabel();
+  });
+  if(!chapters.length){ $(".spine-wrap",el).style.display="none"; }
+  return el;
+}
+
+function mkTrack(b,kind,ep,idx){
+  return { slug:b.slug, kind, idx,
+    book:b.title||b.slug,
+    label: kind==="full" ? t().whole : `${t().chShort} ${num(idx+1)} — ${ep.title||""}`,
+    src:ep.url };
+}
+
+/* ---------------- playback ---------------- */
+const cur = ()=>queue[qi];
+function start(list,i){ queue=list; qi=i; load(true); }
+function load(autoplay){
+  const tr=cur(); if(!tr) return;
+  audio.src=tr.src;
+  $("#pTitle").textContent=tr.label; $("#pTitle").classList.remove("err");
+  $("#pSub").textContent=tr.book;
+  $("#player").classList.add("on"); document.body.classList.add("has-player");
+  $("#prev").disabled = qi<=0;
+  $("#next").disabled = qi>=queue.length-1;
+  if(autoplay) audio.play().catch(fail);
+  paintSpines();
+}
+function fail(){ $("#pTitle").textContent=t().notfound; $("#pTitle").classList.add("err"); paintSpines(); }
+function paintSpines(){
+  const tr=cur();
+  for(const slug in refs){
+    const R=refs[slug];
+    R.whole && (R.whole.dataset.on = (tr&&tr.slug===slug&&tr.kind==="full"&&!audio.paused)?"1":"0");
+    R.segs.forEach((s,i)=>{
+      const now = tr&&tr.slug===slug&&tr.kind==="chapter"&&tr.idx===i;
+      s.dataset.now = now?"1":"0";
+      if(!now) R.fills[i].style.width="0";
+      R.chs[i] && (R.chs[i].dataset.now = now?"1":"0");
+    });
+  }
+  const on=!audio.paused;
+  $("#toggle").innerHTML = on?ICON_PAUSE:ICON_PLAY;
+  $("#toggle").setAttribute("aria-label", on?t().pause:t().play);
+}
+
+audio.addEventListener("play",paintSpines);
+audio.addEventListener("pause",paintSpines);
+audio.addEventListener("error",()=>{ if(audio.src) fail(); });
+audio.addEventListener("ended",()=>{
+  const tr=cur();
+  if(tr){ const R=refs[tr.slug]; if(R&&tr.kind==="chapter") R.segs[tr.idx].dataset.done="1"; }
+  if(qi<queue.length-1){ qi++; load(true); } else { paintSpines(); }
+});
+audio.addEventListener("timeupdate",()=>{
+  if(!audio.duration) return;
+  const p=audio.currentTime/audio.duration;
+  $("#scrubFill").style.width=p*100+"%";
+  $("#pCur").textContent=clock(audio.currentTime);
+  $("#pDur").textContent=clock(audio.duration);
+  const tr=cur();
+  if(tr&&tr.kind==="chapter"){ const R=refs[tr.slug]; R&&R.fills[tr.idx]&&(R.fills[tr.idx].style.width=p*100+"%"); }
+});
+
+$("#toggle").addEventListener("click",()=>audio.paused?audio.play().catch(fail):audio.pause());
+$("#prev").addEventListener("click",()=>{ if(qi>0){ qi--; load(true); } });
+$("#next").addEventListener("click",()=>{ if(qi<queue.length-1){ qi++; load(true); } });
+$("#close").addEventListener("click",()=>{
+  audio.pause(); audio.removeAttribute("src"); queue=[]; qi=-1;
+  $("#player").classList.remove("on"); document.body.classList.remove("has-player");
+  paintSpines();
+});
+$("#scrub").addEventListener("click",e=>{
+  if(!audio.duration) return;
+  const r=e.currentTarget.getBoundingClientRect();
+  const x = document.dir==="rtl" ? r.right-e.clientX : e.clientX-r.left;
+  audio.currentTime = Math.min(Math.max(x/r.width,0),1)*audio.duration;
+});
+document.addEventListener("keydown",e=>{
+  if(e.code==="Space" && cur() && !/^(BUTTON|A|INPUT)$/.test(document.activeElement.tagName)){
+    e.preventDefault(); audio.paused?audio.play().catch(fail):audio.pause();
+  }
+});
+
+/* language switch keeps your place */
+$$("[data-setlang]").forEach(b=>b.addEventListener("click",()=>{
+  if(b.dataset.setlang===LANG) return;
+  const tr=cur(), ratio = audio.duration ? audio.currentTime/audio.duration : 0;
+  const keep = tr ? {slug:tr.slug, kind:tr.kind, idx:tr.idx, playing:!audio.paused} : null;
+  LANG=b.dataset.setlang; localStorage.setItem("abs-lang",LANG);
+  audio.pause(); queue=[]; qi=-1;
+  render();
+  if(keep) resume(keep, ratio);
+  else { $("#player").classList.remove("on"); document.body.classList.remove("has-player"); }
+}));
+
+function resume(keep, ratio){
+  const b=(DATA.books||[]).find(x=>x.slug===keep.slug); if(!b) return;
+  const {full,chapters}=split(b);
+  if(keep.kind==="full"){
+    if(!full) return; queue=[mkTrack(b,"full",full,0)]; qi=0;
+  } else {
+    if(!chapters[keep.idx]) return;
+    queue=chapters.map((c,i)=>mkTrack(b,"chapter",c,i)); qi=keep.idx;
+  }
+  load(false);
+  audio.addEventListener("loadedmetadata",()=>{ if(audio.duration) audio.currentTime=ratio*audio.duration; },{once:true});
+  if(keep.playing) audio.play().catch(fail);
+}
+
+/* boot */
+fetch("manifest.json?"+Date.now())
+  .then(r=>{ if(!r.ok) throw 0; return r.json(); })
+  .then(d=>{ DATA=d; render(); })
+  .catch(()=>{ render(); const m=$("#msg"); m.hidden=false; m.textContent=t().error; });
 </script>
 </body>
 </html>

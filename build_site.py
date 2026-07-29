@@ -62,6 +62,19 @@ def shrink(src: Path, dst_dir: Path) -> Path:
     return dst
 
 
+def duration_secs(path: Path) -> int | None:
+    """Audio length in whole seconds via ffprobe (feeds the site's chapter spine)."""
+    try:
+        out = subprocess.run(
+            ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+             "-of", "default=noprint_wrappers=1:nokey=1", str(path)],
+            capture_output=True, text=True,
+        )
+        return round(float(out.stdout.strip()))
+    except (ValueError, OSError):
+        return None
+
+
 def audio_files(book_dir: Path, lang: str) -> list[Path]:
     d = book_dir / "output_podcast" / lang
     if not d.is_dir():
@@ -103,7 +116,8 @@ def publish_book(book_name: str, repo: str, do_shrink: bool = True) -> dict | No
 
     base = f"https://github.com/{repo}/releases/download/{tag}"
     episodes = {
-        lang: [{"title": episode_title(p.name), "url": f"{base}/{p.name}"} for p in ps]
+        lang: [{"title": episode_title(p.name), "url": f"{base}/{p.name}",
+                "seconds": duration_secs(p)} for p in ps]
         for lang, ps in files.items() if ps
     }
     return {"slug": slug, "title": title, "episodes": episodes}
