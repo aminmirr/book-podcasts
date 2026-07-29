@@ -120,21 +120,29 @@ html[data-lang="fa"] .cat{ font-family:'Vazirmatn',sans-serif; }
 dialog.sheet{ border:1px solid var(--line); border-radius:14px; background:var(--ink-raise);
   color:var(--paper); padding:0; max-width:440px; width:calc(100% - 32px); }
 dialog.sheet::backdrop{ background:rgba(6,10,12,.6); backdrop-filter:blur(3px); }
-.sheet form{ padding:clamp(20px,4vw,30px); display:flex; flex-direction:column; gap:14px; }
+.sheet-panel{ padding:clamp(20px,4vw,30px); display:flex; flex-direction:column; gap:14px; }
+.sheet-panel[hidden]{ display:none; }
 .sheet h3{ font-family:'Newsreader',Georgia,serif; font-weight:500; font-size:1.4rem; }
 html[data-lang="fa"] .sheet h3{ font-family:'Vazirmatn',sans-serif; font-weight:800; }
+.sheet-lead{ color:var(--haze); font-size:.92rem; margin-top:-4px; }
 .sheet label{ display:flex; flex-direction:column; gap:5px; font-size:.82rem; color:var(--haze); }
 .sheet input,.sheet textarea{ font:inherit; font-size:.95rem; color:var(--paper);
   background:var(--ink); border:1px solid var(--line); border-radius:8px; padding:9px 12px; }
 .sheet input:focus,.sheet textarea:focus{ outline:none; border-color:var(--accent); }
 .sheet textarea{ resize:vertical; min-height:64px; }
 .sheet-actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:4px; }
-.sheet-actions button{ font:inherit; cursor:pointer; border-radius:999px; padding:9px 18px; font-size:.9rem; }
-html[data-lang="fa"] .sheet-actions button{ font-family:'Vazirmatn',sans-serif; }
+.sheet-actions.col{ flex-direction:column; margin-top:6px; }
+.sheet-actions button,.sheet-actions a{ font:inherit; cursor:pointer; border-radius:999px;
+  padding:11px 18px; font-size:.9rem; text-decoration:none; text-align:center;
+  display:inline-flex; align-items:center; justify-content:center; gap:9px; }
+.sheet-actions.col button,.sheet-actions.col a{ width:100%; }
+html[data-lang="fa"] .sheet-actions button,html[data-lang="fa"] .sheet-actions a{ font-family:'Vazirmatn',sans-serif; }
 .btn-ghost{ background:none; color:var(--haze); border:1px solid var(--line); }
-.btn-ghost:hover{ color:var(--paper); }
-.btn-primary{ background:var(--accent); color:var(--ink); border:1px solid var(--accent); }
+.btn-ghost:hover{ color:var(--paper); border-color:var(--haze); }
+.btn-primary{ background:var(--accent); color:var(--ink); border:1px solid var(--accent); font-weight:500; }
+.btn-primary:hover{ filter:brightness(1.08); }
 .btn-primary[disabled]{ opacity:.5; cursor:default; }
+.btn-primary svg{ width:16px; height:16px; fill:currentColor; }
 .sheet-msg{ color:var(--accent); font-size:.85rem; }
 .sheet-msg.err{ color:var(--saffron); }
 #suggest{ cursor:pointer; }
@@ -280,8 +288,42 @@ footer a:hover{ color:var(--paper); }
 </div>
 
 <dialog class="sheet" id="suggestDlg" aria-labelledby="suggestH">
-  <form id="suggestForm">
+  <!-- step 1: choose path -->
+  <div class="sheet-panel" data-step="choose">
     <h3 id="suggestH" data-i18n="suggest"></h3>
+    <p class="sheet-lead" data-i18n="sgLead"></p>
+    <div class="sheet-actions col">
+      <button type="button" class="btn-primary" id="pickGh">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.6 0 0 3.6 0 8c0 3.5 2.3 6.5 5.5 7.6.4.1.5-.2.5-.4v-1.4c-2.2.5-2.7-1-2.7-1-.4-.9-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.2 1.9.9 2.3.7.1-.5.3-.9.5-1.1-1.8-.2-3.6-.9-3.6-3.9 0-.9.3-1.6.8-2.1-.1-.2-.4-1 .1-2.1 0 0 .7-.2 2.2.8.6-.2 1.3-.3 2-.3s1.4.1 2 .3c1.5-1 2.2-.8 2.2-.8.5 1.1.2 1.9.1 2.1.5.5.8 1.2.8 2.1 0 3-1.8 3.7-3.6 3.9.3.3.6.8.6 1.6v2.4c0 .2.1.5.6.4A8 8 0 0 0 16 8c0-4.4-3.6-8-8-8z"/></svg>
+        <span data-i18n="sgGithub"></span>
+      </button>
+      <button type="button" class="btn-ghost" id="pickAnon" data-i18n="sgAnon"></button>
+    </div>
+  </div>
+
+  <!-- step 2 (GitHub path): offer a star -->
+  <div class="sheet-panel" data-step="star" hidden>
+    <h3 data-i18n="sgStarH"></h3>
+    <p class="sheet-lead" data-i18n="sgStarLead"></p>
+    <div class="sheet-actions col">
+      <button type="button" class="btn-primary" id="starYes" data-i18n="sgStarYes"></button>
+      <button type="button" class="btn-ghost" id="starNo" data-i18n="sgStarNo"></button>
+    </div>
+  </div>
+
+  <!-- fallback if a popup is blocked -->
+  <div class="sheet-panel" data-step="links" hidden>
+    <h3 data-i18n="sgOpenH"></h3>
+    <p class="sheet-lead" data-i18n="sgOpenLead"></p>
+    <div class="sheet-actions col">
+      <a class="btn-primary" id="lnkStar" target="_blank" rel="noopener" data-i18n="sgOpenStar"></a>
+      <a class="btn-ghost" id="lnkIssue" target="_blank" rel="noopener" data-i18n="sgOpenIssue"></a>
+    </div>
+  </div>
+
+  <!-- anonymous path: Supabase form -->
+  <form id="suggestForm" class="sheet-panel" data-step="form" hidden>
+    <h3 data-i18n="suggest"></h3>
     <label><span data-i18n="fTitle"></span><input name="title" maxlength="200" required autocomplete="off"></label>
     <label><span data-i18n="fAuthor"></span><input name="author" maxlength="200" autocomplete="off"></label>
     <label><span data-i18n="fWhy"></span><textarea name="why" maxlength="2000"></textarea></label>
@@ -303,6 +345,15 @@ fa:{ mark:"خلاصه‌های صوتی",
   whole:"نسخه‌ی کامل", chapters:"فصل", showToc:"فهرست فصل‌ها", hideToc:"بستن فهرست",
   all:"همه", dlWhole:"دانلود نسخه‌ی کامل",
   suggest:"پیشنهاد کتاب",
+  sgLead:"چطور می‌خواهی کتاب پیشنهاد بدهی؟",
+  sgGithub:"ادامه با گیت‌هاب", sgAnon:"بدون ورود پیشنهاد بده",
+  sgStarH:"به پروژه ستاره می‌دهی؟",
+  sgStarLead:"یک ستاره کمک می‌کند دیگران این پروژه را پیدا کنند. همین حالا ستاره می‌دهی؟",
+  sgStarYes:"بله، ستاره می‌دهم ⭐", sgStarNo:"نه، فقط پیشنهاد",
+  sgOpenH:"باز کردن", sgOpenLead:"مرورگرت یک تب را مسدود کرد. برای باز کردن بزن:",
+  sgOpenStar:"⭐ ستاره به پروژه", sgOpenIssue:"✍️ باز کردن پیشنهاد",
+  issueTitle:"پیشنهاد کتاب: ",
+  issueBody:"نام کتاب:\nنویسنده:\nزبان (فارسی/انگلیسی):\nچرا؟\n",
   fTitle:"نام کتاب *", fAuthor:"نویسنده", fWhy:"چرا این کتاب؟",
   cancel:"انصراف", send:"ارسال", sending:"در حال ارسال…",
   sent:"ممنون! پیشنهادت ثبت شد.", sendErr:"ارسال نشد، دوباره تلاش کن.",
@@ -323,6 +374,15 @@ en:{ mark:"Audio summaries",
   whole:"Full summary", chapters:"chapters", showToc:"Chapter list", hideToc:"Hide chapters",
   all:"All", dlWhole:"Download full summary",
   suggest:"Suggest a book",
+  sgLead:"How would you like to suggest a book?",
+  sgGithub:"Continue with GitHub", sgAnon:"Suggest without logging in",
+  sgStarH:"Star the project?",
+  sgStarLead:"A star helps other people discover it. Want to star it while you're here?",
+  sgStarYes:"Yes, star it ⭐", sgStarNo:"No, just suggest",
+  sgOpenH:"Open", sgOpenLead:"Your browser blocked a tab — tap to open:",
+  sgOpenStar:"⭐ Star the project", sgOpenIssue:"✍️ Open the suggestion",
+  issueTitle:"Book suggestion: ",
+  issueBody:"Book title:\nAuthor:\nLanguage (Persian/English):\nWhy?\n",
   fTitle:"Book title *", fAuthor:"Author", fWhy:"Why this book?",
   cancel:"Cancel", send:"Send", sending:"Sending…",
   sent:"Thanks! Your suggestion was saved.", sendErr:"Couldn't send — try again.",
@@ -717,10 +777,29 @@ async function castVote(slug,value){
   }catch{ apply(value,prev); MYVOTE[slug]=prev; paintVotes(); }  // revert
 }
 
-/* ---------------- suggestion sheet (Supabase) ---------------- */
+/* ---------------- suggestion sheet (choose → GitHub or anonymous) ---------------- */
 const dlg=$("#suggestDlg"), sForm=$("#suggestForm"), sMsg=$("#suggestMsg");
-function openSuggest(){ sMsg.hidden=true; sForm.reset(); if(dlg.showModal) dlg.showModal(); }
+const REPO_URL="https://github.com/aminmirr/book-podcasts";
+const issueUrl=()=> REPO_URL+"/issues/new?labels=suggestion"
+  + "&title="+encodeURIComponent(t().issueTitle)
+  + "&body=" +encodeURIComponent(t().issueBody);
+const showPanel=name=>$$(".sheet-panel",dlg).forEach(p=>p.hidden=p.dataset.step!==name);
+const openTab=url=>{ const w=window.open(url,"_blank"); if(w) w.opener=null; return w; };
+function showLinks(withStar){
+  $("#lnkIssue").href=issueUrl();
+  const s=$("#lnkStar"); s.href=REPO_URL; s.hidden=!withStar;
+  showPanel("links");
+}
+function openSuggest(){ sMsg.hidden=true; sForm.reset(); showPanel("choose"); if(dlg.showModal) dlg.showModal(); }
+
 $("#suggest").addEventListener("click",e=>{ e.preventDefault(); openSuggest(); });
+$("#pickAnon").addEventListener("click",()=>{ sMsg.hidden=true; showPanel("form"); });
+$("#pickGh").addEventListener("click",()=>showPanel("star"));
+$("#starNo").addEventListener("click",()=>{ if(openTab(issueUrl())) dlg.close(); else showLinks(false); });
+$("#starYes").addEventListener("click",()=>{
+  const w1=openTab(REPO_URL), w2=openTab(issueUrl());   // star page + suggestion issue
+  if(w1&&w2) dlg.close(); else showLinks(true);
+});
 $("#suggestCancel").addEventListener("click",()=>dlg.close());
 sForm.addEventListener("submit",async e=>{
   e.preventDefault();
