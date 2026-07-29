@@ -118,8 +118,17 @@ html[data-lang="fa"] .cat{ font-family:'Vazirmatn',sans-serif; }
 
 /* suggestion sheet */
 dialog.sheet{ border:1px solid var(--line); border-radius:14px; background:var(--ink-raise);
-  color:var(--paper); padding:0; max-width:440px; width:calc(100% - 32px); }
+  color:var(--paper); padding:0; max-width:440px; width:calc(100% - 32px);
+  margin:auto; }   /* the *{margin:0} reset kills native centering — restore it */
 dialog.sheet::backdrop{ background:rgba(6,10,12,.6); backdrop-filter:blur(3px); }
+.sheet-close{ position:absolute; inset-block-start:12px; inset-inline-end:12px; z-index:2;
+  width:32px; height:32px; display:inline-flex; align-items:center; justify-content:center;
+  background:none; border:0; border-radius:50%; cursor:pointer; color:var(--haze);
+  transition:color .2s,background .2s; }
+.sheet-close:hover{ color:var(--paper); background:color-mix(in srgb,var(--paper) 8%,transparent); }
+.sheet-close:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+.sheet-close svg{ width:14px; height:14px; fill:currentColor; }
+.sheet-panel h3{ padding-inline-end:28px; }   /* room for the × */
 .sheet-panel{ padding:clamp(20px,4vw,30px); display:flex; flex-direction:column; gap:14px; }
 .sheet-panel[hidden]{ display:none; }
 .sheet h3{ font-family:'Newsreader',Georgia,serif; font-weight:500; font-size:1.4rem; }
@@ -288,6 +297,9 @@ footer a:hover{ color:var(--paper); }
 </div>
 
 <dialog class="sheet" id="suggestDlg" aria-labelledby="suggestH">
+  <button type="button" class="sheet-close" id="sheetClose" aria-label="Close">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M12.7 4.4 9.1 8l3.6 3.6-1.1 1.1L8 9.1l-3.6 3.6-1.1-1.1L6.9 8 3.3 4.4l1.1-1.1L8 6.9l3.6-3.6z"/></svg>
+  </button>
   <!-- step 1: choose path -->
   <div class="sheet-panel" data-step="choose">
     <h3 id="suggestH" data-i18n="suggest"></h3>
@@ -306,18 +318,17 @@ footer a:hover{ color:var(--paper); }
     <h3 data-i18n="sgStarH"></h3>
     <p class="sheet-lead" data-i18n="sgStarLead"></p>
     <div class="sheet-actions col">
-      <button type="button" class="btn-primary" id="starYes" data-i18n="sgStarYes"></button>
+      <button type="button" class="btn-ghost" id="starYes" data-i18n="sgStarYes"></button>
       <button type="button" class="btn-ghost" id="starNo" data-i18n="sgStarNo"></button>
     </div>
   </div>
 
-  <!-- fallback if a popup is blocked -->
+  <!-- fallback if the popup is blocked -->
   <div class="sheet-panel" data-step="links" hidden>
     <h3 data-i18n="sgOpenH"></h3>
     <p class="sheet-lead" data-i18n="sgOpenLead"></p>
     <div class="sheet-actions col">
-      <a class="btn-primary" id="lnkStar" target="_blank" rel="noopener" data-i18n="sgOpenStar"></a>
-      <a class="btn-ghost" id="lnkIssue" target="_blank" rel="noopener" data-i18n="sgOpenIssue"></a>
+      <a class="btn-primary" id="lnkIssue" target="_blank" rel="noopener" data-i18n="sgOpenIssue"></a>
     </div>
   </div>
 
@@ -350,10 +361,11 @@ fa:{ mark:"خلاصه‌های صوتی",
   sgStarH:"به پروژه ستاره می‌دهی؟",
   sgStarLead:"یک ستاره کمک می‌کند دیگران این پروژه را پیدا کنند. همین حالا ستاره می‌دهی؟",
   sgStarYes:"بله، ستاره می‌دهم ⭐", sgStarNo:"نه، فقط پیشنهاد",
-  sgOpenH:"باز کردن", sgOpenLead:"مرورگرت یک تب را مسدود کرد. برای باز کردن بزن:",
-  sgOpenStar:"⭐ ستاره به پروژه", sgOpenIssue:"✍️ باز کردن پیشنهاد",
+  sgOpenH:"باز کردن", sgOpenLead:"مرورگرت تب را مسدود کرد. برای باز کردن بزن:",
+  sgOpenIssue:"✍️ باز کردن صفحه پیشنهاد",
   issueTitle:"پیشنهاد کتاب: ",
   issueBody:"نام کتاب:\nنویسنده:\nزبان (فارسی/انگلیسی):\nچرا؟\n",
+  starNote:"\n\n— بعد از ثبت، لطفاً به صفحه‌ی اصلی برگرد و روی ⭐ Star بالای صفحه بزن. ممنون! 🙏",
   fTitle:"نام کتاب *", fAuthor:"نویسنده", fWhy:"چرا این کتاب؟",
   cancel:"انصراف", send:"ارسال", sending:"در حال ارسال…",
   sent:"ممنون! پیشنهادت ثبت شد.", sendErr:"ارسال نشد، دوباره تلاش کن.",
@@ -379,10 +391,11 @@ en:{ mark:"Audio summaries",
   sgStarH:"Star the project?",
   sgStarLead:"A star helps other people discover it. Want to star it while you're here?",
   sgStarYes:"Yes, star it ⭐", sgStarNo:"No, just suggest",
-  sgOpenH:"Open", sgOpenLead:"Your browser blocked a tab — tap to open:",
-  sgOpenStar:"⭐ Star the project", sgOpenIssue:"✍️ Open the suggestion",
+  sgOpenH:"Open", sgOpenLead:"Your browser blocked the tab — tap to open:",
+  sgOpenIssue:"✍️ Open the suggestion page",
   issueTitle:"Book suggestion: ",
   issueBody:"Book title:\nAuthor:\nLanguage (Persian/English):\nWhy?\n",
+  starNote:"\n\n— After you submit, please go back to the site and click ⭐ Star at the top. Thank you! 🙏",
   fTitle:"Book title *", fAuthor:"Author", fWhy:"Why this book?",
   cancel:"Cancel", send:"Send", sending:"Sending…",
   sent:"Thanks! Your suggestion was saved.", sendErr:"Couldn't send — try again.",
@@ -780,26 +793,27 @@ async function castVote(slug,value){
 /* ---------------- suggestion sheet (choose → GitHub or anonymous) ---------------- */
 const dlg=$("#suggestDlg"), sForm=$("#suggestForm"), sMsg=$("#suggestMsg");
 const REPO_URL="https://github.com/aminmirr/book-podcasts";
-const issueUrl=()=> REPO_URL+"/issues/new?labels=suggestion"
+// withStar → append the "go back and click Star" reminder to the issue body
+const issueUrl=withStar=> REPO_URL+"/issues/new?labels=suggestion"
   + "&title="+encodeURIComponent(t().issueTitle)
-  + "&body=" +encodeURIComponent(t().issueBody);
+  + "&body=" +encodeURIComponent(t().issueBody + (withStar ? t().starNote : ""));
 const showPanel=name=>$$(".sheet-panel",dlg).forEach(p=>p.hidden=p.dataset.step!==name);
 const openTab=url=>{ const w=window.open(url,"_blank"); if(w) w.opener=null; return w; };
-function showLinks(withStar){
-  $("#lnkIssue").href=issueUrl();
-  const s=$("#lnkStar"); s.href=REPO_URL; s.hidden=!withStar;
-  showPanel("links");
+// open the (single) issue tab; if the browser blocks it, show a tappable link instead
+function goIssue(withStar){
+  const url=issueUrl(withStar);
+  if(openTab(url)) dlg.close();
+  else { $("#lnkIssue").href=url; showPanel("links"); }
 }
 function openSuggest(){ sMsg.hidden=true; sForm.reset(); showPanel("choose"); if(dlg.showModal) dlg.showModal(); }
 
 $("#suggest").addEventListener("click",e=>{ e.preventDefault(); openSuggest(); });
+$("#sheetClose").addEventListener("click",()=>dlg.close());
 $("#pickAnon").addEventListener("click",()=>{ sMsg.hidden=true; showPanel("form"); });
 $("#pickGh").addEventListener("click",()=>showPanel("star"));
-$("#starNo").addEventListener("click",()=>{ if(openTab(issueUrl())) dlg.close(); else showLinks(false); });
-$("#starYes").addEventListener("click",()=>{
-  const w1=openTab(REPO_URL), w2=openTab(issueUrl());   // star page + suggestion issue
-  if(w1&&w2) dlg.close(); else showLinks(true);
-});
+$("#starNo").addEventListener("click",()=>goIssue(false));
+$("#starYes").addEventListener("click",()=>goIssue(true));      // opens issue; reminder to star is in the body
+$("#lnkIssue").addEventListener("click",()=>dlg.close());        // close the box after tapping the link
 $("#suggestCancel").addEventListener("click",()=>dlg.close());
 sForm.addEventListener("submit",async e=>{
   e.preventDefault();
