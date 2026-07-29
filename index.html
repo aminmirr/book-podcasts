@@ -224,7 +224,11 @@ footer a:hover{ color:var(--paper); }
 
   <footer class="mono">
     <span data-i18n="footnote"></span>
-    <a id="repoLink" href="https://github.com/aminmirr/book-podcasts" target="_blank" rel="noopener">GitHub</a>
+    <span>
+      <a id="suggest" target="_blank" rel="noopener" data-i18n="suggest"></a>
+      &nbsp;·&nbsp;
+      <a id="repoLink" href="https://github.com/aminmirr/book-podcasts" target="_blank" rel="noopener">GitHub</a>
+    </span>
   </footer>
 </div>
 
@@ -249,6 +253,8 @@ fa:{ mark:"خلاصه‌های صوتی",
   sBooks:"کتاب", sEps:"اپیزود", sListen:"زمان شنیدن",
   whole:"نسخه‌ی کامل", chapters:"فصل", showToc:"فهرست فصل‌ها", hideToc:"بستن فهرست",
   all:"همه", dlWhole:"دانلود نسخه‌ی کامل",
+  suggest:"پیشنهاد کتاب", suggestTitle:"پیشنهاد کتاب: ",
+  suggestBody:"نام کتاب:\nنویسنده:\nزبان (فارسی/انگلیسی):\nچرا؟\n",
   play:"پخش", pause:"توقف", prev:"قبلی", next:"بعدی", close:"بستن", download:"دانلود",
   missing:"هنوز آماده نیست",
   loading:"در حال بارگذاری…",
@@ -264,6 +270,8 @@ en:{ mark:"Audio summaries",
   sBooks:"books", sEps:"episodes", sListen:"listening time",
   whole:"Full summary", chapters:"chapters", showToc:"Chapter list", hideToc:"Hide chapters",
   all:"All", dlWhole:"Download full summary",
+  suggest:"Suggest a book", suggestTitle:"Book suggestion: ",
+  suggestBody:"Book title:\nAuthor:\nLanguage (Persian/English):\nWhy?\n",
   play:"Play", pause:"Pause", prev:"Previous", next:"Next", close:"Close", download:"Download",
   missing:"Not ready yet",
   loading:"Loading…",
@@ -339,6 +347,9 @@ function render(){
   $$("[data-i18n-label]").forEach(e=>e.setAttribute("aria-label",L[e.dataset.i18nLabel]||""));
   $("#headline").innerHTML=L.headline;
   $$("[data-setlang]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.setlang===LANG)));
+  $("#suggest").href = "https://github.com/aminmirr/book-podcasts/issues/new?labels=suggestion"
+    + "&title=" + encodeURIComponent(L.suggestTitle)
+    + "&body="  + encodeURIComponent(L.suggestBody);
   if(!DATA) return;
 
   const books=DATA.books||[];
