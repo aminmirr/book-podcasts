@@ -104,6 +104,41 @@ html[data-lang="fa"] .cat{ font-family:'Vazirmatn',sans-serif; }
 .whole-dl:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
 .whole-dl svg{ width:14px; height:14px; fill:currentColor; }
 
+/* like / dislike */
+.votes{ display:flex; gap:8px; margin-top:14px; }
+.vote{ font:inherit; font-size:.8rem; cursor:pointer; background:none; color:var(--haze);
+  border:1px solid var(--line); border-radius:999px; padding:5px 13px;
+  display:inline-flex; align-items:center; gap:7px;
+  transition:color .2s,border-color .2s,background .2s; }
+.vote:hover{ color:var(--paper); border-color:var(--haze); }
+.vote[aria-pressed="true"]{ color:var(--accent); border-color:var(--accent); }
+.vote:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+.vote .num{ font-size:.78rem; min-width:1ch; text-align:center; }
+.vote svg{ width:11px; height:11px; fill:currentColor; }
+
+/* suggestion sheet */
+dialog.sheet{ border:1px solid var(--line); border-radius:14px; background:var(--ink-raise);
+  color:var(--paper); padding:0; max-width:440px; width:calc(100% - 32px); }
+dialog.sheet::backdrop{ background:rgba(6,10,12,.6); backdrop-filter:blur(3px); }
+.sheet form{ padding:clamp(20px,4vw,30px); display:flex; flex-direction:column; gap:14px; }
+.sheet h3{ font-family:'Newsreader',Georgia,serif; font-weight:500; font-size:1.4rem; }
+html[data-lang="fa"] .sheet h3{ font-family:'Vazirmatn',sans-serif; font-weight:800; }
+.sheet label{ display:flex; flex-direction:column; gap:5px; font-size:.82rem; color:var(--haze); }
+.sheet input,.sheet textarea{ font:inherit; font-size:.95rem; color:var(--paper);
+  background:var(--ink); border:1px solid var(--line); border-radius:8px; padding:9px 12px; }
+.sheet input:focus,.sheet textarea:focus{ outline:none; border-color:var(--accent); }
+.sheet textarea{ resize:vertical; min-height:64px; }
+.sheet-actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:4px; }
+.sheet-actions button{ font:inherit; cursor:pointer; border-radius:999px; padding:9px 18px; font-size:.9rem; }
+html[data-lang="fa"] .sheet-actions button{ font-family:'Vazirmatn',sans-serif; }
+.btn-ghost{ background:none; color:var(--haze); border:1px solid var(--line); }
+.btn-ghost:hover{ color:var(--paper); }
+.btn-primary{ background:var(--accent); color:var(--ink); border:1px solid var(--accent); }
+.btn-primary[disabled]{ opacity:.5; cursor:default; }
+.sheet-msg{ color:var(--accent); font-size:.85rem; }
+.sheet-msg.err{ color:var(--saffron); }
+#suggest{ cursor:pointer; }
+
 .whole{ display:inline-flex; align-items:center; justify-content:center; gap:10px;
   font:inherit; font-size:.9rem; cursor:pointer; white-space:nowrap;
   background:none; color:var(--paper); border:1px solid var(--line);
@@ -244,6 +279,20 @@ footer a:hover{ color:var(--paper); }
   </div>
 </div>
 
+<dialog class="sheet" id="suggestDlg" aria-labelledby="suggestH">
+  <form id="suggestForm">
+    <h3 id="suggestH" data-i18n="suggest"></h3>
+    <label><span data-i18n="fTitle"></span><input name="title" maxlength="200" required autocomplete="off"></label>
+    <label><span data-i18n="fAuthor"></span><input name="author" maxlength="200" autocomplete="off"></label>
+    <label><span data-i18n="fWhy"></span><textarea name="why" maxlength="2000"></textarea></label>
+    <p class="sheet-msg" id="suggestMsg" hidden></p>
+    <div class="sheet-actions">
+      <button type="button" class="btn-ghost" id="suggestCancel" data-i18n="cancel"></button>
+      <button type="submit" class="btn-primary" id="suggestSend" data-i18n="send"></button>
+    </div>
+  </form>
+</dialog>
+
 <script>
 const T = {
 fa:{ mark:"خلاصه‌های صوتی",
@@ -253,8 +302,11 @@ fa:{ mark:"خلاصه‌های صوتی",
   sBooks:"کتاب", sEps:"اپیزود", sListen:"زمان شنیدن",
   whole:"نسخه‌ی کامل", chapters:"فصل", showToc:"فهرست فصل‌ها", hideToc:"بستن فهرست",
   all:"همه", dlWhole:"دانلود نسخه‌ی کامل",
-  suggest:"پیشنهاد کتاب", suggestTitle:"پیشنهاد کتاب: ",
-  suggestBody:"نام کتاب:\nنویسنده:\nزبان (فارسی/انگلیسی):\nچرا؟\n",
+  suggest:"پیشنهاد کتاب",
+  fTitle:"نام کتاب *", fAuthor:"نویسنده", fWhy:"چرا این کتاب؟",
+  cancel:"انصراف", send:"ارسال", sending:"در حال ارسال…",
+  sent:"ممنون! پیشنهادت ثبت شد.", sendErr:"ارسال نشد، دوباره تلاش کن.",
+  like:"پسندیدن", dislike:"نپسندیدن",
   play:"پخش", pause:"توقف", prev:"قبلی", next:"بعدی", close:"بستن", download:"دانلود",
   missing:"هنوز آماده نیست",
   loading:"در حال بارگذاری…",
@@ -270,8 +322,11 @@ en:{ mark:"Audio summaries",
   sBooks:"books", sEps:"episodes", sListen:"listening time",
   whole:"Full summary", chapters:"chapters", showToc:"Chapter list", hideToc:"Hide chapters",
   all:"All", dlWhole:"Download full summary",
-  suggest:"Suggest a book", suggestTitle:"Book suggestion: ",
-  suggestBody:"Book title:\nAuthor:\nLanguage (Persian/English):\nWhy?\n",
+  suggest:"Suggest a book",
+  fTitle:"Book title *", fAuthor:"Author", fWhy:"Why this book?",
+  cancel:"Cancel", send:"Send", sending:"Sending…",
+  sent:"Thanks! Your suggestion was saved.", sendErr:"Couldn't send — try again.",
+  like:"Like", dislike:"Dislike",
   play:"Play", pause:"Pause", prev:"Previous", next:"Next", close:"Close", download:"Download",
   missing:"Not ready yet",
   loading:"Loading…",
@@ -306,6 +361,15 @@ function chTitle(slug, ep){
 const bookCats = slug => (META[slug] && META[slug].categories) || [];
 let CAT = null;   // active category filter
 
+/* ---- Supabase (anon public key + RLS — safe to ship in the browser) ---- */
+const SB_URL="https://jnfkqnflqitecuktxnex.supabase.co/rest/v1";
+const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpuZmtxbmZscWl0ZWN1a3R4bmV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzMjU2NjksImV4cCI6MjEwMDkwMTY2OX0.wMGrmnUdrXv2xQUe7Gk44m7T3OQK9SkPbYhhixSLMVo";
+const SB_H={ "apikey":SB_KEY, "Authorization":"Bearer "+SB_KEY, "Content-Type":"application/json" };
+let VOTES={}, MYVOTE={};   // slug -> {up,down} ; slug -> value
+const voterId=()=>{ let v=localStorage.getItem("abs-voter");
+  if(!v){ v=(crypto.randomUUID?crypto.randomUUID():([1e7]+-1e3+-4e3).replace(/[018]/g,c=>(c^crypto.getRandomValues(new Uint8Array(1))[0]&15>>c/4).toString(16))); localStorage.setItem("abs-voter",v); }
+  return v; };
+
 function dur(secs){
   const mins = Math.round((secs||0)/60);
   const h=Math.floor(mins/60), m=mins%60, L=t();
@@ -328,6 +392,8 @@ const ICON_PLAY='<svg viewBox="0 0 16 16"><path d="M3 1.5v13l11-6.5z"/></svg>';
 const ICON_PAUSE='<svg viewBox="0 0 16 16"><path d="M3 1.5h4v13H3zM9 1.5h4v13H9z"/></svg>';
 const ICON_CHEV='<svg viewBox="0 0 16 16"><path d="M8 11 2 4h12z"/></svg>';
 const ICON_DL='<svg viewBox="0 0 16 16"><path d="M7.2 1h1.6v7.1l2.5-2.5 1.1 1.1L8 11.3 3.6 6.8l1.1-1.1 2.5 2.5zM3 13h10v1.5H3z"/></svg>';
+const ICON_UP='<svg viewBox="0 0 16 16"><path d="M8 4l5 8H3z"/></svg>';
+const ICON_DOWN='<svg viewBox="0 0 16 16"><path d="M8 12 3 4h10z"/></svg>';
 
 /* split a book's episodes for the current language into {full, chapters[]} */
 function split(book){
@@ -347,9 +413,6 @@ function render(){
   $$("[data-i18n-label]").forEach(e=>e.setAttribute("aria-label",L[e.dataset.i18nLabel]||""));
   $("#headline").innerHTML=L.headline;
   $$("[data-setlang]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.setlang===LANG)));
-  $("#suggest").href = "https://github.com/aminmirr/book-podcasts/issues/new?labels=suggestion"
-    + "&title=" + encodeURIComponent(L.suggestTitle)
-    + "&body="  + encodeURIComponent(L.suggestBody);
   if(!DATA) return;
 
   const books=DATA.books||[];
@@ -374,6 +437,7 @@ function render(){
   $("#list").innerHTML="";
   shown.forEach(b=>$("#list").append(bookEl(b, open.has(b.slug))));
   paintSpines();
+  paintVotes();
 }
 
 function renderCats(books){
@@ -443,6 +507,20 @@ function bookEl(b, openToc){
       catBox.append(cb);
     });
   } else catBox.remove();
+
+  // like / dislike
+  const votesBox=document.createElement("div"); votesBox.className="votes";
+  const mkVote=(icon,val,label)=>{
+    const btn=document.createElement("button");
+    btn.type="button"; btn.className="vote"; btn.setAttribute("aria-label",label);
+    btn.innerHTML=`${icon}<span class="num">0</span>`;
+    btn.addEventListener("click",()=>castVote(b.slug, val));
+    return btn;
+  };
+  const up=mkVote(ICON_UP,1,L.like), down=mkVote(ICON_DOWN,-1,L.dislike);
+  votesBox.append(up,down);
+  $(".titles",el).append(votesBox);
+  R.vote={ up, down, upN:$(".num",up), downN:$(".num",down) };
 
   // whole-book: play + download
   const side=$(".book-side",el);
@@ -604,12 +682,69 @@ function resume(keep, ratio){
   if(keep.playing) audio.play().catch(fail);
 }
 
+/* ---------------- likes / dislikes (Supabase) ---------------- */
+function paintVotes(){
+  for(const slug in refs){
+    const R=refs[slug]; if(!R.vote) continue;
+    const v=VOTES[slug]||{up:0,down:0}, mine=MYVOTE[slug];
+    R.vote.upN.textContent=num(v.up); R.vote.downN.textContent=num(v.down);
+    R.vote.up.setAttribute("aria-pressed",String(mine===1));
+    R.vote.down.setAttribute("aria-pressed",String(mine===-1));
+  }
+}
+async function loadVotes(){
+  try{
+    const [all,mine]=await Promise.all([
+      fetch(SB_URL+"/votes?select=slug,value",{headers:SB_H}).then(r=>r.json()),
+      fetch(SB_URL+"/votes?select=slug,value&voter=eq."+voterId(),{headers:SB_H}).then(r=>r.json()),
+    ]);
+    VOTES={}; (all||[]).forEach(r=>{ const v=VOTES[r.slug]||(VOTES[r.slug]={up:0,down:0}); r.value===1?v.up++:v.down++; });
+    MYVOTE={}; (mine||[]).forEach(r=>MYVOTE[r.slug]=r.value);
+    paintVotes();
+  }catch{ /* offline → counts stay at 0 */ }
+}
+async function castVote(slug,value){
+  const prev=MYVOTE[slug];
+  if(prev===value) return;                 // no un-vote (delete is blocked by design)
+  const v=VOTES[slug]||(VOTES[slug]={up:0,down:0});
+  const apply=(pv,nv)=>{ if(pv===1)v.up--; if(pv===-1)v.down--; if(nv===1)v.up++; if(nv===-1)v.down++; };
+  apply(prev,value); MYVOTE[slug]=value; paintVotes();   // optimistic
+  try{
+    const r=await fetch(SB_URL+"/votes",{ method:"POST",
+      headers:{...SB_H,"Prefer":"resolution=merge-duplicates,return=minimal"},
+      body:JSON.stringify({slug,voter:voterId(),value}) });
+    if(!r.ok) throw 0;
+  }catch{ apply(value,prev); MYVOTE[slug]=prev; paintVotes(); }  // revert
+}
+
+/* ---------------- suggestion sheet (Supabase) ---------------- */
+const dlg=$("#suggestDlg"), sForm=$("#suggestForm"), sMsg=$("#suggestMsg");
+function openSuggest(){ sMsg.hidden=true; sForm.reset(); if(dlg.showModal) dlg.showModal(); }
+$("#suggest").addEventListener("click",e=>{ e.preventDefault(); openSuggest(); });
+$("#suggestCancel").addEventListener("click",()=>dlg.close());
+sForm.addEventListener("submit",async e=>{
+  e.preventDefault();
+  const fd=new FormData(sForm), title=(fd.get("title")||"").trim();
+  if(!title) return;
+  const btn=$("#suggestSend"); btn.disabled=true; sMsg.hidden=false; sMsg.classList.remove("err"); sMsg.textContent=t().sending;
+  try{
+    const r=await fetch(SB_URL+"/suggestions",{ method:"POST",
+      headers:{...SB_H,"Prefer":"return=minimal"},
+      body:JSON.stringify({ title, author:(fd.get("author")||"").trim()||null,
+        lang:LANG, why:(fd.get("why")||"").trim()||null }) });
+    if(!r.ok) throw 0;
+    sMsg.textContent=t().sent; sForm.reset();
+    setTimeout(()=>dlg.close(),1300);
+  }catch{ sMsg.classList.add("err"); sMsg.textContent=t().sendErr; }
+  finally{ btn.disabled=false; }
+});
+
 /* boot — manifest is required (generated); books.meta.json is optional (hand-edited) */
 Promise.all([
   fetch("manifest.json?"+Date.now()).then(r=>{ if(!r.ok) throw 0; return r.json(); }),
   fetch("books.meta.json?"+Date.now()).then(r=>r.ok?r.json():{}).catch(()=>({})),
 ])
-  .then(([d,meta])=>{ DATA=d; META=meta||{}; render(); })
+  .then(([d,meta])=>{ DATA=d; META=meta||{}; render(); loadVotes(); })
   .catch(()=>{ render(); const m=$("#msg"); m.hidden=false; m.textContent=t().error; });
 </script>
 </body>
