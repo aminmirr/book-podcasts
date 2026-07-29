@@ -323,12 +323,13 @@ footer a:hover{ color:var(--paper); }
     </div>
   </div>
 
-  <!-- fallback if the popup is blocked -->
+  <!-- after "Yes, star it": stays open so they can star on return -->
   <div class="sheet-panel" data-step="links" hidden>
     <h3 data-i18n="sgOpenH"></h3>
     <p class="sheet-lead" data-i18n="sgOpenLead"></p>
     <div class="sheet-actions col">
-      <a class="btn-primary" id="lnkIssue" target="_blank" rel="noopener" data-i18n="sgOpenIssue"></a>
+      <a class="btn-primary" id="lnkStar"  target="_blank" rel="noopener" data-i18n="sgStarLink"></a>
+      <a class="btn-ghost"   id="lnkIssue" target="_blank" rel="noopener" data-i18n="sgOpenIssue"></a>
     </div>
   </div>
 
@@ -361,11 +362,12 @@ fa:{ mark:"خلاصه‌های صوتی",
   sgStarH:"به پروژه ستاره می‌دهی؟",
   sgStarLead:"یک ستاره کمک می‌کند دیگران این پروژه را پیدا کنند. همین حالا ستاره می‌دهی؟",
   sgStarYes:"بله، ستاره می‌دهم ⭐", sgStarNo:"نه، فقط پیشنهاد",
-  sgOpenH:"باز کردن", sgOpenLead:"مرورگرت تب را مسدود کرد. برای باز کردن بزن:",
-  sgOpenIssue:"✍️ باز کردن صفحه پیشنهاد",
+  sgOpenH:"یک قدم آخر ⭐",
+  sgOpenLead:"پیشنهادت را ثبت کن، بعد به همین صفحه برگرد و برای ستاره‌دادن روی دکمه‌ی زیر بزن:",
+  sgStarLink:"⭐ رفتن به صفحه‌ی ستاره", sgOpenIssue:"✍️ باز کردن صفحه‌ی پیشنهاد",
   issueTitle:"پیشنهاد کتاب: ",
   issueBody:"نام کتاب:\nنویسنده:\nزبان (فارسی/انگلیسی):\nچرا؟\n",
-  starNote:"\n\n— بعد از ثبت، لطفاً به صفحه‌ی اصلی برگرد و روی ⭐ Star بالای صفحه بزن. ممنون! 🙏",
+  starNote:"\n\n— بعد از ثبت، به صفحه‌ی اصلی برگرد و روی «رفتن به صفحه‌ی ستاره» بزن تا پروژه را ⭐ ستاره کنی. ممنون! 🙏",
   fTitle:"نام کتاب *", fAuthor:"نویسنده", fWhy:"چرا این کتاب؟",
   cancel:"انصراف", send:"ارسال", sending:"در حال ارسال…",
   sent:"ممنون! پیشنهادت ثبت شد.", sendErr:"ارسال نشد، دوباره تلاش کن.",
@@ -391,11 +393,12 @@ en:{ mark:"Audio summaries",
   sgStarH:"Star the project?",
   sgStarLead:"A star helps other people discover it. Want to star it while you're here?",
   sgStarYes:"Yes, star it ⭐", sgStarNo:"No, just suggest",
-  sgOpenH:"Open", sgOpenLead:"Your browser blocked the tab — tap to open:",
-  sgOpenIssue:"✍️ Open the suggestion page",
+  sgOpenH:"One last step ⭐",
+  sgOpenLead:"Submit your suggestion, then come back to this page and tap below to star the project:",
+  sgStarLink:"⭐ Go to starring page", sgOpenIssue:"✍️ Open the suggestion page",
   issueTitle:"Book suggestion: ",
   issueBody:"Book title:\nAuthor:\nLanguage (Persian/English):\nWhy?\n",
-  starNote:"\n\n— After you submit, please go back to the site and click ⭐ Star at the top. Thank you! 🙏",
+  starNote:"\n\n— After you submit, go back to the main page and tap “Go to starring page” to give the project a ⭐. Thank you! 🙏",
   fTitle:"Book title *", fAuthor:"Author", fWhy:"Why this book?",
   cancel:"Cancel", send:"Send", sending:"Sending…",
   sent:"Thanks! Your suggestion was saved.", sendErr:"Couldn't send — try again.",
@@ -799,21 +802,31 @@ const issueUrl=withStar=> REPO_URL+"/issues/new?labels=suggestion"
   + "&body=" +encodeURIComponent(t().issueBody + (withStar ? t().starNote : ""));
 const showPanel=name=>$$(".sheet-panel",dlg).forEach(p=>p.hidden=p.dataset.step!==name);
 const openTab=url=>{ const w=window.open(url,"_blank"); if(w) w.opener=null; return w; };
-// open the (single) issue tab; if the browser blocks it, show a tappable link instead
-function goIssue(withStar){
-  const url=issueUrl(withStar);
-  if(openTab(url)) dlg.close();
-  else { $("#lnkIssue").href=url; showPanel("links"); }
-}
 function openSuggest(){ sMsg.hidden=true; sForm.reset(); showPanel("choose"); if(dlg.showModal) dlg.showModal(); }
 
 $("#suggest").addEventListener("click",e=>{ e.preventDefault(); openSuggest(); });
 $("#sheetClose").addEventListener("click",()=>dlg.close());
 $("#pickAnon").addEventListener("click",()=>{ sMsg.hidden=true; showPanel("form"); });
 $("#pickGh").addEventListener("click",()=>showPanel("star"));
-$("#starNo").addEventListener("click",()=>goIssue(false));
-$("#starYes").addEventListener("click",()=>goIssue(true));      // opens issue; reminder to star is in the body
-$("#lnkIssue").addEventListener("click",()=>dlg.close());        // close the box after tapping the link
+
+// "No, just suggest" → open the suggestion page and close the box
+$("#starNo").addEventListener("click",()=>{
+  const url=issueUrl(false);
+  if(openTab(url)){ dlg.close(); return; }
+  $("#lnkIssue").href=url; $("#lnkStar").hidden=true; showPanel("links");   // popup blocked → tappable link
+});
+// "Yes, star it" → open the suggestion page, but KEEP the box open with a
+// "Go to starring page" link (the issue body tells them to come back and tap it)
+$("#starYes").addEventListener("click",()=>{
+  const url=issueUrl(true);
+  openTab(url);
+  $("#lnkStar").href=REPO_URL; $("#lnkStar").hidden=false;
+  $("#lnkIssue").href=url;
+  showPanel("links");            // stays open; do NOT close here
+});
+// tapping either link closes the box
+$("#lnkStar").addEventListener("click",()=>dlg.close());
+$("#lnkIssue").addEventListener("click",()=>dlg.close());
 $("#suggestCancel").addEventListener("click",()=>dlg.close());
 sForm.addEventListener("submit",async e=>{
   e.preventDefault();
