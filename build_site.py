@@ -129,6 +129,24 @@ def load_manifest() -> dict:
     return {"books": []}
 
 
+META = SITE_DIR / "books.meta.json"
+META_FIELDS = ("title_en", "title_fa", "author", "cover", "note_en", "note_fa")
+
+
+def seed_meta(manifest: dict) -> None:
+    """Ensure books.meta.json has a (hand-editable) stub per book. Adds missing
+    slugs only — NEVER overwrites existing entries, so edits always survive."""
+    meta = json.loads(META.read_text()) if META.exists() else {}
+    added = 0
+    for b in manifest["books"]:
+        if b["slug"] not in meta:
+            meta[b["slug"]] = {"title_en": b["title"], **{k: "" for k in META_FIELDS[1:]}}
+            added += 1
+    if added or not META.exists():
+        META.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n")
+    print(f"books.meta.json: {len(meta)} book(s), {added} new stub(s) (existing edits untouched)")
+
+
 def main() -> None:
     args = sys.argv[1:]
     do_shrink = "--no-shrink" not in args
@@ -152,6 +170,7 @@ def main() -> None:
     manifest["books"] = sorted(by_slug.values(), key=lambda b: b["title"])
     MANIFEST.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")
     print(f"wrote {MANIFEST} ({len(manifest['books'])} book(s))")
+    seed_meta(manifest)
 
 
 if __name__ == "__main__":

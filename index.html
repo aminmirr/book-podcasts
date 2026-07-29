@@ -66,10 +66,20 @@ html[data-lang="fa"] .stat b{ font-family:'Vazirmatn',sans-serif; font-weight:80
 /* book */
 .book{ padding-block:clamp(30px,4.5vw,44px); border-bottom:1px solid var(--line); }
 .book-top{ display:grid; grid-template-columns:1fr auto; gap:20px 28px; align-items:start; }
-.book-title{ font-family:'Newsreader',Georgia,serif; font-weight:500;
-  font-size:clamp(1.35rem,3vw,1.95rem); line-height:1.2; letter-spacing:-.01em; }
-html[data-lang="fa"] .book-title{ font-family:'Vazirmatn',sans-serif; font-weight:800; line-height:1.45; letter-spacing:0; }
-.book-note{ margin-top:12px; max-width:60ch; font-size:.95rem;
+.book-id{ display:flex; gap:clamp(14px,3vw,22px); align-items:flex-start; min-width:0; }
+.cover{ width:clamp(58px,11vw,92px); aspect-ratio:2/3; object-fit:cover; flex:none;
+  border-radius:3px; border:1px solid var(--line); background:var(--ink-raise);
+  box-shadow:0 1px 0 0 color-mix(in srgb,var(--paper) 8%,transparent) inset; }
+.titles{ min-width:0; }
+/* English title: always the bold serif display line */
+.book-title-en{ font-family:'Newsreader',Georgia,serif; font-weight:500;
+  font-size:clamp(1.35rem,3vw,1.95rem); line-height:1.18; letter-spacing:-.01em; }
+.book-title-fa{ font-family:'Vazirmatn',sans-serif; font-weight:500; direction:rtl;
+  font-size:clamp(1rem,2.2vw,1.28rem); line-height:1.5; margin-top:5px;
+  color:color-mix(in srgb,var(--paper) 82%,var(--ink)); }
+.book-author{ color:var(--haze); margin-top:10px; font-size:.9rem; }
+.book-author::before{ content:"—  "; opacity:.6; }
+.book-note{ margin-top:14px; max-width:60ch; font-size:.95rem;
   color:color-mix(in srgb,var(--paper) 74%,var(--ink)); }
 
 .whole{ display:inline-flex; align-items:center; justify-content:center; gap:10px;
@@ -156,6 +166,7 @@ footer a:hover{ color:var(--paper); }
 
 @media (max-width:680px){
   .book-top{ grid-template-columns:1fr; }
+  .cover{ width:64px; }
   .whole{ width:100%; }
   .ch{ grid-template-columns:auto 1fr auto; }
   .ch-dl{ display:none; }
@@ -240,6 +251,7 @@ en:{ mark:"Audio summaries",
 
 let LANG = localStorage.getItem("abs-lang") || "fa";
 let DATA = null;
+let META = {};   // slug -> hand-edited { title_en, title_fa, author, cover, note_en, note_fa }
 const audio = new Audio();
 let queue = [], qi = -1;
 const refs = {};   // slug -> { segs:[], fills:[], whole, chs:[] }
@@ -320,10 +332,23 @@ function bookEl(b, openToc){
   const el=document.createElement("article"); el.className="book";
   const chMin=chapters.reduce((s,c)=>s+(c.seconds||0),0);
 
+  const m = META[b.slug] || {};
+  const titleEn = m.title_en || b.title || b.slug;
+  const titleFa = m.title_fa || "";
+  const author  = m.author || "";
+  const cover   = m.cover || "";
+  const note    = (LANG==="fa" ? m.note_fa : m.note_en) || "";
+
   el.innerHTML=`
     <div class="book-top">
-      <div>
-        <h2 class="book-title">${esc(b.title||b.slug)}</h2>
+      <div class="book-id">
+        ${cover?`<img class="cover" src="${esc(cover)}" alt="" loading="lazy" onerror="this.remove()">`:""}
+        <div class="titles">
+          <h2 class="book-title-en">${esc(titleEn)}</h2>
+          ${titleFa?`<p class="book-title-fa">${esc(titleFa)}</p>`:""}
+          ${author?`<p class="book-author">${esc(author)}</p>`:""}
+          ${note?`<p class="book-note">${esc(note)}</p>`:""}
+        </div>
       </div>
       <div class="book-side"></div>
     </div>
@@ -394,7 +419,7 @@ function bookEl(b, openToc){
 
 function mkTrack(b,kind,ep,idx){
   return { slug:b.slug, kind, idx,
-    book:b.title||b.slug,
+    book:(META[b.slug]&&META[b.slug].title_en)||b.title||b.slug,
     label: kind==="full" ? t().whole : `${t().chShort} ${num(idx+1)} — ${ep.title||""}`,
     src:ep.url };
 }
@@ -495,10 +520,12 @@ function resume(keep, ratio){
   if(keep.playing) audio.play().catch(fail);
 }
 
-/* boot */
-fetch("manifest.json?"+Date.now())
-  .then(r=>{ if(!r.ok) throw 0; return r.json(); })
-  .then(d=>{ DATA=d; render(); })
+/* boot — manifest is required (generated); books.meta.json is optional (hand-edited) */
+Promise.all([
+  fetch("manifest.json?"+Date.now()).then(r=>{ if(!r.ok) throw 0; return r.json(); }),
+  fetch("books.meta.json?"+Date.now()).then(r=>r.ok?r.json():{}).catch(()=>({})),
+])
+  .then(([d,meta])=>{ DATA=d; META=meta||{}; render(); })
   .catch(()=>{ render(); const m=$("#msg"); m.hidden=false; m.textContent=t().error; });
 </script>
 </body>
