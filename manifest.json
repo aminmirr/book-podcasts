@@ -386,6 +386,256 @@
       }
     },
     {
+      "slug": "exploratory-data-analysis-john-w-tukey",
+      "title": "Exploratory Data Analysis  John W Tukey",
+      "episodes": {
+        "English": [
+          {
+            "title": "Full-book overview",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/whole_book_en.m4a",
+            "seconds": 1265
+          },
+          {
+            "title": "To the Student or Teacher",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/00-To-the-Student-or-Teacher_en.m4a",
+            "seconds": 1319
+          },
+          {
+            "title": "SCHEMATIC SUMMARIES pictures and numbers",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/01-2-SCHEMATIC-SUMMARIES-pictures-and-numbers_en.m4a",
+            "seconds": 1424
+          },
+          {
+            "title": "EASY RE EXPRESSION",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/02-3-EASY-RE-EXPRESSION_en.m4a",
+            "seconds": 1283
+          },
+          {
+            "title": "EFFECTIVE COMPARISON including well chosen expression",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/03-4-EFFECTIVE-COMPARISON-including-well-chosen-expression_en.m4a",
+            "seconds": 1243
+          },
+          {
+            "title": "PLOTS OF RELATIONSHIP",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/04-5-PLOTS-OF-RELATIONSHIP_en.m4a",
+            "seconds": 1184
+          },
+          {
+            "title": "STRAIGHTENING OUT PLOTS using three points",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/05-6-STRAIGHTENING-OUT-PLOTS-using-three-points_en.m4a",
+            "seconds": 1288
+          },
+          {
+            "title": "SMOOTHING SEQUENCES",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/06-7-SMOOTHING-SEQUENCES_en.m4a",
+            "seconds": 1224
+          },
+          {
+            "title": "OPTIONAL SECTIONS FOR CHAPTER 7",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/07-7-OPTIONAL-SECTIONS-FOR-CHAPTER-7_en.m4a",
+            "seconds": 1270
+          },
+          {
+            "title": "PARALLEL AND WANDERING SCHEMATIC PLOTS",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/08-8-PARALLEL-AND-WANDERING-SCHEMATIC-PLOTS_en.m4a",
+            "seconds": 1302
+          },
+          {
+            "title": "DELINEATIONS OF BATCHES OF POINTS",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/09-9-DELINEATIONS-OF-BATCHES-OF-POINTS_en.m4a",
+            "seconds": 1340
+          },
+          {
+            "title": "USING TWO WAY ANALYSES",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/10-10-USING-TWO-WAY-ANALYSES_en.m4a",
+            "seconds": 1288
+          },
+          {
+            "title": "MAKING TWO WAY ANALYSES",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/11-11-MAKING-TWO-WAY-ANALYSES_en.m4a",
+            "seconds": 1329
+          },
+          {
+            "title": "OPTIONAL SECTIONS FOR CHAPTERS 10 AND 11",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/12-11-OPTIONAL-SECTIONS-FOR-CHAPTERS-10-AND-11_en.m4a",
+            "seconds": 1149
+          },
+          {
+            "title": "ADVANCED FITS",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/13-12-ADVANCED-FITS_en.m4a",
+            "seconds": 1260
+          },
+          {
+            "title": "THREE WAY FITS",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/14-13-THREE-WAY-FITS_en.m4a",
+            "seconds": 1348
+          },
+          {
+            "title": "LOOKING IN TWO OR MORE WAYS AT BATCHES OF POINTS",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/15-14-LOOKING-IN-TWO-OR-MORE-WAYS-AT-BATCHES-OF-POINTS_en.m4a",
+            "seconds": 1318
+          },
+          {
+            "title": "COUNTED FRACTIONS",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/16-15-COUNTED-FRACTIONS_en.m4a",
+            "seconds": 1202
+          },
+          {
+            "title": "BETTER SMOOTHING",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/17-16-BETTER-SMOOTHING_en.m4a",
+            "seconds": 1154
+          },
+          {
+            "title": "COUNTS in BIN after BIN",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/18-17-COUNTS-in-BIN-after-BIN_en.m4a",
+            "seconds": 1138
+          },
+          {
+            "title": "PRODUCT RATIO PLOTS",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/19-18-PRODUCT-RATIO-PLOTS_en.m4a",
+            "seconds": 1269
+          },
+          {
+            "title": "SHAPES OF DISTRIBUTION",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/20-19-SHAPES-OF-DISTRIBUTION_en.m4a",
+            "seconds": 1202
+          },
+          {
+            "title": "MATHEMATICAL DISTRIBUTIONS",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/21-20-MATHEMATICAL-DISTRIBUTIONS_en.m4a",
+            "seconds": 832
+          },
+          {
+            "title": "POSTSCRIPT",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/22-21-POSTSCRIPT_en.m4a",
+            "seconds": 1286
+          }
+        ],
+        "Persian": [
+          {
+            "title": "Full-book overview",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/whole_book_fa.m4a",
+            "seconds": 1725
+          },
+          {
+            "title": "To the Student or Teacher",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/00-To-the-Student-or-Teacher_fa.m4a",
+            "seconds": 933
+          },
+          {
+            "title": "SCHEMATIC SUMMARIES pictures and numbers",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/01-2-SCHEMATIC-SUMMARIES-pictures-and-numbers_fa.m4a",
+            "seconds": 830
+          },
+          {
+            "title": "EASY RE EXPRESSION",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/02-3-EASY-RE-EXPRESSION_fa.m4a",
+            "seconds": 1592
+          },
+          {
+            "title": "EFFECTIVE COMPARISON including well chosen expression",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/03-4-EFFECTIVE-COMPARISON-including-well-chosen-expression_fa.m4a",
+            "seconds": 1465
+          },
+          {
+            "title": "PLOTS OF RELATIONSHIP",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/04-5-PLOTS-OF-RELATIONSHIP_fa.m4a",
+            "seconds": 1712
+          },
+          {
+            "title": "STRAIGHTENING OUT PLOTS using three points",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/05-6-STRAIGHTENING-OUT-PLOTS-using-three-points_fa.m4a",
+            "seconds": 1373
+          },
+          {
+            "title": "SMOOTHING SEQUENCES",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/06-7-SMOOTHING-SEQUENCES_fa.m4a",
+            "seconds": 1126
+          },
+          {
+            "title": "OPTIONAL SECTIONS FOR CHAPTER 7",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/07-7-OPTIONAL-SECTIONS-FOR-CHAPTER-7_fa.m4a",
+            "seconds": 1018
+          },
+          {
+            "title": "PARALLEL AND WANDERING SCHEMATIC PLOTS",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/08-8-PARALLEL-AND-WANDERING-SCHEMATIC-PLOTS_fa.m4a",
+            "seconds": 1364
+          },
+          {
+            "title": "DELINEATIONS OF BATCHES OF POINTS",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/09-9-DELINEATIONS-OF-BATCHES-OF-POINTS_fa.m4a",
+            "seconds": 940
+          },
+          {
+            "title": "USING TWO WAY ANALYSES",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/10-10-USING-TWO-WAY-ANALYSES_fa.m4a",
+            "seconds": 1538
+          },
+          {
+            "title": "MAKING TWO WAY ANALYSES",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/11-11-MAKING-TWO-WAY-ANALYSES_fa.m4a",
+            "seconds": 1711
+          },
+          {
+            "title": "OPTIONAL SECTIONS FOR CHAPTERS 10 AND 11",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/12-11-OPTIONAL-SECTIONS-FOR-CHAPTERS-10-AND-11_fa.m4a",
+            "seconds": 1045
+          },
+          {
+            "title": "ADVANCED FITS",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/13-12-ADVANCED-FITS_fa.m4a",
+            "seconds": 1847
+          },
+          {
+            "title": "THREE WAY FITS",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/14-13-THREE-WAY-FITS_fa.m4a",
+            "seconds": 1030
+          },
+          {
+            "title": "LOOKING IN TWO OR MORE WAYS AT BATCHES OF POINTS",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/15-14-LOOKING-IN-TWO-OR-MORE-WAYS-AT-BATCHES-OF-POINTS_fa.m4a",
+            "seconds": 1347
+          },
+          {
+            "title": "COUNTED FRACTIONS",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/16-15-COUNTED-FRACTIONS_fa.m4a",
+            "seconds": 1231
+          },
+          {
+            "title": "BETTER SMOOTHING",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/17-16-BETTER-SMOOTHING_fa.m4a",
+            "seconds": 1342
+          },
+          {
+            "title": "COUNTS in BIN after BIN",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/18-17-COUNTS-in-BIN-after-BIN_fa.m4a",
+            "seconds": 1032
+          },
+          {
+            "title": "PRODUCT RATIO PLOTS",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/19-18-PRODUCT-RATIO-PLOTS_fa.m4a",
+            "seconds": 1362
+          },
+          {
+            "title": "SHAPES OF DISTRIBUTION",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/20-19-SHAPES-OF-DISTRIBUTION_fa.m4a",
+            "seconds": 754
+          },
+          {
+            "title": "MATHEMATICAL DISTRIBUTIONS",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/21-20-MATHEMATICAL-DISTRIBUTIONS_fa.m4a",
+            "seconds": 1277
+          },
+          {
+            "title": "POSTSCRIPT",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-exploratory-data-analysis-john-w-tukey/22-21-POSTSCRIPT_fa.m4a",
+            "seconds": 943
+          }
+        ]
+      }
+    },
+    {
       "slug": "honeybee-democracy-thomas-seeley-pdf",
       "title": "Honeybee Democracy Thomas Seeley PDF",
       "episodes": {

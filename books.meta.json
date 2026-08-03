@@ -332,5 +332,112 @@
         "title_fa": ""
       }
     }
+  },
+  "exploratory-data-analysis-john-w-tukey": {
+    "title_en": "Exploratory Data Analysis",
+    "title_fa": "",
+    "author": "John W Tukey",
+    "cover": "covers/Exploratory-Data-Analysis--John-W-Tukey.jpg",
+    "note_en": "",
+    "note_fa": "",
+    "categories": [
+      "Finance",
+      "Statistics",
+      "Data Science"
+    ],
+    "chapters": {
+      "00-To-the-Student-or-Teacher": {
+        "title_en": "To the Student or Teacher",
+        "title_fa": ""
+      },
+      "01-2-SCHEMATIC-SUMMARIES-pictures-and-numbers": {
+        "title_en": "SCHEMATIC SUMMARIES pictures and numbers",
+        "title_fa": ""
+      },
+      "02-3-EASY-RE-EXPRESSION": {
+        "title_en": "EASY RE EXPRESSION",
+        "title_fa": ""
+      },
+      "03-4-EFFECTIVE-COMPARISON-including-well-chosen-expression": {
+        "title_en": "EFFECTIVE COMPARISON including well chosen expression",
+        "title_fa": ""
+      },
+      "04-5-PLOTS-OF-RELATIONSHIP": {
+        "title_en": "PLOTS OF RELATIONSHIP",
+        "title_fa": ""
+      },
+      "05-6-STRAIGHTENING-OUT-PLOTS-using-three-points": {
+        "title_en": "STRAIGHTENING OUT PLOTS using three points",
+        "title_fa": ""
+      },
+      "06-7-SMOOTHING-SEQUENCES": {
+        "title_en": "SMOOTHING SEQUENCES",
+        "title_fa": ""
+      },
+      "07-7-OPTIONAL-SECTIONS-FOR-CHAPTER-7": {
+        "title_en": "OPTIONAL SECTIONS FOR CHAPTER 7",
+        "title_fa": ""
+      },
+      "08-8-PARALLEL-AND-WANDERING-SCHEMATIC-PLOTS": {
+        "title_en": "PARALLEL AND WANDERING SCHEMATIC PLOTS",
+        "title_fa": ""
+      },
+      "09-9-DELINEATIONS-OF-BATCHES-OF-POINTS": {
+        "title_en": "DELINEATIONS OF BATCHES OF POINTS",
+        "title_fa": ""
+      },
+      "10-10-USING-TWO-WAY-ANALYSES": {
+        "title_en": "USING TWO WAY ANALYSES",
+        "title_fa": ""
+      },
+      "11-11-MAKING-TWO-WAY-ANALYSES": {
+        "title_en": "MAKING TWO WAY ANALYSES",
+        "title_fa": ""
+      },
+      "12-11-OPTIONAL-SECTIONS-FOR-CHAPTERS-10-AND-11": {
+        "title_en": "OPTIONAL SECTIONS FOR CHAPTERS 10 AND 11",
+        "title_fa": ""
+      },
+      "13-12-ADVANCED-FITS": {
+        "title_en": "ADVANCED FITS",
+        "title_fa": ""
+      },
+      "14-13-THREE-WAY-FITS": {
+        "title_en": "THREE WAY FITS",
+        "title_fa": ""
+      },
+      "15-14-LOOKING-IN-TWO-OR-MORE-WAYS-AT-BATCHES-OF-POINTS": {
+        "title_en": "LOOKING IN TWO OR MORE WAYS AT BATCHES OF POINTS",
+        "title_fa": ""
+      },
+      "16-15-COUNTED-FRACTIONS": {
+        "title_en": "COUNTED FRACTIONS",
+        "title_fa": ""
+      },
+      "17-16-BETTER-SMOOTHING": {
+        "title_en": "BETTER SMOOTHING",
+        "title_fa": ""
+      },
+      "18-17-COUNTS-in-BIN-after-BIN": {
+        "title_en": "COUNTS in BIN after BIN",
+        "title_fa": ""
+      },
+      "19-18-PRODUCT-RATIO-PLOTS": {
+        "title_en": "PRODUCT RATIO PLOTS",
+        "title_fa": ""
+      },
+      "20-19-SHAPES-OF-DISTRIBUTION": {
+        "title_en": "SHAPES OF DISTRIBUTION",
+        "title_fa": ""
+      },
+      "21-20-MATHEMATICAL-DISTRIBUTIONS": {
+        "title_en": "MATHEMATICAL DISTRIBUTIONS",
+        "title_fa": ""
+      },
+      "22-21-POSTSCRIPT": {
+        "title_en": "POSTSCRIPT",
+        "title_fa": ""
+      }
+    }
   }
 }

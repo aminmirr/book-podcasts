@@ -50,6 +50,13 @@ def episode_title(filename: str) -> str:
     return stem.replace("-", " ").strip() or filename
 
 
+def bar(done: int, total: int, label: str = "") -> None:
+    """One-line progress bar; counts finished files, so it steps per file, not per byte."""
+    filled = round(20 * done / max(total, 1))
+    print(f"\r  [{'#' * filled}{'.' * (20 - filled)}] {done}/{total}  {label[:38]:<38}",
+          end="\n" if done == total else "", flush=True)
+
+
 def shrink(src: Path, dst_dir: Path) -> Path:
     """Transcode to 64k mono AAC (transparent for speech, ~4x smaller). Keeps the
     filename so the release asset name / URL stays stable."""
@@ -105,14 +112,26 @@ def publish_book(book_name: str, repo: str, do_shrink: bool = True) -> dict | No
     with tempfile.TemporaryDirectory() as tmp:
         if do_shrink:
             print(f"  shrinking {len(all_paths)} file(s) to 64k mono AAC ...")
-            uploads = [shrink(p, Path(tmp)) for p in all_paths]
+            uploads = []
+            for i, p in enumerate(all_paths, 1):
+                uploads.append(shrink(p, Path(tmp)))
+                bar(i, len(all_paths), p.name)
         else:
             uploads = all_paths  # already compressed — upload as-is (lossless)
+
+        # One gh call per file so the bar can advance; a single batched call gives no
+        # feedback until every asset is done.
         print(f"  uploading to release {tag} ...")
-        subprocess.run(
-            ["gh", "release", "upload", tag, "--repo", repo, "--clobber", *map(str, uploads)],
-            check=True,
-        )
+        bar(0, len(uploads))
+        for i, p in enumerate(uploads, 1):
+            r = subprocess.run(
+                ["gh", "release", "upload", tag, "--repo", repo, "--clobber", str(p)],
+                capture_output=True, text=True,
+            )
+            if r.returncode:
+                print()
+                sys.exit(f"  upload failed for {p.name}: {r.stderr.strip()}")
+            bar(i, len(uploads), p.name)
 
     base = f"https://github.com/{repo}/releases/download/{tag}"
     episodes = {
