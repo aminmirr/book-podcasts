@@ -655,7 +655,7 @@ function renderCats(books){
 
 function bookEl(b, openToc){
   const L=t(), {full,chapters}=split(b);
-  const el=document.createElement("article"); el.className="book";
+  const el=document.createElement("article"); el.className="book"; el.id=b.slug;
   const chMin=chapters.reduce((s,c)=>s+(c.seconds||0),0);
 
   const m = META[b.slug] || {};
@@ -690,7 +690,7 @@ function bookEl(b, openToc){
       <div class="toc" ${openToc?"":"hidden"}></div>
     </div>`;
 
-  const R = refs[b.slug] = { segs:[], fills:[], chs:[], whole:null };
+  const R = refs[b.slug] = { segs:[], fills:[], chs:[], whole:null, el };
 
   // per-book category chips (clickable → filter)
   const catBox=$(".book-cats",el), cats=bookCats(b.slug).slice(0,3);
@@ -728,7 +728,7 @@ function bookEl(b, openToc){
       if(cur()?.slug===b.slug && cur()?.kind==="full"){ audio.paused?audio.play():audio.pause(); return; }
       start([mkTrack(b,"full",full,0)],0);
     });
-    side.append(w); R.whole=w;
+    side.append(w); R.whole=w; R.fullTrack=mkTrack(b,"full",full,0);
     const dl=document.createElement("a");
     dl.className="whole-dl"; dl.href=full.url; dl.setAttribute("download","");
     dl.title=L.dlWhole; dl.setAttribute("aria-label",L.dlWhole); dl.innerHTML=ICON_DL;
@@ -740,6 +740,7 @@ function bookEl(b, openToc){
   // spine + toc, segment width ∝ chapter length
   const spine=$(".spine",el), toc=$(".toc",el);
   const tracks=chapters.map((c,i)=>mkTrack(b,"chapter",c,i));
+  R.tracks=tracks;
   chapters.forEach((c,i)=>{
     const title=chTitle(b.slug,c);
     const seg=document.createElement("button");
@@ -771,12 +772,17 @@ function bookEl(b, openToc){
     tog.setAttribute("aria-expanded",String(!on));
     toc.hidden=on; setLabel();
   });
+  R.expand=()=>{ if(tog.getAttribute("aria-expanded")!=="true") tog.click(); };
   if(!chapters.length){ $(".spine-wrap",el).style.display="none"; }
   return el;
 }
 
+/* Stable per-chapter id: the asset filename minus _en/_fa — the same key build_site.py
+   uses in books.meta.json, so it means the same chapter in both languages. */
+const chapterKey = url => url.split("/").pop().replace(/\.m4a$/,"").replace(/_(en|fa)$/,"");
+
 function mkTrack(b,kind,ep,idx){
-  return { slug:b.slug, kind, idx,
+  return { slug:b.slug, kind, idx, key:chapterKey(ep.url),
     book:(META[b.slug]&&META[b.slug].title_en)||b.title||b.slug,
     label: kind==="full" ? t().whole : `${t().chShort} ${num(idx+1)} — ${chTitle(b.slug,ep)}`,
     src:ep.url };
@@ -784,7 +790,36 @@ function mkTrack(b,kind,ep,idx){
 
 /* ---------------- playback ---------------- */
 const cur = ()=>queue[qi];
-function start(list,i){ queue=list; qi=i; load(true); }
+function start(list,i,autoplay=true){ queue=list; qi=i; load(autoplay); }
+
+/* ---------------- deep links ----------------
+   #<slug>                        → a book
+   #<slug>/full                   → its whole-book episode
+   #<slug>/<chapter-key>          → one chapter
+
+   Keyed by chapter, not by position: chapter numbering is per-language (a book with
+   6 English and 3 Persian episodes numbers them differently) and shifts whenever a
+   missing episode is generated, so a positional link would rot. The key resolves to
+   the same chapter in either language, and to the book alone if that chapter has no
+   episode in the language being viewed.
+
+   A shared link loads the episode but never autoplays: browsers block unprompted
+   sound anyway, and arriving to noise is hostile. */
+const trackHash = tr => `${tr.slug}/${tr.kind==="full" ? "full" : tr.key}`;
+const trackLink = tr => `${location.origin}${location.pathname}#${trackHash(tr)}`;
+
+function openFromHash(){
+  const [slug, ...rest] = decodeURIComponent(location.hash.slice(1)).split("/");
+  const ep = rest.join("/");                        // keys may contain slashes
+  const R = refs[slug];
+  if(!R || !R.el || !R.el.isConnected) return;      // unknown slug, or filtered out
+  R.el.scrollIntoView({behavior:"smooth", block:"start"});
+  if(!ep) return;
+  if(ep === "full" && R.fullTrack) return start([R.fullTrack], 0, false);
+  const i = (R.tracks || []).findIndex(tr => tr.key === ep);
+  if(i >= 0){ R.expand(); start(R.tracks, i, false); }
+}
+addEventListener("hashchange", openFromHash);
 function load(autoplay){
   const tr=cur(); if(!tr) return;
   audio.src=tr.src;
@@ -1010,9 +1045,10 @@ function mpSetTrack(tr){
 function mDownload(){ const tr=cur(); if(!tr) return; const a=document.createElement("a"); a.href=tr.src; a.download=""; document.body.appendChild(a); a.click(); a.remove(); }
 async function mShare(){
   const tr=cur(); if(!tr) return;
+  const url=trackLink(tr);          // links to this episode, not just the site
   try{
-    if(navigator.share) await navigator.share({title:tr.label,text:tr.book,url:location.href});
-    else if(navigator.clipboard) await navigator.clipboard.writeText(location.href);
+    if(navigator.share) await navigator.share({title:tr.label,text:tr.book,url});
+    else if(navigator.clipboard) await navigator.clipboard.writeText(url);
   }catch{}
 }
 mp.addEventListener("click",e=>{
@@ -1047,7 +1083,7 @@ Promise.all([
   fetch("manifest.json?"+Date.now()).then(r=>{ if(!r.ok) throw 0; return r.json(); }),
   fetch("books.meta.json?"+Date.now()).then(r=>r.ok?r.json():{}).catch(()=>({})),
 ])
-  .then(([d,meta])=>{ DATA=d; META=meta||{}; render(); loadVotes(); })
+  .then(([d,meta])=>{ DATA=d; META=meta||{}; render(); openFromHash(); loadVotes(); })
   .catch(()=>{ render(); const m=$("#msg"); m.hidden=false; m.textContent=t().error; });
 </script>
 </body>

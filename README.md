@@ -75,6 +75,36 @@ so it only **adds** missing keys — your edits always survive a republish.
   URL. Missing/broken images just render without a cover.
 - **Categories:** ≤3 per book. They become clickable chips that filter the list.
 
+## Links
+
+Two kinds, both permanent.
+
+**The audio file itself** — a GitHub Release asset, playable and downloadable with no
+site involved. Every URL is already in `manifest.json`:
+
+```
+https://github.com/aminmirr/book-podcasts/releases/download/book-<slug>/<file>.m4a
+```
+
+**A place on the site** — hash links, handled by `openFromHash()`:
+
+| Link | Opens |
+|---|---|
+| `…/#show-your-work` | that book, scrolled into view |
+| `…/#show-your-work/full` | its whole-book episode, loaded in the player |
+| `…/#show-your-work/04-8-Learn-to-Take-a-Punch` | that chapter, with the table of contents opened |
+
+The share button in the player copies the link for whatever is playing.
+
+Chapters are keyed by **chapter key**, not by number. Numbering is per-language — a
+book with 6 English and 3 Persian episodes numbers the same chapter differently — and
+shifts whenever a missing episode is generated, so `#slug/3` would rot. The key is the
+asset filename minus `_en`/`_fa`, the same key `books.meta.json` uses, so one link
+lands on the same chapter in either language. A key with no episode in the current
+language falls back to opening the book.
+
+Deep links load the episode but never autoplay.
+
 ## Site features
 
 - Reading-room design (Newsreader serif + Vazirmatn, one amber/verdigris accent),
