@@ -46,6 +46,23 @@ good audio (`--no-shrink` forces that for every file). Book names are matched lo
 — `tukey` finds `Exploratory-Data-Analysis--John-W-Tukey` — but never guessed: an
 ambiguous or unknown name exits instead of creating an empty release under a typo.
 
+### Download-all zips
+
+Publishing also builds one zip per language (`<slug>-en.zip`, `<slug>-fa.zip`),
+uploads it as another release asset, and records its URL, size and file count under
+`zips` in the manifest. The site turns that into a **Download all · 74 MB** link next
+to the chapter count; a book with no `zips` entry simply doesn't show one, so books
+published before this existed keep working until their next publish.
+
+`ZIP_STORED`, not deflate — m4a is already compressed, so deflating would burn CPU
+to save nothing (measured overhead: ~1 KB on a 74 MB bundle). Entries are nested
+under the book's folder name so unzipping makes a directory instead of spraying
+loose files.
+
+One zip per language rather than one per book: total storage is identical, since
+each episode appears in exactly one zip, but a Persian listener doesn't download the
+English half. It also means the button always matches the language on screen.
+
 ## Editing book details — `books.meta.json`
 
 `manifest.json` is generated (overwritten on every publish); `books.meta.json` is

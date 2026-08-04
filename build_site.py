@@ -11,6 +11,9 @@ Usage:
 Files are transcoded to 64k mono AAC only if they aren't already small — audio the
 generator produced is left untouched, so publishing twice never degrades it.
 
+Each language also gets a zip of its episodes, uploaded as one more release asset,
+which is what the site's "download all" button points at.
+
 Audio (GBs) goes to Releases (one release per book, tag=book-<slug>); the repo
 only holds index.html + manifest.json. Idempotent: re-running re-uploads with
 --clobber and rewrites the book's manifest entry. Owner/repo come from the git
@@ -21,12 +24,14 @@ import re
 import subprocess
 import sys
 import tempfile
+import zipfile
 from pathlib import Path
 
 BOOKS_ROOT = Path.home() / "Downloads" / "notebookLM"
 SITE_DIR = Path(__file__).resolve().parent
 MANIFEST = SITE_DIR / "manifest.json"
 LANGS = ("English", "Persian")
+LANG_CODE = {"English": "en", "Persian": "fa"}
 
 
 def slugify(name: str) -> str:
@@ -134,6 +139,18 @@ def shrink(src: Path, dst_dir: Path) -> Path:
     return dst
 
 
+def make_zip(paths: list[Path], dst: Path, folder: str) -> Path:
+    """Bundle one language's episodes for a single 'download the whole book' click.
+
+    ZIP_STORED, not DEFLATE: m4a is already compressed, so deflating spends CPU to
+    save nothing. Entries are nested under `folder` so unzipping makes a directory
+    instead of spraying loose files."""
+    with zipfile.ZipFile(dst, "w", zipfile.ZIP_STORED) as z:
+        for p in paths:
+            z.write(p, arcname=f"{folder}/{p.name}")
+    return dst
+
+
 def duration_secs(path: Path) -> int | None:
     """Audio length in whole seconds via ffprobe (feeds the site's chapter spine)."""
     try:
@@ -174,40 +191,56 @@ def publish_book(book_name: str, repo: str, do_shrink: bool = True) -> dict | No
     )
 
     all_paths = [p for ps in files.values() for p in ps]
+    base = f"https://github.com/{repo}/releases/download/{tag}"
+
+    def push(path: Path) -> None:
+        r = subprocess.run(
+            ["gh", "release", "upload", tag, "--repo", repo, "--clobber", str(path)],
+            capture_output=True, text=True,
+        )
+        if r.returncode:
+            print()
+            sys.exit(f"  upload failed for {path.name}: {r.stderr.strip()}")
+
     with tempfile.TemporaryDirectory() as tmp:
         # Only the files that are still big get transcoded; the rest upload as-is.
+        small: dict[Path, Path] = {}
         big = [p for p in all_paths if do_shrink and not already_small(p)]
         if big:
             print(f"  shrinking {len(big)} of {len(all_paths)} file(s) to 64k mono AAC ...")
-            small = {}
             for i, p in enumerate(big, 1):
                 small[p] = shrink(p, Path(tmp))
                 bar(i, len(big), p.name)
-            uploads = [small.get(p, p) for p in all_paths]
-        else:
-            uploads = all_paths
+        # what actually gets uploaded, still grouped by language
+        up = {lang: [small.get(p, p) for p in ps] for lang, ps in files.items() if ps}
+        uploads = [p for ps in up.values() for p in ps]
 
         # One gh call per file so the bar can advance; a single batched call gives no
         # feedback until every asset is done.
         print(f"  uploading to release {tag} ...")
         bar(0, len(uploads))
         for i, p in enumerate(uploads, 1):
-            r = subprocess.run(
-                ["gh", "release", "upload", tag, "--repo", repo, "--clobber", str(p)],
-                capture_output=True, text=True,
-            )
-            if r.returncode:
-                print()
-                sys.exit(f"  upload failed for {p.name}: {r.stderr.strip()}")
+            push(p)
             bar(i, len(uploads), p.name)
 
-    base = f"https://github.com/{repo}/releases/download/{tag}"
+        # One zip per language, so a listener downloads the half they actually want.
+        # Storage is the same either way: each episode appears in exactly one zip.
+        print(f"  bundling {len(up)} zip(s) ...")
+        zips = {}
+        bar(0, len(up))
+        for i, (lang, ps) in enumerate(up.items(), 1):
+            z = make_zip(ps, Path(tmp) / f"{slug}-{LANG_CODE[lang]}.zip", book_name)
+            push(z)
+            zips[lang] = {"url": f"{base}/{z.name}", "bytes": z.stat().st_size,
+                          "count": len(ps)}
+            bar(i, len(up), z.name)
+
     episodes = {
         lang: [{"title": episode_title(p.name), "url": f"{base}/{p.name}",
                 "seconds": duration_secs(p)} for p in ps]
         for lang, ps in files.items() if ps
     }
-    return {"slug": slug, "title": title, "episodes": episodes}
+    return {"slug": slug, "title": title, "episodes": episodes, "zips": zips}
 
 
 def load_manifest() -> dict:

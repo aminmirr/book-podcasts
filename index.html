@@ -190,6 +190,13 @@ html[data-lang="fa"] .sheet-actions button,html[data-lang="fa"] .sheet-actions a
 
 .spine-meta{ display:flex; justify-content:space-between; align-items:center;
   gap:16px; margin-top:12px; color:var(--haze); }
+.spine-meta .right{ display:flex; align-items:center; gap:14px; }
+.dl-all{ display:inline-flex; align-items:center; gap:6px; color:var(--haze);
+  text-decoration:none; padding:4px 0; transition:color .2s; }
+.dl-all:hover{ color:var(--paper); }
+.dl-all:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+.dl-all svg{ width:12px; height:12px; fill:currentColor; }
+.dl-all .size{ opacity:.75; }
 .toc-toggle{ font:inherit; background:none; border:0; cursor:pointer; color:var(--haze);
   display:inline-flex; align-items:center; gap:7px; padding:4px 0; }
 .toc-toggle:hover{ color:var(--paper); }
@@ -505,6 +512,7 @@ fa:{ mark:"خلاصه‌های صوتی",
   like:"پسندیدن", dislike:"نپسندیدن",
   play:"پخش", pause:"توقف", prev:"قبلی", next:"بعدی", close:"بستن", download:"دانلود",
   share:"اشتراک‌گذاری", copyLink:"کپی لینک", copied:"کپی شد",
+  dlAll:"دانلود همه", files:"فایل", mb:"مگابایت",
   back15:"۱۵ ثانیه به عقب", fwd15:"۱۵ ثانیه به جلو", speed:"سرعت پخش",
   missing:"هنوز آماده نیست",
   loading:"در حال بارگذاری…",
@@ -538,6 +546,7 @@ en:{ mark:"Audio summaries",
   like:"Like", dislike:"Dislike",
   play:"Play", pause:"Pause", prev:"Previous", next:"Next", close:"Close", download:"Download",
   share:"Share", copyLink:"Copy link", copied:"Copied",
+  dlAll:"Download all", files:"files", mb:"MB",
   back15:"Back 15 seconds", fwd15:"Forward 15 seconds", speed:"Playback speed",
   missing:"Not ready yet",
   loading:"Loading…",
@@ -561,6 +570,9 @@ const t  = ()=>T[LANG];
 const num = n => LANG==="fa" ? n.toLocaleString("fa-IR") : n.toLocaleString("en-US");
 const esc = s => String(s??"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const langKey = ()=> LANG==="fa" ? "Persian" : "English";
+/* Whole megabytes: the number exists to set expectations before a long download,
+   and a decimal implies a precision nobody acts on. */
+const mb = bytes => `${num(Math.round(bytes/1048576))} ${t().mb}`;
 const isWhole = ep => /whole_book/.test(ep.url);
 const chapKey = url => url.split("/").pop().replace(/\.m4a$/,"").replace(/_(en|fa)$/,"");
 function chTitle(slug, ep){
@@ -703,10 +715,24 @@ function bookEl(b, openToc){
         <button type="button" class="toc-toggle mono" data-slug="${esc(b.slug)}" aria-expanded="${openToc}">
           ${ICON_CHEV}<span class="toc-label"></span>
         </button>
-        <span class="mono">${num(chapters.length)} ${L.chapters} · ${dur(chMin)}</span>
+        <div class="right mono">
+          <span>${num(chapters.length)} ${L.chapters} · ${dur(chMin)}</span>
+        </div>
       </div>
       <div class="toc" ${openToc?"":"hidden"}></div>
     </div>`;
+
+  // "download everything in this language" — a zip built at publish time and
+  // shipped as a release asset. Absent for books published before zips existed.
+  const zip = (b.zips || {})[langKey()];
+  if(zip){
+    const za=document.createElement("a");
+    za.className="dl-all"; za.href=zip.url; za.setAttribute("download","");
+    za.innerHTML=`${ICON_DL}<span>${esc(L.dlAll)}</span>`
+      +`<span class="size">${esc(mb(zip.bytes))}</span>`;
+    za.title=`${L.dlAll} — ${num(zip.count)} ${L.files} · ${mb(zip.bytes)}`;
+    $(".spine-meta .right",el).prepend(za);
+  }
 
   const R = refs[b.slug] = { segs:[], fills:[], chs:[], whole:null, el };
 
