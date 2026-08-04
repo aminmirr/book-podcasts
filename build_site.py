@@ -3,9 +3,13 @@
 Publish a book's podcast audio to GitHub Releases and refresh manifest.json.
 
 Usage:
-    python build_site.py "Show-your-work"                 # one book
-    python build_site.py --all                            # every book under BOOKS_ROOT
-    python build_site.py --all --no-shrink                # upload already-compressed files as-is
+    python build_site.py                 # list books, pick one
+    python build_site.py tukey           # any distinct part of the folder name
+    python build_site.py --all           # every book under BOOKS_ROOT
+    python build_site.py --no-shrink     # never transcode, even a 256k original
+
+Files are transcoded to 64k mono AAC only if they aren't already small — audio the
+generator produced is left untouched, so publishing twice never degrades it.
 
 Audio (GBs) goes to Releases (one release per book, tag=book-<slug>); the repo
 only holds index.html + manifest.json. Idempotent: re-running re-uploads with
@@ -50,11 +54,72 @@ def episode_title(filename: str) -> str:
     return stem.replace("-", " ").strip() or filename
 
 
+def all_books() -> list[str]:
+    """Folder names under BOOKS_ROOT that have audio."""
+    return sorted(p.name for p in BOOKS_ROOT.iterdir() if (p / "output_podcast").is_dir())
+
+
+def published_slugs() -> set[str]:
+    try:
+        return {b["slug"] for b in json.loads(MANIFEST.read_text())["books"]}
+    except (json.JSONDecodeError, KeyError, OSError):
+        return set()
+
+
+def resolve(name: str, books: list[str]) -> str:
+    """Exact folder name, or any distinct case-insensitive substring of one.
+    Never guesses: an ambiguous or unknown name exits instead of creating an
+    empty release under a typo'd tag."""
+    if name in books:
+        return name
+    hits = [b for b in books if name.lower() in b.lower()]
+    if len(hits) == 1:
+        return hits[0]
+    listing = "\n  ".join(hits or books)
+    problem = "matches several books" if hits else "matches no book"
+    sys.exit(f"{name!r} {problem}:\n  {listing}")
+
+
+def pick(books: list[str]) -> list[str]:
+    """No argument given: number the books and ask. Marks the ones already on the site."""
+    if not sys.stdin.isatty():
+        sys.exit(__doc__)
+    done = published_slugs()
+    print(f"\nBooks in {BOOKS_ROOT}:\n")
+    for i, b in enumerate(books, 1):
+        mark = "  (on the site)" if slugify(b) in done else ""
+        print(f"  [{i}] {b}{mark}")
+    while True:
+        raw = input("\nPublish which? (number, 'a' for all, q to quit): ").strip().lower()
+        if raw in ("q", ""):
+            sys.exit(0)
+        if raw == "a":
+            return books
+        if raw.isdigit() and 1 <= int(raw) <= len(books):
+            return [books[int(raw) - 1]]
+        print("  Not a valid choice.")
+
+
 def bar(done: int, total: int, label: str = "") -> None:
     """One-line progress bar; counts finished files, so it steps per file, not per byte."""
     filled = round(20 * done / max(total, 1))
     print(f"\r  [{'#' * filled}{'.' * (20 - filled)}] {done}/{total}  {label[:38]:<38}",
           end="\n" if done == total else "", flush=True)
+
+
+def already_small(path: Path) -> bool:
+    """True if this is already ~64k mono (the generator's own output). Re-encoding it
+    would only lose quality, so the transcode is skipped per file rather than per run."""
+    out = subprocess.run(
+        ["ffprobe", "-v", "error", "-select_streams", "a:0", "-show_entries",
+         "stream=channels,bit_rate", "-of", "default=noprint_wrappers=1", str(path)],
+        capture_output=True, text=True,
+    ).stdout
+    info = dict(line.split("=", 1) for line in out.strip().splitlines() if "=" in line)
+    try:
+        return int(info["channels"]) == 1 and int(info["bit_rate"]) <= 80_000
+    except (KeyError, ValueError):
+        return False
 
 
 def shrink(src: Path, dst_dir: Path) -> Path:
@@ -110,14 +175,17 @@ def publish_book(book_name: str, repo: str, do_shrink: bool = True) -> dict | No
 
     all_paths = [p for ps in files.values() for p in ps]
     with tempfile.TemporaryDirectory() as tmp:
-        if do_shrink:
-            print(f"  shrinking {len(all_paths)} file(s) to 64k mono AAC ...")
-            uploads = []
-            for i, p in enumerate(all_paths, 1):
-                uploads.append(shrink(p, Path(tmp)))
-                bar(i, len(all_paths), p.name)
+        # Only the files that are still big get transcoded; the rest upload as-is.
+        big = [p for p in all_paths if do_shrink and not already_small(p)]
+        if big:
+            print(f"  shrinking {len(big)} of {len(all_paths)} file(s) to 64k mono AAC ...")
+            small = {}
+            for i, p in enumerate(big, 1):
+                small[p] = shrink(p, Path(tmp))
+                bar(i, len(big), p.name)
+            uploads = [small.get(p, p) for p in all_paths]
         else:
-            uploads = all_paths  # already compressed — upload as-is (lossless)
+            uploads = all_paths
 
         # One gh call per file so the bar can advance; a single batched call gives no
         # feedback until every asset is done.
@@ -181,18 +249,81 @@ def seed_meta(manifest: dict) -> None:
     print(f"books.meta.json: {len(meta)} book(s) (existing edits untouched)")
 
 
+def pick_cover(current: str) -> str:
+    """Numbered list of covers/ so the path never has to be typed. Also takes a
+    pasted https:// URL or any path containing a slash."""
+    covers = SITE_DIR / "covers"
+    files = sorted(p.name for p in covers.iterdir()
+                   if p.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif")) \
+        if covers.is_dir() else []
+    print("    (drop the image in covers/ first, then pick a number — or paste a URL)")
+    for i, f in enumerate(files, 1):
+        print(f"    [{i}] {f}")
+    raw = input(f"  Cover{f' [{current}]' if current else ''}: ").strip()
+    if raw.isdigit() and 1 <= int(raw) <= len(files):
+        return f"covers/{files[int(raw) - 1]}"
+    return raw if "/" in raw else ""
+
+
+def ask_meta(names: list[str]) -> None:
+    """Fill in the hand-edited fields for freshly published books. Skips a book that
+    already has an author and a cover, so republishing never re-interrogates you.
+    Chapter titles stay a file edit — too many to sit through a prompt for."""
+    if not sys.stdin.isatty():
+        return
+    meta = json.loads(META.read_text())
+    for name in names:
+        e = meta.get(slugify(name))
+        if e is None or (e.get("author") and e.get("cover")):
+            continue
+        print(f"\n── Book details: {name} ──   (Enter keeps what's shown)")
+        for key, label in (("title_en", "English title"), ("title_fa", "Persian title"),
+                           ("author", "Author")):
+            cur = e.get(key, "")
+            val = input(f"  {label}{f' [{cur}]' if cur else ''}: ").strip()
+            if val:
+                e[key] = val
+        if cover := pick_cover(e.get("cover", "")):
+            e["cover"] = cover
+        cats = input("  Categories, comma-separated (max 3): ").strip()
+        if cats:
+            e["categories"] = [c.strip() for c in cats.split(",") if c.strip()][:3]
+    META.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n")
+
+
+def commit_and_push(names: list[str], repo: str) -> None:
+    """Publishing only reaches the live site after a push, so offer it here."""
+    if not sys.stdin.isatty():
+        return
+    git = ["git", "-C", str(SITE_DIR)]
+    if input("\nCommit and push to the live site? [Y/n]: ").strip().lower() in ("n", "no"):
+        print("  Skipped. When ready:  git add -A && git commit -m '...' && git push")
+        return
+    subprocess.run([*git, "add", "manifest.json", "books.meta.json", "covers"], check=True)
+    r = subprocess.run([*git, "commit", "-m", f"Add {', '.join(names)}"],
+                       capture_output=True, text=True)
+    if r.returncode and "nothing to commit" not in r.stdout:
+        sys.exit(r.stdout + r.stderr)
+    subprocess.run([*git, "push"], check=True)
+    print(f"\nLive in a minute: https://{repo.split('/')[0]}.github.io/{repo.split('/')[1]}/")
+
+
 def main() -> None:
     args = sys.argv[1:]
     do_shrink = "--no-shrink" not in args
     args = [a for a in args if a != "--no-shrink"]
-    if not args:
-        sys.exit(__doc__)
     repo = owner_repo()
 
+    books = all_books()
+    if not books:
+        sys.exit(f"no books with audio under {BOOKS_ROOT}")
     if args == ["--all"]:
-        names = sorted(p.name for p in BOOKS_ROOT.iterdir() if (p / "output_podcast").is_dir())
+        names = books
+    elif args:
+        names = [resolve(a, books) for a in args]
     else:
-        names = args
+        names = pick(books)
+    print("\nPublishing: " + ", ".join(names))
 
     manifest = load_manifest()
     by_slug = {b["slug"]: b for b in manifest["books"]}
@@ -205,6 +336,8 @@ def main() -> None:
     MANIFEST.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")
     print(f"wrote {MANIFEST} ({len(manifest['books'])} book(s))")
     seed_meta(manifest)
+    ask_meta(names)
+    commit_and_push(names, repo)
 
 
 if __name__ == "__main__":

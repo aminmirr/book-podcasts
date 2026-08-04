@@ -17,22 +17,34 @@ Each book has one **whole-book** episode (standalone overview) plus one episode
 | Generated data | `manifest.json` | episodes, URLs, **durations** — do not hand-edit |
 | Editable data | `books.meta.json` | titles, author, cover, notes, categories, chapter titles |
 | Covers | `covers/*` | referenced from `books.meta.json` |
+| Logo | `logo.png` (master) → `icon.png`, `og.png` | favicon + social preview; regenerate the two from the master, don't edit them |
 | Likes + suggestions | **Supabase** (anon key + RLS) | see below |
 
 ## Publish / update audio
 
 ```bash
-python build_site.py "Show-your-work"      # one book (dir name under ~/Downloads/notebookLM)
+python build_site.py                       # list books, pick one
+python build_site.py tukey                 # any distinct part of the folder name
 python build_site.py --all                 # every book with audio
-python build_site.py --all --no-shrink     # upload already-compressed files as-is (lossless)
-git add manifest.json books.meta.json && git commit -m "publish" && git push
 ```
+
+Drop the cover image in `covers/` first. After uploading, the script asks for the
+book's titles (EN/FA), author, cover (pick from a numbered list of `covers/`, or paste
+a URL) and up to 3 categories, writes them into `books.meta.json`, then offers to
+commit and push. It only asks about books that don't already have an author and a
+cover, so republishing is silent. Everything else — chapter titles, notes — stays a
+file edit.
 
 `build_site.py` transcodes each `.m4a` to 64k mono AAC (~4× smaller than NotebookLM's
 256k stereo, transparent for speech), reads durations via `ffprobe`, uploads them as
-Release assets, and rewrites the book's `manifest.json` entry. Requires `ffmpeg`.
-It also **seeds** `books.meta.json` with a stub for any new book (never overwriting
-existing edits).
+Release assets with a progress bar, and rewrites the book's `manifest.json` entry.
+Requires `ffmpeg`. It also **seeds** `books.meta.json` with a stub for any new book
+(never overwriting existing edits).
+
+Files that are already ~64k mono upload untouched, so republishing never re-encodes
+good audio (`--no-shrink` forces that for every file). Book names are matched loosely
+— `tukey` finds `Exploratory-Data-Analysis--John-W-Tukey` — but never guessed: an
+ambiguous or unknown name exits instead of creating an empty release under a typo.
 
 ## Editing book details — `books.meta.json`
 
