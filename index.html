@@ -200,18 +200,29 @@ html[data-lang="fa"] .sheet-actions button,html[data-lang="fa"] .sheet-actions a
 /* chapter list */
 .toc{ margin-top:20px; border-top:1px solid var(--line); }
 .toc[hidden]{ display:none; }
-.ch{ display:grid; grid-template-columns:auto 1fr auto auto; align-items:center;
-  gap:16px; padding-block:11px; border-bottom:1px solid color-mix(in srgb,var(--line) 55%,transparent);
-  background:none; border-inline:0; border-top:0; width:100%; text-align:start;
+/* row = the play button plus its actions as siblings; nesting buttons inside the
+   row button would be invalid HTML and break click and focus handling */
+.ch-row{ display:flex; align-items:center; gap:2px;
+  border-bottom:1px solid color-mix(in srgb,var(--line) 55%,transparent); }
+.ch{ display:grid; grid-template-columns:auto 1fr auto; align-items:center;
+  gap:16px; padding-block:11px; flex:1; min-width:0; border:0;
+  background:none; text-align:start;
   font:inherit; color:var(--paper); cursor:pointer; transition:color .2s; }
 .ch:hover{ color:var(--accent); }
 .ch:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
+.ch-act{ display:flex; align-items:center; justify-content:center; flex:none;
+  width:30px; height:30px; padding:0; border:0; border-radius:6px; background:none;
+  color:var(--haze); text-decoration:none; cursor:pointer;
+  transition:color .2s, background .2s; }
+.ch-act:hover{ color:var(--paper); background:color-mix(in srgb,var(--paper) 8%,transparent); }
+.ch-act:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+.ch-act svg{ width:14px; height:14px; fill:currentColor; }
+.ch-act svg[stroke]{ fill:none; }
+.ch-act.ok{ color:var(--verdigris); }
 .ch-n{ color:var(--haze); font-family:'JetBrains Mono',monospace; font-size:.78rem; font-variant-numeric:tabular-nums; }
 .ch[data-now="1"] .ch-n, .ch[data-now="1"]{ color:var(--accent); }
 .ch-t{ min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:.96rem; }
 .ch-d{ color:var(--haze); font-size:.8rem; white-space:nowrap; }
-.ch-dl{ color:var(--haze); text-decoration:none; font-size:.75rem; padding-inline:6px; }
-.ch-dl:hover{ color:var(--paper); }
 .missing{ color:var(--haze); }
 
 /* sticky player */
@@ -328,6 +339,8 @@ footer a:hover{ color:var(--paper); }
     <button type="button" class="pbtn flip trk" id="next" data-i18n-label="next"><svg viewBox="0 0 16 16"><path d="M3 2v12l8-6zM11.4 2H13v12h-1.6z"/></svg></button>
     <div class="pnow"><b id="pTitle"></b><span id="pSub"></span></div>
     <div class="ptime"><span id="pCur">0:00</span> / <span id="pDur">0:00</span></div>
+    <button type="button" class="pbtn" id="pShare" data-i18n-label="share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg></button>
+    <button type="button" class="pbtn" id="pDl" data-i18n-label="download"><svg viewBox="0 0 16 16"><path d="M7.2 1h1.6v7.1l2.5-2.5 1.1 1.1L8 11.3 3.6 6.8l1.1-1.1 2.5 2.5zM3 13h10v1.5H3z"/></svg></button>
     <button type="button" class="pspeed" id="speed" data-i18n-label="speed">1×</button>
     <button type="button" class="pbtn" id="close" data-i18n-label="close"><svg viewBox="0 0 16 16"><path d="M12.7 4.4 9.1 8l3.6 3.6-1.1 1.1L8 9.1l-3.6 3.6-1.1-1.1L6.9 8 3.3 4.4l1.1-1.1L8 6.9l3.6-3.6z"/></svg></button>
   </div>
@@ -491,6 +504,7 @@ fa:{ mark:"خلاصه‌های صوتی",
   sent:"ممنون! پیشنهادت ثبت شد.", sendErr:"ارسال نشد، دوباره تلاش کن.",
   like:"پسندیدن", dislike:"نپسندیدن",
   play:"پخش", pause:"توقف", prev:"قبلی", next:"بعدی", close:"بستن", download:"دانلود",
+  share:"اشتراک‌گذاری", copyLink:"کپی لینک", copied:"کپی شد",
   back15:"۱۵ ثانیه به عقب", fwd15:"۱۵ ثانیه به جلو", speed:"سرعت پخش",
   missing:"هنوز آماده نیست",
   loading:"در حال بارگذاری…",
@@ -523,6 +537,7 @@ en:{ mark:"Audio summaries",
   sent:"Thanks! Your suggestion was saved.", sendErr:"Couldn't send — try again.",
   like:"Like", dislike:"Dislike",
   play:"Play", pause:"Pause", prev:"Previous", next:"Next", close:"Close", download:"Download",
+  share:"Share", copyLink:"Copy link", copied:"Copied",
   back15:"Back 15 seconds", fwd15:"Forward 15 seconds", speed:"Playback speed",
   missing:"Not ready yet",
   loading:"Loading…",
@@ -588,6 +603,9 @@ const ICON_PLAY='<svg viewBox="0 0 16 16"><path d="M3 1.5v13l11-6.5z"/></svg>';
 const ICON_PAUSE='<svg viewBox="0 0 16 16"><path d="M3 1.5h4v13H3zM9 1.5h4v13H9z"/></svg>';
 const ICON_CHEV='<svg viewBox="0 0 16 16"><path d="M8 11 2 4h12z"/></svg>';
 const ICON_DL='<svg viewBox="0 0 16 16"><path d="M7.2 1h1.6v7.1l2.5-2.5 1.1 1.1L8 11.3 3.6 6.8l1.1-1.1 2.5 2.5zM3 13h10v1.5H3z"/></svg>';
+const ICON_LINK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>';
+const ICON_CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9 17.5 20 6.5"/></svg>';
+const ICON_SHARE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>';
 const ICON_UP='<svg viewBox="0 0 16 16"><path d="M8 4l5 8H3z"/></svg>';
 const ICON_DOWN='<svg viewBox="0 0 16 16"><path d="M8 12 3 4h10z"/></svg>';
 
@@ -757,10 +775,21 @@ function bookEl(b, openToc){
     row.type="button"; row.className="ch";
     row.innerHTML=`<span class="ch-n">${String(i+1).padStart(2,"0")}</span>
       <span class="ch-t">${esc(title)}</span>
-      <span class="ch-d mono">${dur(c.seconds)}</span>
-      <a class="ch-dl mono" href="${esc(c.url)}" download title="${esc(L.download)}">↓</a>`;
-    row.addEventListener("click",e=>{ if(e.target.closest(".ch-dl")) return; start(tracks,i); });
-    toc.append(row); R.chs.push(row);
+      <span class="ch-d mono">${dur(c.seconds)}</span>`;
+    row.addEventListener("click",()=>start(tracks,i));
+
+    const copy=document.createElement("button");
+    copy.type="button"; copy.className="ch-act"; copy.innerHTML=ICON_LINK;
+    copy.title=L.copyLink; copy.setAttribute("aria-label",L.copyLink);
+    copy.addEventListener("click",()=>copyLink(trackLink(tracks[i]),copy));
+
+    const dl=document.createElement("a");
+    dl.className="ch-act"; dl.href=c.url; dl.setAttribute("download","");
+    dl.title=L.download; dl.setAttribute("aria-label",L.download); dl.innerHTML=ICON_DL;
+
+    const rowWrap=document.createElement("div"); rowWrap.className="ch-row";
+    rowWrap.append(row,copy,dl);
+    toc.append(rowWrap); R.chs.push(row);
   });
 
   const tog=$(".toc-toggle",el);
@@ -807,6 +836,20 @@ function start(list,i,autoplay=true){ queue=list; qi=i; load(autoplay); }
    sound anyway, and arriving to noise is hostile. */
 const trackHash = tr => `${tr.slug}/${tr.kind==="full" ? "full" : tr.key}`;
 const trackLink = tr => `${location.origin}${location.pathname}#${trackHash(tr)}`;
+
+/* Clipboard needs a secure context — fine on GitHub Pages and localhost. If it is
+   refused, fall back to a selectable prompt rather than failing silently. */
+async function copyLink(url, btn){
+  try{
+    await navigator.clipboard.writeText(url);
+  }catch{
+    prompt(t().copyLink, url);
+    return;
+  }
+  const was=btn.innerHTML;
+  btn.innerHTML=ICON_CHECK; btn.classList.add("ok"); btn.title=t().copied;
+  setTimeout(()=>{ btn.innerHTML=was; btn.classList.remove("ok"); btn.title=t().copyLink; },1400);
+}
 
 function openFromHash(){
   const [slug, ...rest] = decodeURIComponent(location.hash.slice(1)).split("/");
@@ -878,6 +921,8 @@ $("#prev").addEventListener("click",()=>{ if(qi>0){ qi--; load(true); } });
 $("#next").addEventListener("click",()=>{ if(qi<queue.length-1){ qi++; load(true); } });
 
 /* 15s skip */
+$("#pShare").addEventListener("click",mShare);
+$("#pDl").addEventListener("click",mDownload);
 $("#back15").addEventListener("click",()=>{ audio.currentTime=Math.max(0,(audio.currentTime||0)-15); });
 $("#fwd15").addEventListener("click",()=>{ if(audio.duration) audio.currentTime=Math.min(audio.duration,audio.currentTime+15); });
 
