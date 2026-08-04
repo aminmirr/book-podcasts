@@ -876,7 +876,13 @@ function load(autoplay){
   if(autoplay) audio.play().catch(fail);
   paintSpines();
 }
-function fail(){ $("#pTitle").textContent=t().notfound; $("#pTitle").classList.add("err"); paintSpines(); }
+/* Only a real media failure is "not found". play() also rejects when the browser
+   blocks unprompted sound — restoring a session on reload, or a deep link — and the
+   file is perfectly fine there; the player just stays paused until it is clicked. */
+function fail(err){
+  if(err && err.name==="NotAllowedError") return;
+  $("#pTitle").textContent=t().notfound; $("#pTitle").classList.add("err"); paintSpines();
+}
 function paintSpines(){
   const tr=cur();
   for(const slug in refs){
