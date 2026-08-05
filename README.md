@@ -122,6 +122,22 @@ language falls back to opening the book.
 
 Deep links load the episode but never autoplay.
 
+## Search
+
+The box above the category chips filters the list as you type, matching book titles
+(EN + FA), author, note, categories and **chapter titles**. A book matched only by a
+chapter opens its chapter list, so you can see why it matched. `/` focuses the box,
+Escape clears it. It composes with the category chips (both must match).
+
+Queries are folded before comparing, or Persian search quietly fails: the zero-width
+non-joiner in words like `خلاصه‌های` means a typed space would never match, and Arabic
+`ي`/`ك` look identical to Persian `ی`/`ک` on most keyboards. `node test_search.js`
+covers this.
+
+Note that Persian search only finds what exists — as of now every `title_fa` and
+`note_fa` in `books.meta.json` is empty, so there is no Persian book text to match.
+The publish prompt asks for those.
+
 ## Site features
 
 - Reading-room design (Newsreader serif + Vazirmatn, one amber/verdigris accent),
