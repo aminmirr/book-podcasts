@@ -874,6 +874,128 @@
           }
         ]
       }
+    },
+    {
+      "slug": "good-to-great-by-jim-collins-compress",
+      "title": "good to great by jim collins compress",
+      "episodes": {
+        "English": [
+          {
+            "title": "Full-book overview",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/whole_book_en.m4a",
+            "seconds": 1539
+          },
+          {
+            "title": "Good is the enemy of great",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/00-Good-is-the-enemy-of-great_en.m4a",
+            "seconds": 1340
+          },
+          {
+            "title": "First who then what",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/01-First-who-then-what_en.m4a",
+            "seconds": 1673
+          },
+          {
+            "title": "Confront the brutal facts",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/02-Confront-the-brutal-facts_en.m4a",
+            "seconds": 1462
+          },
+          {
+            "title": "The hedgehog concept",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/03-The-hedgehog-concept_en.m4a",
+            "seconds": 1496
+          },
+          {
+            "title": "A culture of discipline",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/04-A-culture-of-discipline_en.m4a",
+            "seconds": 1229
+          },
+          {
+            "title": "Technology accelerators",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/05-Technology-accelerators_en.m4a",
+            "seconds": 802
+          },
+          {
+            "title": "The flywheel and the doom loop",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/06-The-flywheel-and-the-doom-loop_en.m4a",
+            "seconds": 1306
+          },
+          {
+            "title": "From good to great to built to last",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/07-From-good-to-great-to-built-to-last_en.m4a",
+            "seconds": 1422
+          },
+          {
+            "title": "Frequently Asked Questions",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/08-Frequently-Asked-Questions_en.m4a",
+            "seconds": 1194
+          }
+        ],
+        "Persian": [
+          {
+            "title": "Full-book overview",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/whole_book_fa.m4a",
+            "seconds": 1442
+          },
+          {
+            "title": "Good is the enemy of great",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/00-Good-is-the-enemy-of-great_fa.m4a",
+            "seconds": 1067
+          },
+          {
+            "title": "First who then what",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/01-First-who-then-what_fa.m4a",
+            "seconds": 978
+          },
+          {
+            "title": "Confront the brutal facts",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/02-Confront-the-brutal-facts_fa.m4a",
+            "seconds": 1699
+          },
+          {
+            "title": "The hedgehog concept",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/03-The-hedgehog-concept_fa.m4a",
+            "seconds": 1069
+          },
+          {
+            "title": "A culture of discipline",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/04-A-culture-of-discipline_fa.m4a",
+            "seconds": 1018
+          },
+          {
+            "title": "Technology accelerators",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/05-Technology-accelerators_fa.m4a",
+            "seconds": 615
+          },
+          {
+            "title": "The flywheel and the doom loop",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/06-The-flywheel-and-the-doom-loop_fa.m4a",
+            "seconds": 773
+          },
+          {
+            "title": "From good to great to built to last",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/07-From-good-to-great-to-built-to-last_fa.m4a",
+            "seconds": 1482
+          },
+          {
+            "title": "Frequently Asked Questions",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/08-Frequently-Asked-Questions_fa.m4a",
+            "seconds": 1335
+          }
+        ]
+      },
+      "zips": {
+        "English": {
+          "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/good-to-great-by-jim-collins-compress-en.zip",
+          "bytes": 112875424,
+          "count": 10
+        },
+        "Persian": {
+          "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-good-to-great-by-jim-collins-compress/good-to-great-by-jim-collins-compress-fa.zip",
+          "bytes": 95947981,
+          "count": 10
+        }
+      }
     }
   ]
 }

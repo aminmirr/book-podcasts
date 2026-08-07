@@ -439,5 +439,54 @@
         "title_fa": ""
       }
     }
+  },
+  "good-to-great-by-jim-collins-compress": {
+    "title_en": "good to great",
+    "title_fa": "از خوب به عالی",
+    "author": "jim collins",
+    "cover": "covers/good-to-great-cover.jpg",
+    "note_en": "",
+    "note_fa": "",
+    "categories": [
+      "Life"
+    ],
+    "chapters": {
+      "00-Good-is-the-enemy-of-great": {
+        "title_en": "Good is the enemy of great",
+        "title_fa": ""
+      },
+      "01-First-who-then-what": {
+        "title_en": "First who then what",
+        "title_fa": ""
+      },
+      "02-Confront-the-brutal-facts": {
+        "title_en": "Confront the brutal facts",
+        "title_fa": ""
+      },
+      "03-The-hedgehog-concept": {
+        "title_en": "The hedgehog concept",
+        "title_fa": ""
+      },
+      "04-A-culture-of-discipline": {
+        "title_en": "A culture of discipline",
+        "title_fa": ""
+      },
+      "05-Technology-accelerators": {
+        "title_en": "Technology accelerators",
+        "title_fa": ""
+      },
+      "06-The-flywheel-and-the-doom-loop": {
+        "title_en": "The flywheel and the doom loop",
+        "title_fa": ""
+      },
+      "07-From-good-to-great-to-built-to-last": {
+        "title_en": "From good to great to built to last",
+        "title_fa": ""
+      },
+      "08-Frequently-Asked-Questions": {
+        "title_en": "Frequently Asked Questions",
+        "title_fa": ""
+      }
+    }
   }
 }
