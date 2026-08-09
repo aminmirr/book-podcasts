@@ -7,6 +7,7 @@ Usage:
     python build_site.py tukey           # any distinct part of the folder name
     python build_site.py --all           # every book under BOOKS_ROOT
     python build_site.py --no-shrink     # never transcode, even a 256k original
+    python build_site.py X --upload-only # upload + manifest only; no prompts, no commit
 
 Files are transcoded to 64k mono AAC only if they aren't already small — audio the
 generator produced is left untouched, so publishing twice never degrades it.
@@ -344,7 +345,11 @@ def commit_and_push(names: list[str], repo: str) -> None:
 def main() -> None:
     args = sys.argv[1:]
     do_shrink = "--no-shrink" not in args
-    args = [a for a in args if a != "--no-shrink"]
+    # --upload-only: do the slow, unattended half (transcode, upload, manifest) and
+    # stop. Said explicitly rather than inferred from isatty, because the queue runs
+    # this with a terminal attached and still must not prompt or commit.
+    upload_only = "--upload-only" in args
+    args = [a for a in args if a not in ("--no-shrink", "--upload-only")]
     repo = owner_repo()
 
     books = all_books()
@@ -369,6 +374,10 @@ def main() -> None:
     MANIFEST.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")
     print(f"wrote {MANIFEST} ({len(manifest['books'])} book(s))")
     seed_meta(manifest)
+    if upload_only:
+        print("\n  Uploaded. Titles, author, cover and the commit are still yours:")
+        print(f"  python build_site.py \"{names[0]}\"")
+        return
     ask_meta(names)
     commit_and_push(names, repo)
 
