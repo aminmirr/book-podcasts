@@ -9,6 +9,7 @@ Usage:
     python build_site.py --no-shrink     # never transcode, even a 256k original
     python build_site.py X --upload-only # upload + manifest only; no prompts, no commit
     python build_site.py --categories    # rename or merge a category across all books
+    python build_site.py X --force-upload # re-send every asset, ignoring what's there
 
 Files are transcoded to 64k mono AAC only if they aren't already small — audio the
 generator produced is left untouched, so publishing twice never degrades it.
@@ -174,7 +175,39 @@ def audio_files(book_dir: Path, lang: str) -> list[Path]:
     return sorted(d.glob("*.m4a"), key=lambda p: (not p.stem.startswith("whole_book"), p.name))
 
 
-def publish_book(book_name: str, repo: str, do_shrink: bool = True) -> dict | None:
+def release_assets(tag: str, repo: str) -> dict[str, int]:
+    """What the release already holds: asset name → byte size.
+
+    Empty on any failure — a missing release, no network, unreadable JSON — which
+    falls back to uploading everything. Skipping is the optimisation, so any doubt
+    resolves toward doing the work.
+    """
+    r = subprocess.run(["gh", "release", "view", tag, "--repo", repo, "--json", "assets"],
+                       capture_output=True, text=True)
+    if r.returncode:
+        return {}
+    try:
+        return {a["name"]: a["size"] for a in json.loads(r.stdout).get("assets") or []}
+    except (json.JSONDecodeError, KeyError, TypeError):
+        return {}
+
+
+def to_upload(paths: list[Path], have: dict[str, int],
+              force: bool = False) -> list[Path]:
+    """Which of these still need sending.
+
+    Size is the only comparison GitHub offers without downloading each asset, so two
+    different files of identical byte length would read as the same. For 64k AAC of
+    differing speech that does not happen; --force-upload is the way out if it ever
+    does, or if an asset is truncated.
+    """
+    if force:
+        return list(paths)
+    return [p for p in paths if have.get(p.name) != p.stat().st_size]
+
+
+def publish_book(book_name: str, repo: str, do_shrink: bool = True,
+                 force: bool = False) -> dict | None:
     book_dir = BOOKS_ROOT / book_name
     files = {lang: audio_files(book_dir, lang) for lang in LANGS}
     if not any(files.values()):
@@ -219,20 +252,29 @@ def publish_book(book_name: str, repo: str, do_shrink: bool = True) -> dict | No
 
         # One gh call per file so the bar can advance; a single batched call gives no
         # feedback until every asset is done.
+        have = release_assets(tag, repo)
+        todo = to_upload(uploads, have, force)
         print(f"  uploading to release {tag} ...")
-        bar(0, len(uploads))
-        for i, p in enumerate(uploads, 1):
-            push(p)
-            bar(i, len(uploads), p.name)
+        if len(todo) < len(uploads):
+            print(f"  {len(uploads) - len(todo)} of {len(uploads)} already uploaded"
+                  f" — sending {len(todo)}")
+        if todo:
+            bar(0, len(todo))
+            for i, p in enumerate(todo, 1):
+                push(p)
+                bar(i, len(todo), p.name)
 
         # One zip per language, so a listener downloads the half they actually want.
         # Storage is the same either way: each episode appears in exactly one zip.
+        # An unchanged episode set makes a byte-identical archive (ZIP_STORED, same
+        # files, same order), so the same size check covers zips with nothing added.
         print(f"  bundling {len(up)} zip(s) ...")
         zips = {}
         bar(0, len(up))
         for i, (lang, ps) in enumerate(up.items(), 1):
             z = make_zip(ps, Path(tmp) / f"{slug}-{LANG_CODE[lang]}.zip", book_name)
-            push(z)
+            if to_upload([z], have, force):
+                push(z)
             zips[lang] = {"url": f"{base}/{z.name}", "bytes": z.stat().st_size,
                           "count": len(ps)}
             bar(i, len(up), z.name)
@@ -457,10 +499,12 @@ def main() -> None:
     # stop. Said explicitly rather than inferred from isatty, because the queue runs
     # this with a terminal attached and still must not prompt or commit.
     upload_only = "--upload-only" in args
+    force = "--force-upload" in args
     if "--categories" in args:
         manage_categories()
         return
-    args = [a for a in args if a not in ("--no-shrink", "--upload-only")]
+    args = [a for a in args
+            if a not in ("--no-shrink", "--upload-only", "--force-upload")]
     repo = owner_repo()
 
     books = all_books()
@@ -476,7 +520,7 @@ def main() -> None:
 
     published = {}
     for name in names:
-        entry = publish_book(name, repo, do_shrink)
+        entry = publish_book(name, repo, do_shrink, force)
         if entry:
             published[entry["slug"]] = entry
 
