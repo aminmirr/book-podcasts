@@ -493,5 +493,44 @@
         "title_fa": ""
       }
     }
+  },
+  "the-constitution-of-liberty": {
+    "title_en": "The Constitution of Liberty",
+    "title_fa": "منشور آزادی",
+    "author": "Friedrich von Hayek",
+    "cover": "covers/The-Constitution-of-Liberty book cover.jpg",
+    "note_en": "",
+    "note_fa": "",
+    "categories": [
+      "Politics",
+      "Economics",
+      "Philosophy"
+    ],
+    "chapters": {
+      "00-Introductory-Essay": {
+        "title_en": "Introductory Essay",
+        "title_fa": ""
+      },
+      "01-The-Constitution-of-Liberty-Editions-and-Translations": {
+        "title_en": "The Constitution of Liberty Editions and Translations",
+        "title_fa": ""
+      },
+      "02-Part-I-The-Value-of-Freedom": {
+        "title_en": "Part I The Value of Freedom",
+        "title_fa": ""
+      },
+      "03-Part-II-Freedom-and-the-Law": {
+        "title_en": "Part II Freedom and the Law",
+        "title_fa": ""
+      },
+      "04-Part-III-Freedom-in-the-Welfare-State": {
+        "title_en": "Part III Freedom in the Welfare State",
+        "title_fa": ""
+      },
+      "05-Postscript": {
+        "title_en": "Postscript",
+        "title_fa": ""
+      }
+    }
   }
 }

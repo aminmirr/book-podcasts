@@ -663,6 +663,98 @@
       }
     },
     {
+      "slug": "the-constitution-of-liberty",
+      "title": "The Constitution of Liberty",
+      "episodes": {
+        "English": [
+          {
+            "title": "Full-book overview",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-the-constitution-of-liberty/whole_book_en.m4a",
+            "seconds": 1287
+          },
+          {
+            "title": "Introductory Essay",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-the-constitution-of-liberty/00-Introductory-Essay_en.m4a",
+            "seconds": 1352
+          },
+          {
+            "title": "The Constitution of Liberty Editions and Translations",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-the-constitution-of-liberty/01-The-Constitution-of-Liberty-Editions-and-Translations_en.m4a",
+            "seconds": 1204
+          },
+          {
+            "title": "Part I The Value of Freedom",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-the-constitution-of-liberty/02-Part-I-The-Value-of-Freedom_en.m4a",
+            "seconds": 1158
+          },
+          {
+            "title": "Part II Freedom and the Law",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-the-constitution-of-liberty/03-Part-II-Freedom-and-the-Law_en.m4a",
+            "seconds": 1104
+          },
+          {
+            "title": "Part III Freedom in the Welfare State",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-the-constitution-of-liberty/04-Part-III-Freedom-in-the-Welfare-State_en.m4a",
+            "seconds": 1258
+          },
+          {
+            "title": "Postscript",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-the-constitution-of-liberty/05-Postscript_en.m4a",
+            "seconds": 1284
+          }
+        ],
+        "Persian": [
+          {
+            "title": "Full-book overview",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-the-constitution-of-liberty/whole_book_fa.m4a",
+            "seconds": 1137
+          },
+          {
+            "title": "Introductory Essay",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-the-constitution-of-liberty/00-Introductory-Essay_fa.m4a",
+            "seconds": 989
+          },
+          {
+            "title": "The Constitution of Liberty Editions and Translations",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-the-constitution-of-liberty/01-The-Constitution-of-Liberty-Editions-and-Translations_fa.m4a",
+            "seconds": 1649
+          },
+          {
+            "title": "Part I The Value of Freedom",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-the-constitution-of-liberty/02-Part-I-The-Value-of-Freedom_fa.m4a",
+            "seconds": 1014
+          },
+          {
+            "title": "Part II Freedom and the Law",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-the-constitution-of-liberty/03-Part-II-Freedom-and-the-Law_fa.m4a",
+            "seconds": 1645
+          },
+          {
+            "title": "Part III Freedom in the Welfare State",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-the-constitution-of-liberty/04-Part-III-Freedom-in-the-Welfare-State_fa.m4a",
+            "seconds": 1241
+          },
+          {
+            "title": "Postscript",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-the-constitution-of-liberty/05-Postscript_fa.m4a",
+            "seconds": 845
+          }
+        ]
+      },
+      "zips": {
+        "English": {
+          "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-the-constitution-of-liberty/the-constitution-of-liberty-en.zip",
+          "bytes": 72527165,
+          "count": 7
+        },
+        "Persian": {
+          "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-the-constitution-of-liberty/the-constitution-of-liberty-fa.zip",
+          "bytes": 71225286,
+          "count": 7
+        }
+      }
+    },
+    {
       "slug": "dokumenpub-die-with-zero-9780358100515-2019033906-2019033907",
       "title": "dokumenpub die with zero 9780358100515 2019033906 2019033907",
       "episodes": {
