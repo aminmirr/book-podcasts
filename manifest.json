@@ -609,11 +609,6 @@
             "title": "Stick Around",
             "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-show-your-work/05-10-Stick-Around_en.m4a",
             "seconds": 1414
-          },
-          {
-            "title": "Thank You",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-show-your-work/06-Thank-You_en.m4a",
-            "seconds": 1004
           }
         ],
         "Persian": [
@@ -651,24 +646,19 @@
             "title": "Stick Around",
             "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-show-your-work/05-10-Stick-Around_fa.m4a",
             "seconds": 1657
-          },
-          {
-            "title": "Thank You",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-show-your-work/06-Thank-You_fa.m4a",
-            "seconds": 1387
           }
         ]
       },
       "zips": {
         "English": {
           "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-show-your-work/show-your-work-en.zip",
-          "bytes": 86417180,
-          "count": 8
+          "bytes": 77991371,
+          "count": 7
         },
         "Persian": {
           "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-show-your-work/show-your-work-fa.zip",
-          "bytes": 83574106,
-          "count": 8
+          "bytes": 71970601,
+          "count": 7
         }
       }
     },

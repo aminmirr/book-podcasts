@@ -8,6 +8,7 @@ Usage:
     python build_site.py --all           # every book under BOOKS_ROOT
     python build_site.py --no-shrink     # never transcode, even a 256k original
     python build_site.py X --upload-only # upload + manifest only; no prompts, no commit
+    python build_site.py --categories    # rename or merge a category across all books
 
 Files are transcoded to 64k mono AAC only if they aren't already small — audio the
 generator produced is left untouched, so publishing twice never degrades it.
@@ -299,6 +300,115 @@ def pick_cover(current: str) -> str:
     return raw if "/" in raw else ""
 
 
+MAX_CATEGORIES = 3          # what the site renders per book
+
+
+def category_counts(meta: dict) -> dict[str, int]:
+    """Every category in use, and how many books use it.
+
+    There is no separate vocabulary file: the list *is* what books have. A category
+    exists while some book carries it and disappears when the last one drops it, so
+    it can never drift out of step with what the site actually shows.
+    """
+    counts: dict[str, int] = {}
+    for entry in meta.values():
+        for cat in entry.get("categories") or []:
+            counts[cat] = counts.get(cat, 0) + 1
+    return dict(sorted(counts.items()))
+
+
+def parse_categories(raw: str, known: list[str]) -> list[str]:
+    """Numbers pick from the list, anything else is a new name, and both can be mixed.
+
+    A typed name that already exists resolves to it whatever the casing, so "business"
+    never appears alongside "Business" — case drift is most of how the current mess
+    happened.
+    """
+    chosen: list[str] = []
+    lookup = {k.lower(): k for k in known}
+    for part in raw.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        if part.isdigit() and 1 <= int(part) <= len(known):
+            pick = known[int(part) - 1]
+        else:
+            pick = lookup.get(part.lower(), part)
+        if pick not in chosen:
+            chosen.append(pick)
+    return chosen[:MAX_CATEGORIES]
+
+
+def ask_categories(current: list[str], meta: dict) -> list[str]:
+    """Show what's in use with its usage count, then take numbers and/or new names.
+
+    The counts are the whole mechanism: seeing "Business (3)" beside "Data (1)" is what
+    makes an established name the easy choice. Nothing forbids a new one.
+    """
+    counts = category_counts(meta)
+    known = list(counts)
+    if known:
+        print("\n  Categories — pick numbers, or type a new name")
+        half = (len(known) + 1) // 2
+        for i in range(half):
+            left = f"[{i+1}] {known[i]} ({counts[known[i]]})"
+            j = i + half
+            right = f"[{j+1}] {known[j]} ({counts[known[j]]})" if j < len(known) else ""
+            print(f"  {left:<28}{right}")
+    shown = f" [{', '.join(current)}]" if current else ""
+    raw = input(f"  Choose (max {MAX_CATEGORIES}){shown}: ").strip()
+    return parse_categories(raw, known) if raw else current
+
+
+def manage_categories() -> None:
+    """Rename a category everywhere. Renaming onto an existing name merges them —
+    the same operation, so there is no separate merge command."""
+    meta = json.loads(META.read_text())
+    while True:
+        counts = category_counts(meta)
+        known = list(counts)
+        if not known:
+            print("  No categories in use yet.")
+            return
+        print("\n  Categories in use")
+        for i, cat in enumerate(known, 1):
+            print(f"  [{i:>2}] {cat} ({counts[cat]})")
+        raw = input("\n  Rename which? (number, q to finish): ").strip().lower()
+        if raw in ("q", ""):
+            return
+        if not raw.isdigit() or not 1 <= int(raw) <= len(known):
+            print("  Not a valid choice.")
+            continue
+        old = known[int(raw) - 1]
+        new = input(f"  New name for {old!r} (an existing name merges them): ").strip()
+        if not new or new == old:
+            continue
+        new = {k.lower(): k for k in known}.get(new.lower(), new)
+        touched = rename_category(meta, old, new)
+        META.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n")
+        verb = "merged into" if new in known else "renamed to"
+        print(f"  → {old} {verb} {new} in {len(touched)} book(s): "
+              f"{', '.join(t[:28] for t in touched) or '—'}")
+
+
+def rename_category(meta: dict, old: str, new: str) -> list[str]:
+    """Apply the rename in place; returns the slugs changed. De-duplicates, since a
+    book holding both names must end up with one."""
+    touched = []
+    for slug, entry in meta.items():
+        cats = entry.get("categories") or []
+        if old not in cats:
+            continue
+        renamed = []
+        for c in cats:
+            c = new if c == old else c
+            if c not in renamed:
+                renamed.append(c)
+        entry["categories"] = renamed
+        touched.append(slug)
+    return touched
+
+
 def ask_meta(names: list[str]) -> None:
     """Fill in the hand-edited fields for freshly published books. Skips a book that
     already has an author and a cover, so republishing never re-interrogates you.
@@ -319,9 +429,7 @@ def ask_meta(names: list[str]) -> None:
                 e[key] = val
         if cover := pick_cover(e.get("cover", "")):
             e["cover"] = cover
-        cats = input("  Categories, comma-separated (max 3): ").strip()
-        if cats:
-            e["categories"] = [c.strip() for c in cats.split(",") if c.strip()][:3]
+        e["categories"] = ask_categories(e.get("categories") or [], meta)
     META.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n")
 
 
@@ -349,6 +457,9 @@ def main() -> None:
     # stop. Said explicitly rather than inferred from isatty, because the queue runs
     # this with a terminal attached and still must not prompt or commit.
     upload_only = "--upload-only" in args
+    if "--categories" in args:
+        manage_categories()
+        return
     args = [a for a in args if a not in ("--no-shrink", "--upload-only")]
     repo = owner_repo()
 
@@ -363,16 +474,24 @@ def main() -> None:
         names = pick(books)
     print("\nPublishing: " + ", ".join(names))
 
-    manifest = load_manifest()
-    by_slug = {b["slug"]: b for b in manifest["books"]}
+    published = {}
     for name in names:
         entry = publish_book(name, repo, do_shrink)
         if entry:
-            by_slug[entry["slug"]] = entry
+            published[entry["slug"]] = entry
 
+    # Re-read immediately before writing and lay only our own books on top. An upload
+    # takes minutes, and this file is rewritten whole — trusting a copy read at startup
+    # means a second publish running alongside silently reverts whatever the first one
+    # did. Only the books this run touched are ours to overwrite.
+    manifest = load_manifest()
+    by_slug = {b["slug"]: b for b in manifest["books"]}
+    clobbered = [s for s in published if s in by_slug]
+    by_slug.update(published)
     manifest["books"] = sorted(by_slug.values(), key=lambda b: b["title"])
     MANIFEST.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")
-    print(f"wrote {MANIFEST} ({len(manifest['books'])} book(s))")
+    print(f"wrote {MANIFEST} ({len(manifest['books'])} book(s), "
+          f"{len(published)} updated, {len(published) - len(clobbered)} new)")
     seed_meta(manifest)
     if upload_only:
         print("\n  Uploaded. Titles, author, cover and the commit are still yours:")
