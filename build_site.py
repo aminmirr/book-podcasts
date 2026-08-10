@@ -313,6 +313,7 @@ def seed_meta(manifest: dict) -> None:
         e.setdefault("title_en", b["title"])
         for k in ("title_fa", "author", "cover", "note_en", "note_fa"):
             e.setdefault(k, "")
+        e.setdefault("translated_fa", None)      # True/False once checked; None = unknown, no badge
         e.setdefault("categories", [])          # up to 3 strings
         chs = e.setdefault("chapters", {})       # chapter_key -> {title_en, title_fa}
         for eps in b["episodes"].values():

@@ -87,6 +87,12 @@ html[data-lang="fa"] .stat b{ font-family:'Vazirmatn',sans-serif; font-weight:80
 .book-title-fa{ font-family:'Vazirmatn',sans-serif; font-weight:500; direction:rtl;
   font-size:clamp(1rem,2.2vw,1.28rem); line-height:1.5; margin-top:5px;
   color:color-mix(in srgb,var(--paper) 82%,var(--ink)); }
+.no-fa{ display:inline-block; vertical-align:middle; margin-inline-start:10px;
+  font-family:'JetBrains Mono',monospace; font-size:.62rem; letter-spacing:.04em;
+  text-transform:uppercase; color:var(--haze); border:1px solid var(--line);
+  border-radius:999px; padding:3px 9px; }
+html[data-lang="fa"] .no-fa{ font-family:'Vazirmatn',sans-serif; text-transform:none;
+  letter-spacing:0; font-size:.7rem; }
 .book-author{ color:var(--haze); margin-top:10px; font-size:.9rem; }
 .book-author::before{ content:"—  "; opacity:.6; }
 .book-note{ margin-top:14px; max-width:60ch; font-size:.95rem;
@@ -542,6 +548,7 @@ fa:{ mark:"خلاصه‌های صوتی",
   searchPh:"جستجوی کتاب یا فصل…", clear:"پاک کردن", noResults:"چیزی پیدا نشد برای",
   back15:"۱۵ ثانیه به عقب", fwd15:"۱۵ ثانیه به جلو", speed:"سرعت پخش",
   missing:"هنوز آماده نیست",
+  noFa:"بدون ترجمه‌ی رسمی فارسی",
   loading:"در حال بارگذاری…",
   error:"فهرست بارگذاری نشد. بررسی کن که فایل manifest.json کنار همین صفحه باشد.",
   empty:"هنوز کتابی اضافه نشده.",
@@ -577,6 +584,7 @@ en:{ mark:"Audio summaries",
   searchPh:"Search books or chapters…", clear:"Clear", noResults:"Nothing found for",
   back15:"Back 15 seconds", fwd15:"Forward 15 seconds", speed:"Playback speed",
   missing:"Not ready yet",
+  noFa:"No official Persian translation",
   loading:"Loading…",
   error:"Couldn't load the list. Check that manifest.json sits next to this page.",
   empty:"No books yet.",
@@ -751,13 +759,14 @@ function bookEl(b, openToc){
   const author  = m.author || "";
   const cover   = m.cover || "";
   const note    = (LANG==="fa" ? m.note_fa : m.note_en) || "";
+  const noFa    = m.translated_fa === false;
 
   el.innerHTML=`
     <div class="book-top">
       <div class="book-id">
         ${cover?`<img class="cover" src="${esc(cover)}" alt="" loading="lazy" onerror="this.remove()">`:""}
         <div class="titles">
-          <h2 class="book-title-en">${esc(titleEn)}</h2>
+          <h2 class="book-title-en">${esc(titleEn)}${noFa?` <span class="no-fa">${esc(L.noFa)}</span>`:""}</h2>
           ${titleFa?`<p class="book-title-fa">${esc(titleFa)}</p>`:""}
           ${author?`<p class="book-author">${esc(author)}</p>`:""}
           ${note?`<p class="book-note">${esc(note)}</p>`:""}
