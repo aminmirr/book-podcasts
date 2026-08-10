@@ -211,181 +211,6 @@
       }
     },
     {
-      "slug": "chris-brooks-introductory-econometrics-for-finance-2008",
-      "title": "Chris Brooks Introductory Econometrics for Finance 2008",
-      "episodes": {
-        "English": [
-          {
-            "title": "Full-book overview",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/whole_book_en.m4a",
-            "seconds": 1298
-          },
-          {
-            "title": "Half title",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/00-Half-title_en.m4a",
-            "seconds": 1266
-          },
-          {
-            "title": "Figures",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/01-Figures_en.m4a",
-            "seconds": 1487
-          },
-          {
-            "title": "Boxes",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/02-Boxes_en.m4a",
-            "seconds": 1326
-          },
-          {
-            "title": "Introduction",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/03-1-Introduction_en.m4a",
-            "seconds": 1337
-          },
-          {
-            "title": "A brief overview of the classical linear regression model",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/04-2-A-brief-overview-of-the-classical-linear-regression-model_en.m4a",
-            "seconds": 1378
-          },
-          {
-            "title": "Further development and analysis of the classical linear r",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/05-3-Further-development-and-analysis-of-the-classical-linear-r_en.m4a",
-            "seconds": 1562
-          },
-          {
-            "title": "Classical linear regression model assumptions and diagnost",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/06-4-Classical-linear-regression-model-assumptions-and-diagnost_en.m4a",
-            "seconds": 1302
-          },
-          {
-            "title": "Univariate time series modelling and forecasting",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/07-5-Univariate-time-series-modelling-and-forecasting_en.m4a",
-            "seconds": 833
-          },
-          {
-            "title": "Multivariate models",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/08-6-Multivariate-models_en.m4a",
-            "seconds": 1322
-          },
-          {
-            "title": "Modelling long run relationships in finance",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/09-7-Modelling-long-run-relationships-in-finance_en.m4a",
-            "seconds": 1284
-          },
-          {
-            "title": "Switching models",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/11-9-Switching-models_en.m4a",
-            "seconds": 1288
-          },
-          {
-            "title": "Panel data",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/12-10-Panel-data_en.m4a",
-            "seconds": 1499
-          },
-          {
-            "title": "Simulation methods",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/14-12-Simulation-methods_en.m4a",
-            "seconds": 1445
-          },
-          {
-            "title": "Conducting empirical research or doing a project or disse",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/15-13-Conducting-empirical-research-or-doing-a-project-or-disse_en.m4a",
-            "seconds": 1203
-          }
-        ],
-        "Persian": [
-          {
-            "title": "Full-book overview",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/whole_book_fa.m4a",
-            "seconds": 1483
-          },
-          {
-            "title": "Half title",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/00-Half-title_fa.m4a",
-            "seconds": 782
-          },
-          {
-            "title": "Figures",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/01-Figures_fa.m4a",
-            "seconds": 1664
-          },
-          {
-            "title": "Boxes",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/02-Boxes_fa.m4a",
-            "seconds": 1627
-          },
-          {
-            "title": "Introduction",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/03-1-Introduction_fa.m4a",
-            "seconds": 641
-          },
-          {
-            "title": "A brief overview of the classical linear regression model",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/04-2-A-brief-overview-of-the-classical-linear-regression-model_fa.m4a",
-            "seconds": 933
-          },
-          {
-            "title": "Further development and analysis of the classical linear r",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/05-3-Further-development-and-analysis-of-the-classical-linear-r_fa.m4a",
-            "seconds": 995
-          },
-          {
-            "title": "Classical linear regression model assumptions and diagnost",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/06-4-Classical-linear-regression-model-assumptions-and-diagnost_fa.m4a",
-            "seconds": 1501
-          },
-          {
-            "title": "Univariate time series modelling and forecasting",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/07-5-Univariate-time-series-modelling-and-forecasting_fa.m4a",
-            "seconds": 1113
-          },
-          {
-            "title": "Multivariate models",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/08-6-Multivariate-models_fa.m4a",
-            "seconds": 915
-          },
-          {
-            "title": "Modelling long run relationships in finance",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/09-7-Modelling-long-run-relationships-in-finance_fa.m4a",
-            "seconds": 1146
-          },
-          {
-            "title": "Modelling volatility and correlation",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/10-8-Modelling-volatility-and-correlation_fa.m4a",
-            "seconds": 912
-          },
-          {
-            "title": "Switching models",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/11-9-Switching-models_fa.m4a",
-            "seconds": 1134
-          },
-          {
-            "title": "Panel data",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/12-10-Panel-data_fa.m4a",
-            "seconds": 1364
-          },
-          {
-            "title": "Limited dependent variable models",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/13-11-Limited-dependent-variable-models_fa.m4a",
-            "seconds": 1399
-          },
-          {
-            "title": "Simulation methods",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/14-12-Simulation-methods_fa.m4a",
-            "seconds": 1617
-          },
-          {
-            "title": "Conducting empirical research or doing a project or disse",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/15-13-Conducting-empirical-research-or-doing-a-project-or-disse_fa.m4a",
-            "seconds": 999
-          },
-          {
-            "title": "Recent and future developments in the modelling of financ",
-            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-chris-brooks-introductory-econometrics-for-finance-2008/16-14-Recent-and-future-developments-in-the-modelling-of-financ_fa.m4a",
-            "seconds": 1873
-          }
-        ]
-      }
-    },
-    {
       "slug": "exploratory-data-analysis-john-w-tukey",
       "title": "Exploratory Data Analysis  John W Tukey",
       "episodes": {
@@ -784,6 +609,11 @@
             "title": "Stick Around",
             "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-show-your-work/05-10-Stick-Around_en.m4a",
             "seconds": 1414
+          },
+          {
+            "title": "Thank You",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-show-your-work/06-Thank-You_en.m4a",
+            "seconds": 1004
           }
         ],
         "Persian": [
@@ -791,6 +621,16 @@
             "title": "Full-book overview",
             "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-show-your-work/whole_book_fa.m4a",
             "seconds": 1035
+          },
+          {
+            "title": "A New Way of Operating",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-show-your-work/00-A-New-Way-of-Operating_fa.m4a",
+            "seconds": 1442
+          },
+          {
+            "title": "Think Process Not Product",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-show-your-work/01-2-Think-Process-Not-Product_fa.m4a",
+            "seconds": 1072
           },
           {
             "title": "Open Up Your Cabinet of Curiosities",
@@ -806,8 +646,30 @@
             "title": "Learn to Take a Punch",
             "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-show-your-work/04-8-Learn-to-Take-a-Punch_fa.m4a",
             "seconds": 995
+          },
+          {
+            "title": "Stick Around",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-show-your-work/05-10-Stick-Around_fa.m4a",
+            "seconds": 1657
+          },
+          {
+            "title": "Thank You",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-show-your-work/06-Thank-You_fa.m4a",
+            "seconds": 1387
           }
         ]
+      },
+      "zips": {
+        "English": {
+          "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-show-your-work/show-your-work-en.zip",
+          "bytes": 86417180,
+          "count": 8
+        },
+        "Persian": {
+          "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-show-your-work/show-your-work-fa.zip",
+          "bytes": 83574106,
+          "count": 8
+        }
       }
     },
     {

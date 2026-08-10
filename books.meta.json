@@ -284,6 +284,10 @@
       "05-10-Stick-Around": {
         "title_en": "Stick Around",
         "title_fa": ""
+      },
+      "06-Thank-You": {
+        "title_en": "Thank You",
+        "title_fa": ""
       }
     }
   },
@@ -448,7 +452,8 @@
     "note_en": "",
     "note_fa": "",
     "categories": [
-      "Management", "Business"
+      "Management",
+      "Business"
     ],
     "chapters": {
       "00-Good-is-the-enemy-of-great": {
