@@ -542,5 +542,81 @@
         "title_fa": ""
       }
     }
+  },
+  "daron-acemogulu-james-a-robinson-the-narrow-corridor": {
+    "title_en": "The Narrow Corridor",
+    "title_fa": "راه باریک آزادی",
+    "author": "Daron Acemoglu and James A. Robinson",
+    "cover": "covers/The-Narrow-Corridor.jpeg",
+    "note_en": "What separates societies where liberty flourishes from those crushed by tyranny or chaos? Daron Acemoglu and James A. Robinson, authors of Why Nations Fail, argue that liberty survives only in a narrow corridor: the space where a strong, capable state and a strong, mobilized society counterbalance each other in a continuous, uneasy race — the ‘Red Queen’ dynamic that keeps state power in check without collapsing into anarchy. Drawing on cases spanning ancient Mesopotamia, medieval Europe, imperial China, colonial America, and today’s fragile democracies, they show why some countries built the institutions of liberty while others fell to despotism or stayed trapped in stateless disorder. The book argues that liberty is not a natural endowment or the inevitable endpoint of progress, but a fragile, hard-won achievement that must be constantly defended by an engaged citizenry — and one that can just as easily be lost.",
+    "note_fa": "چرا برخی جوامع به آزادی می‌رسند و برخی دیگر گرفتار استبداد یا هرج‌ومرج می‌مانند؟ دارون عجم‌اوغلو و جیمز رابینسون، نویسندگان «چرا ملت‌ها شکست می‌خورند»، در این کتاب استدلال می‌کنند که آزادی فقط در یک «راهروی باریک» زنده می‌ماند: جایی که دولتی قدرتمند و جامعه‌ای قدرتمند و بسیج‌شده، در رقابتی پیوسته و شکننده -آنچه آن را «ملکه‌ی سرخ» می‌نامند- یکدیگر را مهار می‌کنند. اگر دولت خیلی قوی شود، به استبداد می‌رسیم؛ اگر جامعه در برابر آن بی‌قدرت بماند یا اصلاً دولتی شکل نگیرد، هرج‌ومرج نتیجه است. نویسندگان با مثال‌هایی از میان‌رودان باستان، اروپای قرون‌وسطا، چین امپراتوری، آمریکای استعماری و دموکراسی‌های امروزی نشان می‌دهند چرا برخی کشورها نهادهای آزادی را ساختند و برخی دیگر نساختند. کتابی گسترده و خواندنی که نشان می‌دهد آزادی نه هدیه‌ای طبیعی، بلکه دستاوردی شکننده و دشوار است که فقط با مشارکت مداوم شهروندان حفظ می‌شود -و به همان آسانی هم می‌تواند از دست برود.",
+    "translated_fa": true,
+    "categories": [
+      "Politics",
+      "Economics",
+      "Philosophy"
+    ],
+    "chapters": {
+      "00-How-Does-History-End": {
+        "title_en": "How Does History End",
+        "title_fa": "تاریخ چگونه به پایان می‌رسد؟"
+      },
+      "01-The-Red-Queen": {
+        "title_en": "The Red Queen",
+        "title_fa": "ملکه‌ی سرخ"
+      },
+      "02-Will-to-Power": {
+        "title_en": "Will to Power",
+        "title_fa": "اراده‌ی قدرت"
+      },
+      "03-Economics-Outside-the-Corridor": {
+        "title_en": "Economics Outside the Corridor",
+        "title_fa": "اقتصاد بیرون از راهرو"
+      },
+      "04-Allegory-of-Good-Government": {
+        "title_en": "Allegory of Good Government",
+        "title_fa": "تمثیل حکومت خوب"
+      },
+      "05-The-European-Scissors": {
+        "title_en": "The European Scissors",
+        "title_fa": "قیچی اروپایی"
+      },
+      "06-Mandate-of-Heaven": {
+        "title_en": "Mandate of Heaven",
+        "title_fa": "فرمان آسمانی"
+      },
+      "07-Broken-Red-Queen": {
+        "title_en": "Broken Red Queen",
+        "title_fa": "ملکه‌ی سرخ شکسته"
+      },
+      "08-Devil-in-the-Details": {
+        "title_en": "Devil in the Details",
+        "title_fa": "شیطان در جزئیات"
+      },
+      "09-Whats-the-Matter-with-Ferguson": {
+        "title_en": "Whats the Matter with Ferguson",
+        "title_fa": "فرگوسن چه مشکلی دارد؟"
+      },
+      "10-The-Paper-Leviathan": {
+        "title_en": "The Paper Leviathan",
+        "title_fa": "لویاتان کاغذی"
+      },
+      "11-Wahhabs-Children": {
+        "title_en": "Wahhabs Children",
+        "title_fa": "فرزندان وهاب"
+      },
+      "12-Red-Queen-Out-of-Control": {
+        "title_en": "Red Queen Out of Control",
+        "title_fa": "ملکه‌ی سرخ خارج از کنترل"
+      },
+      "13-Into-the-Corridor": {
+        "title_en": "Into the Corridor",
+        "title_fa": "به درون راهرو"
+      },
+      "14-Living-with-the-Leviathan": {
+        "title_en": "Living with the Leviathan",
+        "title_fa": "زیستن با لویاتان"
+      }
+    }
   }
 }
