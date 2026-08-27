@@ -177,6 +177,62 @@
       "16-14-Recent-and-future-developments-in-the-modelling-of-financ": {
         "title_en": "Recent and future developments in the modelling of financ",
         "title_fa": ""
+      },
+      "00-1-Introduction": {
+        "title_en": "Introduction",
+        "title_fa": ""
+      },
+      "01-2-A-brief-overview-of-the-classical-linear-regression-model": {
+        "title_en": "A brief overview of the classical linear regression model",
+        "title_fa": ""
+      },
+      "02-3-Further-development-and-analysis-of-the-classical-linear-r": {
+        "title_en": "Further development and analysis of the classical linear r",
+        "title_fa": ""
+      },
+      "05-6-Multivariate-models": {
+        "title_en": "Multivariate models",
+        "title_fa": ""
+      },
+      "06-7-Modelling-long-run-relationships-in-finance": {
+        "title_en": "Modelling long run relationships in finance",
+        "title_fa": ""
+      },
+      "07-8-Modelling-volatility-and-correlation": {
+        "title_en": "Modelling volatility and correlation",
+        "title_fa": ""
+      },
+      "08-9-Switching-models": {
+        "title_en": "Switching models",
+        "title_fa": ""
+      },
+      "09-10-Panel-data": {
+        "title_en": "Panel data",
+        "title_fa": ""
+      },
+      "10-11-Limited-dependent-variable-models": {
+        "title_en": "Limited dependent variable models",
+        "title_fa": ""
+      },
+      "11-12-Simulation-methods": {
+        "title_en": "Simulation methods",
+        "title_fa": ""
+      },
+      "12-13-Conducting-empirical-research-or-doing-a-project-or-disse": {
+        "title_en": "Conducting empirical research or doing a project or disse",
+        "title_fa": ""
+      },
+      "13-14-Recent-and-future-developments-in-the-modelling-of-financ": {
+        "title_en": "Recent and future developments in the modelling of financ",
+        "title_fa": ""
+      },
+      "03-4-Classical-linear-regression-model-assumptions-and-diagnost": {
+        "title_en": "Classical linear regression model assumptions and diagnost",
+        "title_fa": ""
+      },
+      "04-5-Univariate-time-series-modelling-and-forecasting": {
+        "title_en": "Univariate time series modelling and forecasting",
+        "title_fa": ""
       }
     }
   },
@@ -223,6 +279,18 @@
       },
       "10-Notes": {
         "title_en": "Notes",
+        "title_fa": ""
+      },
+      "00-1-Introduction": {
+        "title_en": "Introduction",
+        "title_fa": ""
+      },
+      "01-2-Life-in-a-Honeybee-Colony": {
+        "title_en": "Life in a Honeybee Colony",
+        "title_fa": ""
+      },
+      "04-5-Agreement-on-Best-Site": {
+        "title_en": "Agreement on Best Site",
         "title_fa": ""
       }
     }
@@ -340,6 +408,26 @@
       },
       "07-Connect-with-HMH": {
         "title_en": "Connect with HMH",
+        "title_fa": ""
+      },
+      "00-Optimize-Your-Life": {
+        "title_en": "Optimize Your Life",
+        "title_fa": ""
+      },
+      "01-Why-Die-with-Zero": {
+        "title_en": "Why Die with Zero",
+        "title_fa": ""
+      },
+      "02-Balance-Your-Life": {
+        "title_en": "Balance Your Life",
+        "title_fa": ""
+      },
+      "03-Start-to-Time-Bucket-Your-Life": {
+        "title_en": "Start to Time Bucket Your Life",
+        "title_fa": ""
+      },
+      "04-Be-BoldNot-Foolish": {
+        "title_en": "Be BoldNot Foolish",
         "title_fa": ""
       }
     }
@@ -616,6 +704,86 @@
       "14-Living-with-the-Leviathan": {
         "title_en": "Living with the Leviathan",
         "title_fa": "زیستن با لویاتان"
+      }
+    }
+  },
+  "autocracy-inc-the-dictators-who-want-to-run-the-world": {
+    "title_en": "Autocracy Inc  The Dictators Who Want to Run the World",
+    "title_fa": "",
+    "author": "",
+    "cover": "",
+    "note_en": "",
+    "note_fa": "",
+    "translated_fa": null,
+    "categories": [],
+    "chapters": {
+      "00-Introduction": {
+        "title_en": "Introduction",
+        "title_fa": ""
+      },
+      "01-Chapter-II-Kleptocracy-Metastasizes": {
+        "title_en": "Chapter II Kleptocracy Metastasizes",
+        "title_fa": ""
+      },
+      "02-Chapter-III-Controlling-the-Narrative": {
+        "title_en": "Chapter III Controlling the Narrative",
+        "title_fa": ""
+      },
+      "03-Chapter-IV-Changing-the-Operating-System": {
+        "title_en": "Chapter IV Changing the Operating System",
+        "title_fa": ""
+      },
+      "04-Chapter-V-Smearing-the-Democrats": {
+        "title_en": "Chapter V Smearing the Democrats",
+        "title_fa": ""
+      },
+      "05-Epilogue": {
+        "title_en": "Epilogue",
+        "title_fa": ""
+      }
+    }
+  },
+  "the-open-society-and-its": {
+    "title_en": "the open society and its",
+    "title_fa": "",
+    "author": "",
+    "cover": "",
+    "note_en": "",
+    "note_fa": "",
+    "translated_fa": null,
+    "categories": [],
+    "chapters": {
+      "00-Title": {
+        "title_en": "Title",
+        "title_fa": ""
+      },
+      "01-PERSONAL-RECOLLECTIONS-OF-THE-PUBLICATION-OF-THE-OPEN-SOCIET": {
+        "title_en": "PERSONAL RECOLLECTIONS OF THE PUBLICATION OF THE OPEN SOCIET",
+        "title_fa": ""
+      },
+      "02-AUTHORS-INTRODUCTION": {
+        "title_en": "AUTHORS INTRODUCTION",
+        "title_fa": ""
+      },
+      "03-VOLUME-I-THE-SPELL-OF-PLATO": {
+        "title_en": "VOLUME I THE SPELL OF PLATO",
+        "title_fa": ""
+      },
+      "04-VOLUME-II-THE-HIGH-TIDE-OF-PROPHECY": {
+        "title_en": "VOLUME II THE HIGH TIDE OF PROPHECY",
+        "title_fa": ""
+      },
+      "05-NOTES": {
+        "title_en": "NOTES",
+        "title_fa": ""
+      },
+      "06-NOTES-TO-VOLUME-I": {
+        "title_en": "NOTES TO VOLUME I",
+        "title_fa": ""
+      },
+      "07-NOTES-TO-VOLUME-II": {
+        "title_en": "NOTES TO VOLUME II",
+        "title_fa": ""
       }
     }
   }
