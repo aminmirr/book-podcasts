@@ -747,14 +747,17 @@
     }
   },
   "the-open-society-and-its": {
-    "title_en": "the open society and its",
-    "title_fa": "",
-    "author": "",
-    "cover": "",
+    "title_en": "The Open Society and Its Enemies",
+    "title_fa": "جامعه باز و دشمنان آن",
+    "author": "Karl Popper",
+    "cover": "covers/جامعه باز و دشمنان آن.jpeg",
     "note_en": "",
     "note_fa": "",
     "translated_fa": null,
-    "categories": [],
+    "categories": [
+      "Philosophy",
+      "Politics"
+    ],
     "chapters": {
       "00-Title": {
         "title_en": "Title",
