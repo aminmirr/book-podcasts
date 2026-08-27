@@ -709,13 +709,16 @@
   },
   "autocracy-inc-the-dictators-who-want-to-run-the-world": {
     "title_en": "Autocracy Inc  The Dictators Who Want to Run the World",
-    "title_fa": "",
-    "author": "",
-    "cover": "",
+    "title_fa": "یکه‌سالاری، شرکت سهامی: دیکتاتورهایی که می‌خواهند جهان را اداره کنند",
+    "author": "Anne Applebaum",
+    "cover": "'/Users/aminmirlohi/develpment/book-podcasts/covers/Autocracy Inc  The Dictators Who Want to Run the World.jpg'",
     "note_en": "",
     "note_fa": "",
     "translated_fa": null,
-    "categories": [],
+    "categories": [
+      "Politics",
+      "Government"
+    ],
     "chapters": {
       "00-Introduction": {
         "title_en": "Introduction",
