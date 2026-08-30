@@ -714,7 +714,7 @@
     "cover": "covers/Autocracy Inc  The Dictators Who Want to Run the World.jpg",
     "note_en": "",
     "note_fa": "",
-    "translated_fa": null,
+    "translated_fa": false,
     "categories": [
       "Politics",
       "Government"
@@ -753,7 +753,7 @@
     "cover": "covers/The Open Society and Its Enemies.jpeg",
     "note_en": "",
     "note_fa": "",
-    "translated_fa": null,
+    "translated_fa": true,
     "categories": [
       "Philosophy",
       "Politics"
