@@ -33,6 +33,9 @@ from pathlib import Path
 BOOKS_ROOT = Path.home() / "Downloads" / "notebookLM"
 SITE_DIR = Path(__file__).resolve().parent
 MANIFEST = SITE_DIR / "manifest.json"
+# Shared with the book_podcast generator repo and check_translations.py's --register —
+# a book can be researched before it's even been fed to the generator.
+TRANSLATION_RESEARCH_FILE = BOOKS_ROOT / "_translation_research.json"
 LANGS = ("English", "Persian")
 LANG_CODE = {"English": "en", "Persian": "fa"}
 
@@ -308,9 +311,19 @@ def seed_meta(manifest: dict) -> None:
     and a per-chapter title map). Uses setdefault everywhere — it only ADDS missing
     keys and NEVER overwrites an existing value, so your edits always survive a republish."""
     meta = json.loads(META.read_text()) if META.exists() else {}
+    research = (json.loads(TRANSLATION_RESEARCH_FILE.read_text())
+                if TRANSLATION_RESEARCH_FILE.exists() else {})
     for b in manifest["books"]:
         e = meta.setdefault(b["slug"], {})
         e.setdefault("title_en", b["title"])
+        # A book researched ahead of time (check_translations.py --register, before it
+        # even had a notebook) lands here so that first publish needs no re-research.
+        # Only fills what's still unset — a hand edit always wins.
+        if cached := research.get(b["slug"]):
+            if e.get("translated_fa") is None and cached.get("translated_fa") is not None:
+                e["translated_fa"] = cached["translated_fa"]
+            if not e.get("title_fa") and cached.get("title_fa"):
+                e["title_fa"] = cached["title_fa"]
         for k in ("title_fa", "author", "cover", "note_en", "note_fa"):
             e.setdefault(k, "")
         e.setdefault("translated_fa", None)      # True/False once checked; None = unknown, no badge
