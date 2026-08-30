@@ -87,12 +87,16 @@ html[data-lang="fa"] .stat b{ font-family:'Vazirmatn',sans-serif; font-weight:80
 .book-title-fa{ font-family:'Vazirmatn',sans-serif; font-weight:500; direction:rtl;
   font-size:clamp(1rem,2.2vw,1.28rem); line-height:1.5; margin-top:5px;
   color:color-mix(in srgb,var(--paper) 82%,var(--ink)); }
-.no-fa{ display:inline-block; vertical-align:middle; margin-inline-start:10px;
-  font-family:'JetBrains Mono',monospace; font-size:.62rem; letter-spacing:.04em;
-  text-transform:uppercase; color:var(--haze); border:1px solid var(--line);
-  border-radius:999px; padding:3px 9px; }
-html[data-lang="fa"] .no-fa{ font-family:'Vazirmatn',sans-serif; text-transform:none;
-  letter-spacing:0; font-size:.7rem; }
+.no-fa{ position:relative; display:inline-flex; align-items:center; justify-content:center;
+  vertical-align:middle; margin-inline-start:12px; width:76px; height:76px;
+  background-image:url(seal-badge.png); background-size:contain;
+  background-position:center; background-repeat:no-repeat; }
+.no-fa span{ font-family:'JetBrains Mono',monospace; font-weight:700; font-size:.36rem;
+  letter-spacing:0; text-transform:uppercase; line-height:1.4; color:#5c3a0c;
+  text-align:center; max-width:48px; }
+html[data-lang="fa"] .no-fa{ width:84px; height:84px; }
+html[data-lang="fa"] .no-fa span{ font-family:'Vazirmatn',sans-serif; font-weight:800;
+  text-transform:none; letter-spacing:0; font-size:.52rem; max-width:46px; }
 .book-author{ color:var(--haze); margin-top:10px; font-size:.9rem; }
 .book-author::before{ content:"—  "; opacity:.6; }
 .book-note{ margin-top:14px; max-width:60ch; font-size:.95rem;
@@ -766,7 +770,7 @@ function bookEl(b, openToc){
       <div class="book-id">
         ${cover?`<img class="cover" src="${esc(cover)}" alt="" loading="lazy" onerror="this.remove()">`:""}
         <div class="titles">
-          <h2 class="book-title-en">${esc(titleEn)}${noFa?` <span class="no-fa">${esc(L.noFa)}</span>`:""}</h2>
+          <h2 class="book-title-en">${esc(titleEn)}${noFa?` <span class="no-fa"><span>${LANG==="fa"?"بدون ترجمه‌ی<br>رسمی فارسی":"No official<br>Persian translation"}</span></span>`:""}</h2>
           ${titleFa?`<p class="book-title-fa">${esc(titleFa)}</p>`:""}
           ${author?`<p class="book-author">${esc(author)}</p>`:""}
           ${note?`<p class="book-note">${esc(note)}</p>`:""}
