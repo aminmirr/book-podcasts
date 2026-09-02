@@ -324,6 +324,8 @@ def seed_meta(manifest: dict) -> None:
                 e["translated_fa"] = cached["translated_fa"]
             if not e.get("title_fa") and cached.get("title_fa"):
                 e["title_fa"] = cached["title_fa"]
+            if not e.get("note_fa") and cached.get("note_fa"):
+                e["note_fa"] = cached["note_fa"]
         for k in ("title_fa", "author", "cover", "note_en", "note_fa"):
             e.setdefault(k, "")
         e.setdefault("translated_fa", None)      # True/False once checked; None = unknown, no badge

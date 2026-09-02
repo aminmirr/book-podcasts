@@ -1,17 +1,23 @@
 #!/usr/bin/env python3
-"""Research cache for books.meta.json's translated_fa field.
+"""Research cache for books.meta.json's translated_fa / title_fa / note_fa.
 
 Deciding whether a book has an official Persian translation needs real
-research (a bookstore/publisher listing, not a review article) — that's what
-the check-fa-translations skill does with WebSearch. This script is the
+research (a bookstore/publisher listing, not a review article), and a good
+~100-word summary needs someone (Claude) to actually read/know the book —
+that's what the check-fa-translations skill does. This script is the
 bookkeeping half:
 
-  --list                              what still needs research (and syncs
-                                       anything the cache can already answer)
-  --register <slug> true <title_fa>   record a confirmed translation
-  --register <slug> false             record a confirmed non-translation
-  --slug-for <pdf-path>                preview the slug a PDF will get once
-                                       it goes through the podcast pipeline
+  --list                                    what still needs research (and
+                                             syncs anything the cache can
+                                             already answer)
+  --register <slug> true <title_fa> [--note "..."]   record a confirmed
+                                             translation, optionally with a
+                                             ~100-word Persian summary
+  --register <slug> false [--note "..."]    record a confirmed
+                                             non-translation, same --note
+  --slug-for <pdf-path>                     preview the slug a PDF will get
+                                             once it goes through the
+                                             podcast pipeline
 
 The cache lives at BASE_OUTPUT_DIR/_translation_research.json — shared with
 the book_podcast generator repo (same ~/Downloads/notebookLM directory it
@@ -60,6 +66,9 @@ def apply_cached(entry: dict, cached: dict) -> list[str]:
     if not entry.get("title_fa") and cached.get("title_fa"):
         entry["title_fa"] = cached["title_fa"]
         changed.append("title_fa")
+    if not entry.get("note_fa") and cached.get("note_fa"):
+        entry["note_fa"] = cached["note_fa"]
+        changed.append("note_fa")
     return changed
 
 
@@ -105,7 +114,7 @@ def cmd_list() -> None:
         print(f"  author:   {e.get('author', '')}")
 
 
-def cmd_register(slug: str, translated: bool, title_fa: str | None) -> None:
+def cmd_register(slug: str, translated: bool, title_fa: str | None, note_fa: str | None = None) -> None:
     if translated and not title_fa:
         sys.exit("registering translated_fa=true needs the official Persian title")
 
@@ -113,9 +122,16 @@ def cmd_register(slug: str, translated: bool, title_fa: str | None) -> None:
     record = {"translated_fa": translated, "checked_at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
     if translated:
         record["title_fa"] = title_fa
+    if note_fa:
+        record["note_fa"] = note_fa
     research[slug] = record
     save_research(research)
-    print(f"cached: {slug} -> translated_fa={translated}" + (f", title_fa={title_fa!r}" if translated else ""))
+    summary = f"translated_fa={translated}"
+    if translated:
+        summary += f", title_fa={title_fa!r}"
+    if note_fa:
+        summary += f", note_fa=({len(note_fa.split())} words)"
+    print(f"cached: {slug} -> {summary}")
 
     meta = load_meta()
     if slug not in meta:
@@ -137,15 +153,21 @@ def main() -> None:
         slug, verdict, *rest = args[1:]
         if verdict.lower() not in ("true", "false"):
             sys.exit("verdict must be true or false")
-        cmd_register(slug, verdict.lower() == "true", rest[0] if rest else None)
+        note_fa = None
+        if "--note" in rest:
+            i = rest.index("--note")
+            note_fa = rest[i + 1] if i + 1 < len(rest) else None
+            rest = rest[:i] + rest[i + 2:]
+        title_fa = rest[0] if rest else None
+        cmd_register(slug, verdict.lower() == "true", title_fa, note_fa)
     elif args[0] == "--slug-for" and len(args) == 2:
         print(predict_slug(args[1]))
     else:
         sys.exit(
             "Usage:\n"
             "  check_translations.py --list\n"
-            "  check_translations.py --register <slug> true <persian-title>\n"
-            "  check_translations.py --register <slug> false\n"
+            "  check_translations.py --register <slug> true <persian-title> [--note \"...\"]\n"
+            "  check_translations.py --register <slug> false [--note \"...\"]\n"
             "  check_translations.py --slug-for <pdf-path>"
         )
 

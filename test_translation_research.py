@@ -49,6 +49,19 @@ changed = ct.apply_cached(e, {"translated_fa": False})
 assert changed == ["translated_fa"], changed
 assert e["title_fa"] == ""
 
+# note_fa fills in the same way, and is independent of translated_fa/title_fa
+e = {"translated_fa": True, "title_fa": "عنوان دستی", "note_fa": ""}
+changed = ct.apply_cached(e, {"translated_fa": True, "title_fa": "چیز دیگر", "note_fa": "خلاصه‌ی تازه"})
+assert changed == ["note_fa"], changed
+assert e["title_fa"] == "عنوان دستی"           # untouched, hand-set
+assert e["note_fa"] == "خلاصه‌ی تازه"           # filled, was empty
+
+# an existing note_fa is never overwritten either
+e = {"translated_fa": None, "note_fa": "خلاصه‌ی قبلی"}
+changed = ct.apply_cached(e, {"translated_fa": False, "note_fa": "خلاصه‌ی جدید"})
+assert changed == ["translated_fa"], changed
+assert e["note_fa"] == "خلاصه‌ی قبلی"
+
 
 # ── predict_slug matches the generator's real slug chain ──────────────────────
 
@@ -97,13 +110,39 @@ meta = json.loads(ct.META.read_text())
 assert meta["future-book"]["translated_fa"] is False
 
 
+# ── the actual CLI: --register ... --note "..." ────────────────────────────────
+
+ct.META.write_text(json.dumps({
+    "note-book": {"title_en": "Note Book", "title_fa": "", "note_fa": "", "translated_fa": None},
+}))
+sys.argv = ["check_translations.py", "--register", "note-book", "true", "عنوان رسمی",
+            "--note", "این یک خلاصه‌ی آزمایشی است."]
+ct.main()
+meta = json.loads(ct.META.read_text())
+assert meta["note-book"]["title_fa"] == "عنوان رسمی"
+assert meta["note-book"]["note_fa"] == "این یک خلاصه‌ی آزمایشی است."
+research = json.loads(ct.RESEARCH_FILE.read_text())
+assert research["note-book"]["note_fa"] == "این یک خلاصه‌ی آزمایشی است."
+
+# --note also works standing alone with a false verdict (no title needed)
+ct.META.write_text(json.dumps({
+    "note-book-2": {"title_en": "Note Book 2", "title_fa": "", "note_fa": "", "translated_fa": None},
+}))
+sys.argv = ["check_translations.py", "--register", "note-book-2", "false", "--note", "خلاصه‌ی دوم."]
+ct.main()
+meta = json.loads(ct.META.read_text())
+assert meta["note-book-2"]["translated_fa"] is False
+assert meta["note-book-2"]["note_fa"] == "خلاصه‌ی دوم."
+
+
 # ── seed_meta() applies the same cache automatically at publish time ──────────
 
 bs.META = tmp / "site_meta.json"
 bs.TRANSLATION_RESEARCH_FILE = tmp / "_translation_research.json"  # the same cache file
 bs.META.write_text(json.dumps({}))
 research = json.loads(bs.TRANSLATION_RESEARCH_FILE.read_text())
-research["brand-new-book"] = {"translated_fa": True, "title_fa": "کتاب کاملا جدید"}
+research["brand-new-book"] = {"translated_fa": True, "title_fa": "کتاب کاملا جدید",
+                               "note_fa": "خلاصه‌ی کتاب کاملا جدید."}
 bs.TRANSLATION_RESEARCH_FILE.write_text(json.dumps(research))
 
 manifest = {"books": [
@@ -115,5 +154,6 @@ seeded = json.loads(bs.META.read_text())
 assert seeded["future-book"]["translated_fa"] is False          # from the earlier --list sync
 assert seeded["brand-new-book"]["translated_fa"] is True        # picked up on first publish
 assert seeded["brand-new-book"]["title_fa"] == "کتاب کاملا جدید"
+assert seeded["brand-new-book"]["note_fa"] == "خلاصه‌ی کتاب کاملا جدید."
 
 print("ok")
