@@ -475,6 +475,128 @@
       }
     },
     {
+      "slug": "cloud-native-database-qke3y8",
+      "title": "Cloud Native Database qke3y8",
+      "episodes": {
+        "English": [
+          {
+            "title": "Full-book overview",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/whole_book_en.m4a",
+            "seconds": 1392
+          },
+          {
+            "title": "Introduction",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/00-Introduction_en.m4a",
+            "seconds": 1397
+          },
+          {
+            "title": "Database and Cloud Nativeness",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/01-Database-and-Cloud-Nativeness_en.m4a",
+            "seconds": 1416
+          },
+          {
+            "title": "Storage Engine",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/02-Storage-Engine_en.m4a",
+            "seconds": 1375
+          },
+          {
+            "title": "High Availability Shared Storage System",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/03-High-Availability-Shared-Storage-System_en.m4a",
+            "seconds": 1232
+          },
+          {
+            "title": "Database Cache",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/04-Database-Cache_en.m4a",
+            "seconds": 1555
+          },
+          {
+            "title": "Computing Engine",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/05-Computing-Engine_en.m4a",
+            "seconds": 1466
+          },
+          {
+            "title": "Integration of Cloud Native and Distributed Architectures",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/06-Integration-of-Cloud-Native-and-Distributed-Architectures_en.m4a",
+            "seconds": 1492
+          },
+          {
+            "title": "Practical Application of PolarDB",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/07-Practical-Application-of-PolarDB_en.m4a",
+            "seconds": 1392
+          },
+          {
+            "title": "PolarDB OM",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/08-PolarDB-OM_en.m4a",
+            "seconds": 1289
+          }
+        ],
+        "Persian": [
+          {
+            "title": "Full-book overview",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/whole_book_fa.m4a",
+            "seconds": 1029
+          },
+          {
+            "title": "Introduction",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/00-Introduction_fa.m4a",
+            "seconds": 1635
+          },
+          {
+            "title": "Database and Cloud Nativeness",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/01-Database-and-Cloud-Nativeness_fa.m4a",
+            "seconds": 971
+          },
+          {
+            "title": "Storage Engine",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/02-Storage-Engine_fa.m4a",
+            "seconds": 1225
+          },
+          {
+            "title": "High Availability Shared Storage System",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/03-High-Availability-Shared-Storage-System_fa.m4a",
+            "seconds": 1822
+          },
+          {
+            "title": "Database Cache",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/04-Database-Cache_fa.m4a",
+            "seconds": 1176
+          },
+          {
+            "title": "Computing Engine",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/05-Computing-Engine_fa.m4a",
+            "seconds": 1181
+          },
+          {
+            "title": "Integration of Cloud Native and Distributed Architectures",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/06-Integration-of-Cloud-Native-and-Distributed-Architectures_fa.m4a",
+            "seconds": 780
+          },
+          {
+            "title": "Practical Application of PolarDB",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/07-Practical-Application-of-PolarDB_fa.m4a",
+            "seconds": 1200
+          },
+          {
+            "title": "PolarDB OM",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/08-PolarDB-OM_fa.m4a",
+            "seconds": 1424
+          }
+        ]
+      },
+      "zips": {
+        "English": {
+          "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/cloud-native-database-qke3y8-en.zip",
+          "bytes": 117474756,
+          "count": 10
+        },
+        "Persian": {
+          "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-cloud-native-database-qke3y8/cloud-native-database-qke3y8-fa.zip",
+          "bytes": 104043965,
+          "count": 10
+        }
+      }
+    },
+    {
       "slug": "daron-acemogulu-james-a-robinson-the-narrow-corridor",
       "title": "Daron Acemogulu James A Robinson The Narrow Corridor",
       "episodes": {

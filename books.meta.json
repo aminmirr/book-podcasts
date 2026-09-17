@@ -947,5 +947,56 @@
         "title_fa": ""
       }
     }
+  },
+  "cloud-native-database-qke3y8": {
+    "title_en": "Cloud Native Database",
+    "translated_fa": false,
+    "title_fa": "پایگاه داده ابری",
+    "author": "Feifei Li, Xuan Zhou, Peng Cai, Rong Zhang, Gui Huang, XiangWen Liu",
+    "cover": "'/Users/aminmirlohi/develpment/book-podcasts/covers/Cloud Native Database Principle and Practice.jpg'",
+    "note_en": "",
+    "note_fa": "",
+    "categories": [
+      "Data Science",
+      "computer science"
+    ],
+    "chapters": {
+      "00-Introduction": {
+        "title_en": "Introduction",
+        "title_fa": ""
+      },
+      "01-Database-and-Cloud-Nativeness": {
+        "title_en": "Database and Cloud Nativeness",
+        "title_fa": ""
+      },
+      "02-Storage-Engine": {
+        "title_en": "Storage Engine",
+        "title_fa": ""
+      },
+      "03-High-Availability-Shared-Storage-System": {
+        "title_en": "High Availability Shared Storage System",
+        "title_fa": ""
+      },
+      "04-Database-Cache": {
+        "title_en": "Database Cache",
+        "title_fa": ""
+      },
+      "05-Computing-Engine": {
+        "title_en": "Computing Engine",
+        "title_fa": ""
+      },
+      "06-Integration-of-Cloud-Native-and-Distributed-Architectures": {
+        "title_en": "Integration of Cloud Native and Distributed Architectures",
+        "title_fa": ""
+      },
+      "07-Practical-Application-of-PolarDB": {
+        "title_en": "Practical Application of PolarDB",
+        "title_fa": ""
+      },
+      "08-PolarDB-OM": {
+        "title_en": "PolarDB OM",
+        "title_fa": ""
+      }
+    }
   }
 }
