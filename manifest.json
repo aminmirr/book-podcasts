@@ -1749,6 +1749,268 @@
           "count": 9
         }
       }
+    },
+    {
+      "slug": "toazinfo-food-science-pr",
+      "title": "toazinfo food science pr",
+      "episodes": {
+        "English": [
+          {
+            "title": "Full-book overview",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/whole_book_en.m4a",
+            "seconds": 930
+          },
+          {
+            "title": "DisciplineIntroduction Food Science as a Discipline",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/00-DisciplineIntroduction-Food-Science-as-a-Discipline_en.m4a",
+            "seconds": 1233
+          },
+          {
+            "title": "Constituents of Foods Properties and Significance",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/01-Constituents-of-Foods-Properties-and-Significance_en.m4a",
+            "seconds": 1390
+          },
+          {
+            "title": "Nutritive Aspects of Food Constituents",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/02-Nutritive-Aspects-of-Food-Constituents_en.m4a",
+            "seconds": 1322
+          },
+          {
+            "title": "Unit Operations in Food Processing",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/03-Unit-Operations-in-Food-Processing_en.m4a",
+            "seconds": 1571
+          },
+          {
+            "title": "Quality Factors in Foods",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/04-Quality-Factors-in-Foods_en.m4a",
+            "seconds": 1543
+          },
+          {
+            "title": "Food Deterioration and its Control",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/05-Food-Deterioration-and-its-Control_en.m4a",
+            "seconds": 1616
+          },
+          {
+            "title": "Heat Preservation and Processing",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/06-Heat-Preservation-and-Processing_en.m4a",
+            "seconds": 1539
+          },
+          {
+            "title": "Cold Preservation and Processing",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/07-Cold-Preservation-and-Processing_en.m4a",
+            "seconds": 1302
+          },
+          {
+            "title": "Food Dehydration and Concentration",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/08-Food-Dehydration-and-Concentration_en.m4a",
+            "seconds": 1516
+          },
+          {
+            "title": "Irradiation Microwave and Ohmic Processing of Foods",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/09-Irradiation-Microwave-and-Ohmic-Processing-of-Foods_en.m4a",
+            "seconds": 1349
+          },
+          {
+            "title": "Fermentation and Other Uses of Microorganisms",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/10-Fermentation-and-Other-Uses-of-Microorganisms_en.m4a",
+            "seconds": 1566
+          },
+          {
+            "title": "Milk and Milk Products",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/11-Milk-and-Milk-Products_en.m4a",
+            "seconds": 1575
+          },
+          {
+            "title": "Meat Poultry and Eggs",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/12-Meat-Poultry-and-Eggs_en.m4a",
+            "seconds": 1507
+          },
+          {
+            "title": "Seafoods",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/13-Seafoods_en.m4a",
+            "seconds": 1313
+          },
+          {
+            "title": "Cereal Grains Legumes and Oilseeds",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/14-Cereal-Grains-Legumes-and-Oilseeds_en.m4a",
+            "seconds": 1347
+          },
+          {
+            "title": "Vegetables and Fruits",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/15-Vegetables-and-Fruits_en.m4a",
+            "seconds": 1694
+          },
+          {
+            "title": "Beverages",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/16-Beverages_en.m4a",
+            "seconds": 1644
+          },
+          {
+            "title": "Confectionery and Chocolate Products",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/17-Confectionery-and-Chocolate-Products_en.m4a",
+            "seconds": 1527
+          },
+          {
+            "title": "Principles of Food Pockaging",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/18-Principles-of-Food-Pockaging_en.m4a",
+            "seconds": 1561
+          },
+          {
+            "title": "Food Processing and the Environment",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/19-Food-Processing-and-the-Environment_en.m4a",
+            "seconds": 1416
+          },
+          {
+            "title": "Food Safety Risks and Hazards",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/20-Food-Safety-Risks-and-Hazards_en.m4a",
+            "seconds": 1444
+          },
+          {
+            "title": "Governmental Regulation of Food Nutrition Labeling",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/21-Governmental-Regulation-of-Food-Nutrition-Labeling_en.m4a",
+            "seconds": 1378
+          },
+          {
+            "title": "Hunger Technology and World Food Needs",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/22-Hunger-Technology-and-World-Food-Needs_en.m4a",
+            "seconds": 1323
+          }
+        ],
+        "Persian": [
+          {
+            "title": "Full-book overview",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/whole_book_fa.m4a",
+            "seconds": 1659
+          },
+          {
+            "title": "DisciplineIntroduction Food Science as a Discipline",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/00-DisciplineIntroduction-Food-Science-as-a-Discipline_fa.m4a",
+            "seconds": 1335
+          },
+          {
+            "title": "Constituents of Foods Properties and Significance",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/01-Constituents-of-Foods-Properties-and-Significance_fa.m4a",
+            "seconds": 1718
+          },
+          {
+            "title": "Nutritive Aspects of Food Constituents",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/02-Nutritive-Aspects-of-Food-Constituents_fa.m4a",
+            "seconds": 1637
+          },
+          {
+            "title": "Unit Operations in Food Processing",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/03-Unit-Operations-in-Food-Processing_fa.m4a",
+            "seconds": 1296
+          },
+          {
+            "title": "Quality Factors in Foods",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/04-Quality-Factors-in-Foods_fa.m4a",
+            "seconds": 1950
+          },
+          {
+            "title": "Food Deterioration and its Control",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/05-Food-Deterioration-and-its-Control_fa.m4a",
+            "seconds": 1054
+          },
+          {
+            "title": "Heat Preservation and Processing",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/06-Heat-Preservation-and-Processing_fa.m4a",
+            "seconds": 948
+          },
+          {
+            "title": "Cold Preservation and Processing",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/07-Cold-Preservation-and-Processing_fa.m4a",
+            "seconds": 1540
+          },
+          {
+            "title": "Food Dehydration and Concentration",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/08-Food-Dehydration-and-Concentration_fa.m4a",
+            "seconds": 1684
+          },
+          {
+            "title": "Irradiation Microwave and Ohmic Processing of Foods",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/09-Irradiation-Microwave-and-Ohmic-Processing-of-Foods_fa.m4a",
+            "seconds": 1136
+          },
+          {
+            "title": "Fermentation and Other Uses of Microorganisms",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/10-Fermentation-and-Other-Uses-of-Microorganisms_fa.m4a",
+            "seconds": 1188
+          },
+          {
+            "title": "Milk and Milk Products",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/11-Milk-and-Milk-Products_fa.m4a",
+            "seconds": 1183
+          },
+          {
+            "title": "Meat Poultry and Eggs",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/12-Meat-Poultry-and-Eggs_fa.m4a",
+            "seconds": 850
+          },
+          {
+            "title": "Seafoods",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/13-Seafoods_fa.m4a",
+            "seconds": 1112
+          },
+          {
+            "title": "Cereal Grains Legumes and Oilseeds",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/14-Cereal-Grains-Legumes-and-Oilseeds_fa.m4a",
+            "seconds": 1824
+          },
+          {
+            "title": "Vegetables and Fruits",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/15-Vegetables-and-Fruits_fa.m4a",
+            "seconds": 1989
+          },
+          {
+            "title": "Beverages",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/16-Beverages_fa.m4a",
+            "seconds": 1765
+          },
+          {
+            "title": "Confectionery and Chocolate Products",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/17-Confectionery-and-Chocolate-Products_fa.m4a",
+            "seconds": 1596
+          },
+          {
+            "title": "Principles of Food Pockaging",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/18-Principles-of-Food-Pockaging_fa.m4a",
+            "seconds": 1132
+          },
+          {
+            "title": "Food Processing and the Environment",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/19-Food-Processing-and-the-Environment_fa.m4a",
+            "seconds": 1598
+          },
+          {
+            "title": "Food Safety Risks and Hazards",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/20-Food-Safety-Risks-and-Hazards_fa.m4a",
+            "seconds": 1741
+          },
+          {
+            "title": "Governmental Regulation of Food Nutrition Labeling",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/21-Governmental-Regulation-of-Food-Nutrition-Labeling_fa.m4a",
+            "seconds": 1456
+          },
+          {
+            "title": "Hunger Technology and World Food Needs",
+            "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/22-Hunger-Technology-and-World-Food-Needs_fa.m4a",
+            "seconds": 1471
+          }
+        ]
+      },
+      "zips": {
+        "English": {
+          "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/toazinfo-food-science-pr-en.zip",
+          "bytes": 290062127,
+          "count": 24
+        },
+        "Persian": {
+          "url": "https://github.com/aminmirr/book-podcasts/releases/download/book-toazinfo-food-science-pr/toazinfo-food-science-pr-fa.zip",
+          "bytes": 291450562,
+          "count": 24
+        }
+      }
     }
   ]
 }

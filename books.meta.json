@@ -840,5 +840,112 @@
         "title_fa": ""
       }
     }
+  },
+  "toazinfo-food-science-pr": {
+    "title_en": "FOOD",
+    "translated_fa": false,
+    "title_fa": "SCIENCEعلوم غذایی",
+    "author": "Norman N. Potter and Joseph H. Hotchkiss",
+    "cover": "/Users/aminmirlohi/develpment/book-podcasts/covers/food_science.jpg",
+    "note_en": "",
+    "note_fa": "",
+    "categories": [
+      "Nature",
+      "Science"
+    ],
+    "chapters": {
+      "00-DisciplineIntroduction-Food-Science-as-a-Discipline": {
+        "title_en": "DisciplineIntroduction Food Science as a Discipline",
+        "title_fa": ""
+      },
+      "01-Constituents-of-Foods-Properties-and-Significance": {
+        "title_en": "Constituents of Foods Properties and Significance",
+        "title_fa": ""
+      },
+      "02-Nutritive-Aspects-of-Food-Constituents": {
+        "title_en": "Nutritive Aspects of Food Constituents",
+        "title_fa": ""
+      },
+      "03-Unit-Operations-in-Food-Processing": {
+        "title_en": "Unit Operations in Food Processing",
+        "title_fa": ""
+      },
+      "04-Quality-Factors-in-Foods": {
+        "title_en": "Quality Factors in Foods",
+        "title_fa": ""
+      },
+      "05-Food-Deterioration-and-its-Control": {
+        "title_en": "Food Deterioration and its Control",
+        "title_fa": ""
+      },
+      "06-Heat-Preservation-and-Processing": {
+        "title_en": "Heat Preservation and Processing",
+        "title_fa": ""
+      },
+      "07-Cold-Preservation-and-Processing": {
+        "title_en": "Cold Preservation and Processing",
+        "title_fa": ""
+      },
+      "08-Food-Dehydration-and-Concentration": {
+        "title_en": "Food Dehydration and Concentration",
+        "title_fa": ""
+      },
+      "09-Irradiation-Microwave-and-Ohmic-Processing-of-Foods": {
+        "title_en": "Irradiation Microwave and Ohmic Processing of Foods",
+        "title_fa": ""
+      },
+      "10-Fermentation-and-Other-Uses-of-Microorganisms": {
+        "title_en": "Fermentation and Other Uses of Microorganisms",
+        "title_fa": ""
+      },
+      "11-Milk-and-Milk-Products": {
+        "title_en": "Milk and Milk Products",
+        "title_fa": ""
+      },
+      "12-Meat-Poultry-and-Eggs": {
+        "title_en": "Meat Poultry and Eggs",
+        "title_fa": ""
+      },
+      "13-Seafoods": {
+        "title_en": "Seafoods",
+        "title_fa": ""
+      },
+      "14-Cereal-Grains-Legumes-and-Oilseeds": {
+        "title_en": "Cereal Grains Legumes and Oilseeds",
+        "title_fa": ""
+      },
+      "15-Vegetables-and-Fruits": {
+        "title_en": "Vegetables and Fruits",
+        "title_fa": ""
+      },
+      "16-Beverages": {
+        "title_en": "Beverages",
+        "title_fa": ""
+      },
+      "17-Confectionery-and-Chocolate-Products": {
+        "title_en": "Confectionery and Chocolate Products",
+        "title_fa": ""
+      },
+      "18-Principles-of-Food-Pockaging": {
+        "title_en": "Principles of Food Pockaging",
+        "title_fa": ""
+      },
+      "19-Food-Processing-and-the-Environment": {
+        "title_en": "Food Processing and the Environment",
+        "title_fa": ""
+      },
+      "20-Food-Safety-Risks-and-Hazards": {
+        "title_en": "Food Safety Risks and Hazards",
+        "title_fa": ""
+      },
+      "21-Governmental-Regulation-of-Food-Nutrition-Labeling": {
+        "title_en": "Governmental Regulation of Food Nutrition Labeling",
+        "title_fa": ""
+      },
+      "22-Hunger-Technology-and-World-Food-Needs": {
+        "title_en": "Hunger Technology and World Food Needs",
+        "title_fa": ""
+      }
+    }
   }
 }
