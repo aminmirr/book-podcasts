@@ -342,13 +342,20 @@ def seed_meta(manifest: dict) -> None:
     print(f"books.meta.json: {len(meta)} book(s) (existing edits untouched)")
 
 
+def list_covers() -> list[str]:
+    """Filenames in covers/, sorted — the numbered list pick_cover() shows, and
+    what a non-interactive caller (the dashboard's publish wizard) needs to
+    build the same numbered picker without going through input()."""
+    covers = SITE_DIR / "covers"
+    return sorted(p.name for p in covers.iterdir()
+                  if p.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif")) \
+        if covers.is_dir() else []
+
+
 def pick_cover(current: str) -> str:
     """Numbered list of covers/ so the path never has to be typed. Also takes a
     pasted https:// URL or any path containing a slash."""
-    covers = SITE_DIR / "covers"
-    files = sorted(p.name for p in covers.iterdir()
-                   if p.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif")) \
-        if covers.is_dir() else []
+    files = list_covers()
     print("    (drop the image in covers/ first, then pick a number — or paste a URL)")
     for i, f in enumerate(files, 1):
         print(f"    [{i}] {f}")
@@ -491,14 +498,28 @@ def ask_meta(names: list[str]) -> None:
     META.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n")
 
 
-def commit_and_push(names: list[str], repo: str) -> None:
-    """Publishing only reaches the live site after a push, so offer it here."""
-    if not sys.stdin.isatty():
+def apply_meta_flags(name: str, title_en: str, title_fa: str, author: str,
+                     cover: str, categories_raw: str) -> None:
+    """Non-interactive equivalent of ask_meta()'s per-book prompt loop, for a
+    caller (the dashboard's publish wizard) that already collected every
+    answer itself and has nothing left to ask. A no-op if the book has no
+    manifest entry yet — mirrors ask_meta()'s own `if e is None: continue`."""
+    meta = json.loads(META.read_text())
+    e = meta.get(slugify(name))
+    if e is None:
         return
+    e["title_en"] = title_en
+    e["title_fa"] = title_fa
+    e["author"] = author
+    e["cover"] = cover
+    e["categories"] = parse_categories(categories_raw, list(category_counts(meta)))
+    META.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n")
+
+
+def push_now(names: list[str], repo: str) -> None:
+    """Non-interactive equivalent of commit_and_push()'s git steps — no Y/n,
+    since a caller that already decided to push has nothing left to confirm."""
     git = ["git", "-C", str(SITE_DIR)]
-    if input("\nCommit and push to the live site? [Y/n]: ").strip().lower() in ("n", "no"):
-        print("  Skipped. When ready:  git add -A && git commit -m '...' && git push")
-        return
     subprocess.run([*git, "add", "manifest.json", "books.meta.json", "covers"], check=True)
     r = subprocess.run([*git, "commit", "-m", f"Add {', '.join(names)}"],
                        capture_output=True, text=True)
@@ -506,6 +527,31 @@ def commit_and_push(names: list[str], repo: str) -> None:
         sys.exit(r.stdout + r.stderr)
     subprocess.run([*git, "push"], check=True)
     print(f"\nLive in a minute: https://{repo.split('/')[0]}.github.io/{repo.split('/')[1]}/")
+
+
+def commit_and_push(names: list[str], repo: str) -> None:
+    """Publishing only reaches the live site after a push, so offer it here."""
+    if not sys.stdin.isatty():
+        return
+    if input("\nCommit and push to the live site? [Y/n]: ").strip().lower() in ("n", "no"):
+        print("  Skipped. When ready:  git add -A && git commit -m '...' && git push")
+        return
+    push_now(names, repo)
+
+
+def _extract_flag(args: list[str], name: str) -> tuple[list[str], str | None]:
+    """Pulls a `--name=value` flag out of args, returning the remaining args and
+    the value (None if the flag wasn't present). Hand-rolled to match the rest
+    of main()'s flag handling, which predates argparse here."""
+    prefix = f"{name}="
+    value = None
+    remaining = []
+    for a in args:
+        if a.startswith(prefix):
+            value = a[len(prefix):]
+        else:
+            remaining.append(a)
+    return remaining, value
 
 
 def main() -> None:
@@ -519,6 +565,16 @@ def main() -> None:
     if "--categories" in args:
         manage_categories()
         return
+    # The wizard's non-interactive metadata path: every field arrives as its own
+    # flag rather than through ask_meta()'s prompts. --push opts into commit_and_push's
+    # git steps without its Y/n confirmation, since the wizard already asked.
+    push = "--push" in args
+    args = [a for a in args if a != "--push"]
+    args, title_en = _extract_flag(args, "--title-en")
+    args, title_fa = _extract_flag(args, "--title-fa")
+    args, author = _extract_flag(args, "--author")
+    args, cover = _extract_flag(args, "--cover")
+    args, categories_raw = _extract_flag(args, "--categories")
     args = [a for a in args
             if a not in ("--no-shrink", "--upload-only", "--force-upload")]
     repo = owner_repo()
@@ -556,6 +612,11 @@ def main() -> None:
     if upload_only:
         print("\n  Uploaded. Titles, author, cover and the commit are still yours:")
         print(f"  python build_site.py \"{names[0]}\"")
+        return
+    if title_en is not None and title_fa is not None and author is not None and cover is not None:
+        apply_meta_flags(names[0], title_en, title_fa, author, cover, categories_raw or "")
+        if push:
+            push_now(names, repo)
         return
     ask_meta(names)
     commit_and_push(names, repo)
