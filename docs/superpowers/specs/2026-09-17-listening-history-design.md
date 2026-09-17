@@ -101,6 +101,26 @@ it — then start the track from `book.episodes[lang]` (available regardless of
 which language is currently rendered; no DOM rebuild required beyond the normal
 language switch).
 
+**Book-level continue.** Each book card's `whole` button (top of the card —
+today it always plays the standalone whole-book overview episode) is the de
+facto "play this book" affordance, since a book has no single continuous
+audiobook track — the overview and each chapter are independent episodes. When
+a book has *any* in-progress `abs-history` entry (whole-book or a chapter,
+whichever this slug's entries most recently had `at` touched), the button
+resumes that specific episode at its saved position instead of restarting the
+overview, and its label reflects that ("Continue: Chapter 4" instead of "Whole
+Book"). This reuses the exact same resume-a-specific-track path as a
+continue-listening card click — same lookup, same cross-language handling — just
+triggered from the book card instead of the row. A book with nothing in
+progress behaves exactly as it does today: the button plays the overview.
+
+Once every episode in a book is `played`, the button reverts to its current
+behavior (plays the overview from 0) — there's nothing left to "continue."
+
+Needs one new string in both the `EN` and `FA` dictionaries (alongside the
+existing `whole`, `chapters`, `showToc`, ... entries) — a "Continue" label to
+pair with the resumed episode's own name.
+
 **Played marks.** A small dot/check on each chapter row and the whole-book row
 in `paintSpines()`'s existing per-book loop, when `abs-history[url].played` is
 true for that row's URL under the *currently displayed* language only — an
@@ -118,6 +138,10 @@ node-run assertions, DOM and `fetch` untouched:
   `position` is negligible, true otherwise.
 - continue-listening selection: filters out `played`, sorts by `at` desc, caps
   at 8.
+- `mostRecentInProgress(slug)` — given the history map and a book slug, returns
+  the entry with the latest `at` among that slug's unplayed, meaningfully-started
+  entries, or `null`. Backs both the continue-listening row and the book-level
+  continue button, so it's tested once.
 
 `test_history.js`, new file, same style as `test_search.js`.
 
