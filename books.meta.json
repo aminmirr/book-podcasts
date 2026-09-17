@@ -792,5 +792,53 @@
         "title_fa": ""
       }
     }
+  },
+  "the-psychology-of-totalitarianism-2022-mattias-desmet": {
+    "title_en": "The Psychology of Totalitarianism",
+    "title_fa": "روانشناسی توتالیتاریسم",
+    "author": "Mattias Desmet",
+    "cover": "covers/the psychology of totallitarism.jpg",
+    "note_en": "",
+    "note_fa": "",
+    "translated_fa": null,
+    "categories": [
+      "Politics",
+      "Philosophy",
+      "Psychology"
+    ],
+    "chapters": {
+      "00-Introduction": {
+        "title_en": "Introduction",
+        "title_fa": ""
+      },
+      "01-2-Science-and-Its-Practical-Applications": {
+        "title_en": "Science and Its Practical Applications",
+        "title_fa": ""
+      },
+      "02-4-The-Immeasurable-Universe": {
+        "title_en": "The Immeasurable Universe",
+        "title_fa": ""
+      },
+      "03-5-The-Desire-for-a-Master": {
+        "title_en": "The Desire for a Master",
+        "title_fa": ""
+      },
+      "04-6-The-Rise-of-the-Masses": {
+        "title_en": "The Rise of the Masses",
+        "title_fa": ""
+      },
+      "05-7-The-Leaders-of-the-Masses": {
+        "title_en": "The Leaders of the Masses",
+        "title_fa": ""
+      },
+      "06-9-The-Dead-versus-the-Living-Universe": {
+        "title_en": "The Dead versus the Living Universe",
+        "title_fa": ""
+      },
+      "07-11-Science-and-Truth": {
+        "title_en": "Science and Truth",
+        "title_fa": ""
+      }
+    }
   }
 }
