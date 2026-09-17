@@ -342,13 +342,20 @@ def seed_meta(manifest: dict) -> None:
     print(f"books.meta.json: {len(meta)} book(s) (existing edits untouched)")
 
 
+def list_covers() -> list[str]:
+    """Filenames in covers/, sorted — the numbered list pick_cover() shows, and
+    what a non-interactive caller (the dashboard's publish wizard) needs to
+    build the same numbered picker without going through input()."""
+    covers = SITE_DIR / "covers"
+    return sorted(p.name for p in covers.iterdir()
+                  if p.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif")) \
+        if covers.is_dir() else []
+
+
 def pick_cover(current: str) -> str:
     """Numbered list of covers/ so the path never has to be typed. Also takes a
     pasted https:// URL or any path containing a slash."""
-    covers = SITE_DIR / "covers"
-    files = sorted(p.name for p in covers.iterdir()
-                   if p.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif")) \
-        if covers.is_dir() else []
+    files = list_covers()
     print("    (drop the image in covers/ first, then pick a number — or paste a URL)")
     for i, f in enumerate(files, 1):
         print(f"    [{i}] {f}")
