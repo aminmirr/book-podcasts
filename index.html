@@ -714,6 +714,42 @@ function continueListening(history,limit=CONTINUE_ROW_LIMIT){
   return continueEntries(history).sort((a,b)=>b.at-a.at).slice(0,limit);
 }
 
+function loadHistory(){
+  const raw=localStorage.getItem(HISTORY_KEY);
+  if(!raw) return {};
+  try{ return JSON.parse(raw); }catch{ return {}; }
+}
+function saveHistory(history){ localStorage.setItem(HISTORY_KEY, JSON.stringify(history)); }
+const HISTORY = loadHistory();
+
+/* tr is a track object from mkTrack() — carries slug/kind/idx/book/label/src already,
+   so nothing needs re-deriving from the DOM. Sticky: once played, stays played. */
+function recordEntry(tr, position, duration, forcePlayed){
+  const prev = HISTORY[tr.src];
+  HISTORY[tr.src] = {
+    position, duration,
+    played: forcePlayed || (prev && prev.played) || shouldMarkPlayed(position, duration),
+    at: Date.now(),
+    slug: tr.slug, lang: LANG, kind: tr.kind, idx: tr.idx, book: tr.book, label: tr.label,
+  };
+  saveHistory(HISTORY);
+}
+
+let lastHistoryWriteAt = 0;
+const HISTORY_WRITE_INTERVAL_MS = 5000;
+function maybeRecordProgress(){
+  const tr=cur(); if(!tr || !audio.duration) return;
+  const now=Date.now();
+  if(now - lastHistoryWriteAt < HISTORY_WRITE_INTERVAL_MS) return;
+  lastHistoryWriteAt = now;
+  recordEntry(tr, audio.currentTime, audio.duration, false);
+}
+function forceRecordProgress(played){
+  const tr=cur(); if(!tr || !audio.duration) return;
+  lastHistoryWriteAt = Date.now();
+  recordEntry(tr, audio.currentTime, audio.duration, played);
+}
+
 /* ---------------- render ---------------- */
 function render(){
   const L=t();
@@ -994,6 +1030,10 @@ function load(autoplay){
   if(autoplay && mIsMobile()) mExpand();            // open expanded when they play something
   $("#prev").disabled = qi<=0;
   $("#next").disabled = qi>=queue.length-1;
+  const histEntry=HISTORY[tr.src];
+  if(shouldResume(histEntry)){
+    audio.addEventListener("loadedmetadata",()=>{ audio.currentTime=histEntry.position; },{once:true});
+  }
   if(autoplay) audio.play().catch(fail);
   paintSpines();
 }
@@ -1024,10 +1064,13 @@ function paintSpines(){
 
 audio.addEventListener("play",paintSpines);
 audio.addEventListener("pause",paintSpines);
+audio.addEventListener("pause",()=>forceRecordProgress(false));
+addEventListener("beforeunload",()=>forceRecordProgress(false));
 audio.addEventListener("error",()=>{ if(audio.src) fail(); });
 audio.addEventListener("ended",()=>{
   const tr=cur();
   if(tr){ const R=refs[tr.slug]; if(R&&tr.kind==="chapter") R.segs[tr.idx].dataset.done="1"; }
+  forceRecordProgress(true);
   if(qi<queue.length-1){ qi++; load(true); } else { paintSpines(); }
 });
 audio.addEventListener("timeupdate",()=>{
@@ -1041,6 +1084,7 @@ audio.addEventListener("timeupdate",()=>{
   $("#mpDur").textContent=faDigits(clock(audio.duration));
   const tr=cur();
   if(tr&&tr.kind==="chapter"){ const R=refs[tr.slug]; R&&R.fills[tr.idx]&&(R.fills[tr.idx].style.width=p*100+"%"); }
+  maybeRecordProgress();
 });
 
 $("#toggle").addEventListener("click",()=>audio.paused?audio.play().catch(fail):audio.pause());
