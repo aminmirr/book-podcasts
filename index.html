@@ -817,8 +817,8 @@ function render(){
   hits.forEach(([b,m])=>$("#list").append(bookEl(b, m.viaChapter || open.has(b.slug))));
 
   if(!hits.length){
-    $(“#msg”).hidden=false;
-    $(“#msg”).textContent = Q ? `${L.noResults} “${$(“#q”).value.trim()}”` : L.empty;
+    $("#msg").hidden=false;
+    $("#msg").textContent = Q ? `${L.noResults} “${$("#q").value.trim()}”` : L.empty;
   }
   paintSpines();
   paintVotes();
