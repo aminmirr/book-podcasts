@@ -134,6 +134,21 @@ html[data-lang="fa"] .cat{ font-family:'Vazirmatn',sans-serif; }
 .book-cats{ display:flex; flex-wrap:wrap; gap:7px; margin-top:14px; }
 .book-cats .cat{ font-size:.72rem; padding:4px 11px; }
 
+/* continue-listening row — recently started, unfinished episodes across all books */
+.continue-wrap{ margin-top:8px; }
+.continue-wrap[hidden]{ display:none; }
+.continue-title{ color:var(--haze); margin-bottom:12px; }
+.continue-row{ display:flex; gap:14px; overflow-x:auto; padding-block:2px 8px; }
+.continue-card{ flex:none; width:168px; display:flex; flex-direction:column; gap:7px;
+  background:none; border:0; padding:0; cursor:pointer; text-align:start; font:inherit; color:inherit; }
+.continue-card:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+.continue-cover{ width:100%; aspect-ratio:2/3; object-fit:cover; border-radius:4px;
+  border:1px solid var(--line); background:var(--ink-raise); }
+.continue-book{ font-size:.82rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.continue-ep{ font-size:.75rem; color:var(--haze); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.continue-bar{ height:2px; background:var(--line); border-radius:2px; overflow:hidden; }
+.continue-bar-fill{ height:100%; background:var(--accent); }
+
 /* whole-book: play + download side by side */
 .book-side{ display:flex; gap:10px; align-items:center; }
 .whole-dl{ display:inline-flex; align-items:center; justify-content:center;
@@ -364,7 +379,14 @@ footer a:hover{ color:var(--paper); }
     </label>
     <nav class="cats" id="cats" role="group" aria-label="Categories" hidden></nav>
   </div>
-  <main><div id="list"></div><div class="msg" id="msg" data-i18n="loading"></div></main>
+  <main>
+    <div class="continue-wrap" id="continueWrap" hidden>
+      <p class="mono continue-title" data-i18n="continueTitle"></p>
+      <div class="continue-row" id="continueRow"></div>
+    </div>
+    <div id="list"></div>
+    <div class="msg" id="msg" data-i18n="loading"></div>
+  </main>
 
   <footer class="mono">
     <span data-i18n="footnote"></span>
@@ -795,11 +817,12 @@ function render(){
   hits.forEach(([b,m])=>$("#list").append(bookEl(b, m.viaChapter || open.has(b.slug))));
 
   if(!hits.length){
-    $("#msg").hidden=false;
-    $("#msg").textContent = Q ? `${L.noResults} “${$("#q").value.trim()}”` : L.empty;
+    $(“#msg”).hidden=false;
+    $(“#msg”).textContent = Q ? `${L.noResults} “${$(“#q”).value.trim()}”` : L.empty;
   }
   paintSpines();
   paintVotes();
+  renderContinueRow();
 }
 
 function renderCats(books){
@@ -1212,6 +1235,29 @@ function playHistoryEntry(entry){
     if(!chapters[entry.idx]) return;
     start(chapters.map((c,i)=>mkTrack(b,"chapter",c,i)), entry.idx);
   }
+}
+
+function renderContinueRow(){
+  const wrap=$("#continueWrap"), row=$("#continueRow");
+  const entries = DATA ? continueListening(HISTORY) : [];
+  if(!entries.length){ wrap.hidden=true; row.innerHTML=""; return; }
+  const L=t();
+  row.innerHTML="";
+  entries.forEach(e=>{
+    const cover=(META[e.slug]&&META[e.slug].cover)||"";
+    const pct = e.duration ? Math.min(100, Math.round((e.position/e.duration)*100)) : 0;
+    const card=document.createElement("button");
+    card.type="button"; card.className="continue-card";
+    card.innerHTML=`
+      ${cover?`<img class="continue-cover" src="${esc(cover)}" alt="" loading="lazy" onerror="this.remove()">`:""}
+      <span class="continue-book">${esc(e.book)}</span>
+      <span class="continue-ep">${esc(e.label)}</span>
+      <span class="continue-bar"><span class="continue-bar-fill" style="width:${pct}%"></span></span>`;
+    card.addEventListener("click",()=>playHistoryEntry(e));
+    row.append(card);
+  });
+  $(".continue-title",wrap).textContent=L.continueTitle;
+  wrap.hidden=false;
 }
 
 /* ---------------- likes / dislikes (Supabase) ---------------- */
