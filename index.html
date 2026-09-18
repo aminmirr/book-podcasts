@@ -689,6 +689,31 @@ function split(book){
            chapters: eps.filter(e=>!isWhole(e)) };
 }
 
+/* ---------------- listening history (localStorage, same-device only) ----------------
+   Resume position + finished/in-progress state, keyed by episode audio URL (unique per
+   book, chapter and language). See docs/superpowers/specs/2026-09-17-listening-history-design.md */
+const HISTORY_KEY="abs-history";
+const RESUME_MIN_SECONDS=5;      // ignore a resume position this close to the start
+const PLAYED_RATIO=0.95;         // finished enough to count as "played"
+const CONTINUE_ROW_LIMIT=8;
+
+function shouldMarkPlayed(position,duration){
+  return !!duration && duration>0 && (position/duration)>=PLAYED_RATIO;
+}
+function shouldResume(entry){
+  return !!entry && !entry.played && (entry.position||0) > RESUME_MIN_SECONDS;
+}
+function continueEntries(history){
+  return Object.keys(history).map(url=>({url,...history[url]})).filter(shouldResume);
+}
+function mostRecentInProgress(history,slug){
+  const list=continueEntries(history).filter(e=>e.slug===slug);
+  return list.length ? list.reduce((a,b)=>b.at>a.at?b:a) : null;
+}
+function continueListening(history,limit=CONTINUE_ROW_LIMIT){
+  return continueEntries(history).sort((a,b)=>b.at-a.at).slice(0,limit);
+}
+
 /* ---------------- render ---------------- */
 function render(){
   const L=t();
