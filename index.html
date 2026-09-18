@@ -259,6 +259,9 @@ html[data-lang="fa"] .sheet-actions button,html[data-lang="fa"] .sheet-actions a
 .ch[data-now="1"] .ch-n, .ch[data-now="1"]{ color:var(--accent); }
 .ch-t{ min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:.96rem; }
 .ch-d{ color:var(--haze); font-size:.8rem; white-space:nowrap; }
+.ch-played{ display:inline-flex; width:11px; height:11px; margin-inline-end:5px;
+  vertical-align:-1px; color:var(--accent); }
+.ch-played svg{ width:100%; height:100%; }
 .missing{ color:var(--haze); }
 
 /* sticky player */
@@ -918,8 +921,10 @@ function bookEl(b, openToc){
   R.tracks=tracks;
   chapters.forEach((c,i)=>{
     const title=chTitle(b.slug,c);
+    const played = HISTORY[c.url] && HISTORY[c.url].played;
     const seg=document.createElement("button");
     seg.type="button"; seg.className="seg";
+    if(played) seg.dataset.done="1";
     seg.style.flexGrow=String(Math.max((c.seconds||60)/60,1));
     seg.title=`${L.chShort} ${num(i+1)} — ${title}`;   // hover: no duration
     seg.setAttribute("aria-label",seg.title);
@@ -932,7 +937,7 @@ function bookEl(b, openToc){
     row.type="button"; row.className="ch";
     row.innerHTML=`<span class="ch-n">${String(i+1).padStart(2,"0")}</span>
       <span class="ch-t">${esc(title)}</span>
-      <span class="ch-d mono">${dur(c.seconds)}</span>`;
+      <span class="ch-d mono">${played?`<span class="ch-played">${ICON_CHECK}</span>`:""}${dur(c.seconds)}</span>`;
     row.addEventListener("click",()=>start(tracks,i));
 
     const copy=document.createElement("button");
@@ -1069,7 +1074,16 @@ addEventListener("beforeunload",()=>forceRecordProgress(false));
 audio.addEventListener("error",()=>{ if(audio.src) fail(); });
 audio.addEventListener("ended",()=>{
   const tr=cur();
-  if(tr){ const R=refs[tr.slug]; if(R&&tr.kind==="chapter") R.segs[tr.idx].dataset.done="1"; }
+  if(tr){
+    const R=refs[tr.slug];
+    if(R&&tr.kind==="chapter"){
+      R.segs[tr.idx].dataset.done="1";
+      if(R.chs[tr.idx] && !R.chs[tr.idx].querySelector(".ch-played")){
+        const d=$(".ch-d",R.chs[tr.idx]);
+        d&&d.insertAdjacentHTML("afterbegin", `<span class="ch-played">${ICON_CHECK}</span>`);
+      }
+    }
+  }
   forceRecordProgress(true);
   if(qi<queue.length-1){ qi++; load(true); } else { paintSpines(); }
 });
