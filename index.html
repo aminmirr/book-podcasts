@@ -723,7 +723,7 @@ function split(book){
 const HISTORY_KEY="abs-history";
 const RESUME_MIN_SECONDS=5;      // ignore a resume position this close to the start
 const PLAYED_RATIO=0.95;         // finished enough to count as "played"
-const CONTINUE_ROW_LIMIT=8;
+const CONTINUE_ROW_LIMIT=4;
 
 function shouldMarkPlayed(position,duration){
   return !!duration && duration>0 && (position/duration)>=PLAYED_RATIO;
@@ -930,20 +930,28 @@ function bookEl(b, openToc){
     const w=document.createElement("button");
     w.type="button"; w.className="whole"; w.dataset.on="0";
     const wholeHist = HISTORY[full.url];
-    const label = continueEntry ? `${L.continue}: ${continueEntry.label}` : L.whole;
-    const shownDur = continueEntry ? dur(continueEntry.duration) : dur(full.seconds);
-    const mark = (!continueEntry && wholeHist && wholeHist.played) ? ICON_CHECK : "";
-    w.innerHTML=`${ICON_PLAY}<span>${esc(label)}</span><small>${mark}${shownDur}</small>`;
+    const mark = (wholeHist && wholeHist.played) ? ICON_CHECK : "";
+    w.innerHTML=`${ICON_PLAY}<span>${esc(L.whole)}</span><small>${mark}${dur(full.seconds)}</small>`;
     w.addEventListener("click",()=>{
-      if(continueEntry){
-        if(cur() && cur().src===continueEntry.url){ audio.paused?audio.play():audio.pause(); return; }
-        playHistoryEntry(continueEntry);
-        return;
-      }
       if(cur()?.slug===b.slug && cur()?.kind==="full"){ audio.paused?audio.play():audio.pause(); return; }
       start([mkTrack(b,"full",full,0)],0);
     });
     side.append(w); R.whole=w; R.fullTrack=mkTrack(b,"full",full,0);
+    /* A whole-book entry in progress is already covered by the button above
+       (load() resumes it automatically since it's the same URL) — a second
+       button here would just duplicate it. Only chapters get their own
+       continue button, since the "Full summary" button can't reach them. */
+    if(continueEntry && continueEntry.kind!=="full"){
+      const c=document.createElement("button");
+      c.type="button"; c.className="whole"; c.dataset.on="0";
+      const label=`${L.continue}: ${continueEntry.label}`;
+      c.innerHTML=`${ICON_PLAY}<span>${esc(label)}</span><small>${dur(continueEntry.duration)}</small>`;
+      c.addEventListener("click",()=>{
+        if(cur() && cur().src===continueEntry.url){ audio.paused?audio.play():audio.pause(); return; }
+        playHistoryEntry(continueEntry);
+      });
+      side.append(c); R.continueBtn=c;
+    }
     const dl=document.createElement("a");
     dl.className="whole-dl"; dl.href=full.url; dl.setAttribute("download","");
     dl.title=L.dlWhole; dl.setAttribute("aria-label",L.dlWhole); dl.innerHTML=ICON_DL;
@@ -1090,11 +1098,9 @@ function paintSpines(){
   const tr=cur();
   for(const slug in refs){
     const R=refs[slug];
-    const wholeActive = tr && tr.slug===slug && (
-      (tr.kind==="full" && !R.continueEntry) ||
-      (R.continueEntry && tr.src===R.continueEntry.url)
-    );
-    R.whole && (R.whole.dataset.on = (wholeActive && !audio.paused)?"1":"0");
+    const playingHere = tr && tr.slug===slug && !audio.paused;
+    R.whole && (R.whole.dataset.on = (playingHere && tr.kind==="full")?"1":"0");
+    R.continueBtn && (R.continueBtn.dataset.on = (playingHere && R.continueEntry && tr.src===R.continueEntry.url)?"1":"0");
     R.segs.forEach((s,i)=>{
       const now = tr&&tr.slug===slug&&tr.kind==="chapter"&&tr.idx===i;
       s.dataset.now = now?"1":"0";
