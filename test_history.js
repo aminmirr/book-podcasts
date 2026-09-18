@@ -54,11 +54,11 @@ assert.strictEqual(mostRecentInProgress(history,"book-a").url, "a.m4a");
 assert.strictEqual(mostRecentInProgress(history,"book-b").url, "d.m4a");
 assert.strictEqual(mostRecentInProgress(history,"book-c"), null, "no entries for an unknown slug");
 
-// cap at CONTINUE_ROW_LIMIT (8)
+// cap at CONTINUE_ROW_LIMIT (4) — the oldest falls off the end as new ones arrive
 const many = {};
 for(let i=0;i<12;i++) many["e"+i+".m4a"] = {position:30,duration:200,played:false,at:i,slug:"x"};
 const capped = continueListening(many);
-assert.strictEqual(capped.length, 8, "capped at 8");
-assert.strictEqual(capped[0].url, "e11.m4a", "most recent of the twelve leads");
+assert.strictEqual(capped.length, 4, "capped at 4");
+assert.deepStrictEqual(capped.map(e=>e.url), ["e11.m4a","e10.m4a","e9.m4a","e8.m4a"], "most recent four, newest first");
 
 console.log("ok");
