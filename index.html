@@ -134,6 +134,21 @@ html[data-lang="fa"] .cat{ font-family:'Vazirmatn',sans-serif; }
 .book-cats{ display:flex; flex-wrap:wrap; gap:7px; margin-top:14px; }
 .book-cats .cat{ font-size:.72rem; padding:4px 11px; }
 
+/* continue-listening row — recently started, unfinished episodes across all books */
+.continue-wrap{ margin-top:8px; }
+.continue-wrap[hidden]{ display:none; }
+.continue-title{ color:var(--haze); margin-bottom:12px; }
+.continue-row{ display:flex; gap:14px; overflow-x:auto; padding-block:2px 8px; }
+.continue-card{ flex:none; width:168px; display:flex; flex-direction:column; gap:7px;
+  background:none; border:0; padding:0; cursor:pointer; text-align:start; font:inherit; color:inherit; }
+.continue-card:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+.continue-cover{ width:100%; aspect-ratio:2/3; object-fit:cover; border-radius:4px;
+  border:1px solid var(--line); background:var(--ink-raise); }
+.continue-book{ font-size:.82rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.continue-ep{ font-size:.75rem; color:var(--haze); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.continue-bar{ height:2px; background:var(--line); border-radius:2px; overflow:hidden; }
+.continue-bar-fill{ height:100%; background:var(--accent); }
+
 /* whole-book: play + download side by side */
 .book-side{ display:flex; gap:10px; align-items:center; }
 .whole-dl{ display:inline-flex; align-items:center; justify-content:center;
@@ -204,6 +219,7 @@ html[data-lang="fa"] .sheet-actions button,html[data-lang="fa"] .sheet-actions a
 .whole[data-on="1"]{ background:var(--accent); border-color:var(--accent); color:var(--ink); }
 .whole svg{ width:12px; height:12px; flex:none; fill:currentColor; }
 .whole small{ opacity:.6; font-size:.8em; }
+.whole small svg{ width:10px; height:10px; vertical-align:-1px; margin-inline-end:4px; }
 
 /* the spine — width of each segment ∝ chapter length */
 .spine-wrap{ margin-top:26px; }
@@ -259,6 +275,9 @@ html[data-lang="fa"] .sheet-actions button,html[data-lang="fa"] .sheet-actions a
 .ch[data-now="1"] .ch-n, .ch[data-now="1"]{ color:var(--accent); }
 .ch-t{ min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:.96rem; }
 .ch-d{ color:var(--haze); font-size:.8rem; white-space:nowrap; }
+.ch-played{ display:inline-flex; width:11px; height:11px; margin-inline-end:5px;
+  vertical-align:-1px; color:var(--accent); }
+.ch-played svg{ width:100%; height:100%; }
 .missing{ color:var(--haze); }
 
 /* sticky player */
@@ -360,7 +379,14 @@ footer a:hover{ color:var(--paper); }
     </label>
     <nav class="cats" id="cats" role="group" aria-label="Categories" hidden></nav>
   </div>
-  <main><div id="list"></div><div class="msg" id="msg" data-i18n="loading"></div></main>
+  <main>
+    <div class="continue-wrap" id="continueWrap" hidden>
+      <p class="mono continue-title" data-i18n="continueTitle"></p>
+      <div class="continue-row" id="continueRow"></div>
+    </div>
+    <div id="list"></div>
+    <div class="msg" id="msg" data-i18n="loading"></div>
+  </main>
 
   <footer class="mono">
     <span data-i18n="footnote"></span>
@@ -558,7 +584,8 @@ fa:{ mark:"خلاصه‌های صوتی",
   empty:"هنوز کتابی اضافه نشده.",
   notfound:"فایل صوتی پیدا نشد",
   footnote:"صدا با NotebookLM · میزبانی روی GitHub Releases",
-  hour:"ساعت", minute:"دقیقه", chShort:"فصل" },
+  hour:"ساعت", minute:"دقیقه", chShort:"فصل",
+  continue:"ادامه", continueTitle:"ادامه‌ی شنیدن" },
 en:{ mark:"Audio summaries",
   eyebrow:"A listening library · made with NotebookLM",
   headline:'Get the heart of a book — <em>even the untranslated ones</em>.',
@@ -594,7 +621,8 @@ en:{ mark:"Audio summaries",
   empty:"No books yet.",
   notfound:"Audio file not found",
   footnote:"Audio by NotebookLM · hosted on GitHub Releases",
-  hour:"h", minute:"min", chShort:"Ch." }
+  hour:"h", minute:"min", chShort:"Ch.",
+  continue:"Continue", continueTitle:"Continue listening" }
 };
 
 let LANG = localStorage.getItem("abs-lang") || "fa";
@@ -689,6 +717,67 @@ function split(book){
            chapters: eps.filter(e=>!isWhole(e)) };
 }
 
+/* ---------------- listening history (localStorage, same-device only) ----------------
+   Resume position + finished/in-progress state, keyed by episode audio URL (unique per
+   book, chapter and language). See docs/superpowers/specs/2026-09-17-listening-history-design.md */
+const HISTORY_KEY="abs-history";
+const RESUME_MIN_SECONDS=5;      // ignore a resume position this close to the start
+const PLAYED_RATIO=0.95;         // finished enough to count as "played"
+const CONTINUE_ROW_LIMIT=8;
+
+function shouldMarkPlayed(position,duration){
+  return !!duration && duration>0 && (position/duration)>=PLAYED_RATIO;
+}
+function shouldResume(entry){
+  return !!entry && !entry.played && (entry.position||0) > RESUME_MIN_SECONDS;
+}
+function continueEntries(history){
+  return Object.keys(history).map(url=>({url,...history[url]})).filter(shouldResume);
+}
+function mostRecentInProgress(history,slug){
+  const list=continueEntries(history).filter(e=>e.slug===slug);
+  return list.length ? list.reduce((a,b)=>b.at>a.at?b:a) : null;
+}
+function continueListening(history,limit=CONTINUE_ROW_LIMIT){
+  return continueEntries(history).sort((a,b)=>b.at-a.at).slice(0,limit);
+}
+
+function loadHistory(){
+  const raw=localStorage.getItem(HISTORY_KEY);
+  if(!raw) return {};
+  try{ return JSON.parse(raw); }catch{ return {}; }
+}
+function saveHistory(history){ localStorage.setItem(HISTORY_KEY, JSON.stringify(history)); }
+const HISTORY = loadHistory();
+
+/* tr is a track object from mkTrack() — carries slug/kind/idx/book/label/src already,
+   so nothing needs re-deriving from the DOM. Sticky: once played, stays played. */
+function recordEntry(tr, position, duration, forcePlayed){
+  const prev = HISTORY[tr.src];
+  HISTORY[tr.src] = {
+    position, duration,
+    played: forcePlayed || (prev && prev.played) || shouldMarkPlayed(position, duration),
+    at: Date.now(),
+    slug: tr.slug, lang: LANG, kind: tr.kind, idx: tr.idx, book: tr.book, label: tr.label,
+  };
+  saveHistory(HISTORY);
+}
+
+let lastHistoryWriteAt = 0;
+const HISTORY_WRITE_INTERVAL_MS = 5000;
+function maybeRecordProgress(){
+  const tr=cur(); if(!tr || !audio.duration) return;
+  const now=Date.now();
+  if(now - lastHistoryWriteAt < HISTORY_WRITE_INTERVAL_MS) return;
+  lastHistoryWriteAt = now;
+  recordEntry(tr, audio.currentTime, audio.duration, false);
+}
+function forceRecordProgress(played){
+  const tr=cur(); if(!tr || !audio.duration) return;
+  lastHistoryWriteAt = Date.now();
+  recordEntry(tr, audio.currentTime, audio.duration, played);
+}
+
 /* ---------------- render ---------------- */
 function render(){
   const L=t();
@@ -733,6 +822,7 @@ function render(){
   }
   paintSpines();
   paintVotes();
+  renderContinueRow();
 }
 
 function renderCats(books){
@@ -834,11 +924,22 @@ function bookEl(b, openToc){
 
   // whole-book: play + download
   const side=$(".book-side",el);
+  const continueEntry = mostRecentInProgress(HISTORY, b.slug);
+  R.continueEntry = continueEntry;
   if(full){
     const w=document.createElement("button");
     w.type="button"; w.className="whole"; w.dataset.on="0";
-    w.innerHTML=`${ICON_PLAY}<span>${esc(L.whole)}</span><small>${dur(full.seconds)}</small>`;
+    const wholeHist = HISTORY[full.url];
+    const label = continueEntry ? `${L.continue}: ${continueEntry.label}` : L.whole;
+    const shownDur = continueEntry ? dur(continueEntry.duration) : dur(full.seconds);
+    const mark = (!continueEntry && wholeHist && wholeHist.played) ? ICON_CHECK : "";
+    w.innerHTML=`${ICON_PLAY}<span>${esc(label)}</span><small>${mark}${shownDur}</small>`;
     w.addEventListener("click",()=>{
+      if(continueEntry){
+        if(cur() && cur().src===continueEntry.url){ audio.paused?audio.play():audio.pause(); return; }
+        playHistoryEntry(continueEntry);
+        return;
+      }
       if(cur()?.slug===b.slug && cur()?.kind==="full"){ audio.paused?audio.play():audio.pause(); return; }
       start([mkTrack(b,"full",full,0)],0);
     });
@@ -857,8 +958,10 @@ function bookEl(b, openToc){
   R.tracks=tracks;
   chapters.forEach((c,i)=>{
     const title=chTitle(b.slug,c);
+    const played = HISTORY[c.url] && HISTORY[c.url].played;
     const seg=document.createElement("button");
     seg.type="button"; seg.className="seg";
+    if(played) seg.dataset.done="1";
     seg.style.flexGrow=String(Math.max((c.seconds||60)/60,1));
     seg.title=`${L.chShort} ${num(i+1)} — ${title}`;   // hover: no duration
     seg.setAttribute("aria-label",seg.title);
@@ -871,7 +974,7 @@ function bookEl(b, openToc){
     row.type="button"; row.className="ch";
     row.innerHTML=`<span class="ch-n">${String(i+1).padStart(2,"0")}</span>
       <span class="ch-t">${esc(title)}</span>
-      <span class="ch-d mono">${dur(c.seconds)}</span>`;
+      <span class="ch-d mono">${played?`<span class="ch-played">${ICON_CHECK}</span>`:""}${dur(c.seconds)}</span>`;
     row.addEventListener("click",()=>start(tracks,i));
 
     const copy=document.createElement("button");
@@ -969,6 +1072,10 @@ function load(autoplay){
   if(autoplay && mIsMobile()) mExpand();            // open expanded when they play something
   $("#prev").disabled = qi<=0;
   $("#next").disabled = qi>=queue.length-1;
+  const histEntry=HISTORY[tr.src];
+  if(shouldResume(histEntry)){
+    audio.addEventListener("loadedmetadata",()=>{ audio.currentTime=histEntry.position; },{once:true});
+  }
   if(autoplay) audio.play().catch(fail);
   paintSpines();
 }
@@ -983,7 +1090,11 @@ function paintSpines(){
   const tr=cur();
   for(const slug in refs){
     const R=refs[slug];
-    R.whole && (R.whole.dataset.on = (tr&&tr.slug===slug&&tr.kind==="full"&&!audio.paused)?"1":"0");
+    const wholeActive = tr && tr.slug===slug && (
+      (tr.kind==="full" && !R.continueEntry) ||
+      (R.continueEntry && tr.src===R.continueEntry.url)
+    );
+    R.whole && (R.whole.dataset.on = (wholeActive && !audio.paused)?"1":"0");
     R.segs.forEach((s,i)=>{
       const now = tr&&tr.slug===slug&&tr.kind==="chapter"&&tr.idx===i;
       s.dataset.now = now?"1":"0";
@@ -999,10 +1110,22 @@ function paintSpines(){
 
 audio.addEventListener("play",paintSpines);
 audio.addEventListener("pause",paintSpines);
+audio.addEventListener("pause",()=>forceRecordProgress(false));
+addEventListener("beforeunload",()=>forceRecordProgress(false));
 audio.addEventListener("error",()=>{ if(audio.src) fail(); });
 audio.addEventListener("ended",()=>{
   const tr=cur();
-  if(tr){ const R=refs[tr.slug]; if(R&&tr.kind==="chapter") R.segs[tr.idx].dataset.done="1"; }
+  if(tr){
+    const R=refs[tr.slug];
+    if(R&&tr.kind==="chapter"){
+      R.segs[tr.idx].dataset.done="1";
+      if(R.chs[tr.idx] && !R.chs[tr.idx].querySelector(".ch-played")){
+        const d=$(".ch-d",R.chs[tr.idx]);
+        d&&d.insertAdjacentHTML("afterbegin", `<span class="ch-played">${ICON_CHECK}</span>`);
+      }
+    }
+  }
+  forceRecordProgress(true);
   if(qi<queue.length-1){ qi++; load(true); } else { paintSpines(); }
 });
 audio.addEventListener("timeupdate",()=>{
@@ -1016,6 +1139,7 @@ audio.addEventListener("timeupdate",()=>{
   $("#mpDur").textContent=faDigits(clock(audio.duration));
   const tr=cur();
   if(tr&&tr.kind==="chapter"){ const R=refs[tr.slug]; R&&R.fills[tr.idx]&&(R.fills[tr.idx].style.width=p*100+"%"); }
+  maybeRecordProgress();
 });
 
 $("#toggle").addEventListener("click",()=>audio.paused?audio.play().catch(fail):audio.pause());
@@ -1094,6 +1218,48 @@ function resume(keep, ratio){
   load(false);
   audio.addEventListener("loadedmetadata",()=>{ if(audio.duration) audio.currentTime=ratio*audio.duration; },{once:true});
   if(keep.playing) audio.play().catch(fail);
+}
+
+/* Resume a specific history entry — used by the continue-listening row and a
+   book's own "Continue: <episode>" button. If the entry's language differs from
+   what's currently shown, switch first (same idea as the language toggle above);
+   the saved position itself is restored automatically by load()'s own check. */
+function playHistoryEntry(entry){
+  const b=(DATA.books||[]).find(x=>x.slug===entry.slug); if(!b) return;
+  if(entry.lang!==LANG){ LANG=entry.lang; localStorage.setItem("abs-lang",LANG); render(); }
+  const {full,chapters}=split(b);
+  if(entry.kind==="full"){
+    if(!full) return;
+    start([mkTrack(b,"full",full,0)],0);
+  }else{
+    let i = chapters.findIndex(c=>c.url===entry.url);
+    if(i<0) i = entry.idx;
+    if(!chapters[i]) return;
+    start(chapters.map((c,j)=>mkTrack(b,"chapter",c,j)), i);
+  }
+}
+
+function renderContinueRow(){
+  const wrap=$("#continueWrap"), row=$("#continueRow");
+  const entries = DATA ? continueListening(HISTORY) : [];
+  if(!entries.length){ wrap.hidden=true; row.innerHTML=""; return; }
+  const L=t();
+  row.innerHTML="";
+  entries.forEach(e=>{
+    const cover=(META[e.slug]&&META[e.slug].cover)||"";
+    const pct = e.duration ? Math.min(100, Math.round((e.position/e.duration)*100)) : 0;
+    const card=document.createElement("button");
+    card.type="button"; card.className="continue-card";
+    card.innerHTML=`
+      ${cover?`<img class="continue-cover" src="${esc(cover)}" alt="" loading="lazy" onerror="this.remove()">`:""}
+      <span class="continue-book">${esc(e.book)}</span>
+      <span class="continue-ep">${esc(e.label)}</span>
+      <span class="continue-bar"><span class="continue-bar-fill" style="width:${pct}%"></span></span>`;
+    card.addEventListener("click",()=>playHistoryEntry(e));
+    row.append(card);
+  });
+  $(".continue-title",wrap).textContent=L.continueTitle;
+  wrap.hidden=false;
 }
 
 /* ---------------- likes / dislikes (Supabase) ---------------- */
