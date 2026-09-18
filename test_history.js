@@ -17,6 +17,10 @@ const mod = { exports: {} };
 new Function("module", src + "\nmodule.exports = { shouldMarkPlayed, shouldResume, continueEntries, mostRecentInProgress, continueListening };")(mod);
 const { shouldMarkPlayed, shouldResume, continueEntries, mostRecentInProgress, continueListening } = mod.exports;
 
+/* ---- the whole inline <script> block must parse, not just the region above ---- */
+const fullScript = html.slice(html.indexOf("<script>") + "<script>".length, html.indexOf("</script>"));
+assert.doesNotThrow(() => new Function(fullScript), "index.html's entire inline script must parse without a SyntaxError");
+
 /* ---- shouldMarkPlayed(): finished enough to count as "played" ---- */
 assert.strictEqual(shouldMarkPlayed(950, 1000), true, "95% exactly counts as played");
 assert.strictEqual(shouldMarkPlayed(940, 1000), false, "94% is not played yet");

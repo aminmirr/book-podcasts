@@ -1092,7 +1092,7 @@ function paintSpines(){
     const R=refs[slug];
     const wholeActive = tr && tr.slug===slug && (
       (tr.kind==="full" && !R.continueEntry) ||
-      (R.continueEntry && tr.kind===R.continueEntry.kind && tr.idx===R.continueEntry.idx)
+      (R.continueEntry && tr.src===R.continueEntry.url)
     );
     R.whole && (R.whole.dataset.on = (wholeActive && !audio.paused)?"1":"0");
     R.segs.forEach((s,i)=>{
@@ -1232,8 +1232,10 @@ function playHistoryEntry(entry){
     if(!full) return;
     start([mkTrack(b,"full",full,0)],0);
   }else{
-    if(!chapters[entry.idx]) return;
-    start(chapters.map((c,i)=>mkTrack(b,"chapter",c,i)), entry.idx);
+    let i = chapters.findIndex(c=>c.url===entry.url);
+    if(i<0) i = entry.idx;
+    if(!chapters[i]) return;
+    start(chapters.map((c,j)=>mkTrack(b,"chapter",c,j)), i);
   }
 }
 
