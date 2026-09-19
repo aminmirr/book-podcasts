@@ -76,6 +76,7 @@ html[data-lang="fa"] .stat b{ font-family:'Vazirmatn',sans-serif; font-weight:80
 /* book */
 .book{ padding-block:clamp(30px,4.5vw,44px); border-bottom:1px solid var(--line); }
 .book-top{ display:grid; grid-template-columns:1fr auto; gap:20px 28px; align-items:start; }
+.book-top>.book-note,.book-top>.book-cats{ grid-column:1/-1; margin-top:0; }
 .book-id{ display:flex; gap:clamp(14px,3vw,22px); align-items:flex-start; min-width:0; }
 .cover{ width:clamp(58px,11vw,92px); aspect-ratio:2/3; object-fit:cover; flex:none;
   border-radius:3px; border:1px solid var(--line); background:var(--ink-raise);
@@ -332,7 +333,7 @@ footer a:hover{ color:var(--paper); }
   .book-top{ grid-template-columns:1fr; }
   .cover{ width:64px; }
   .whole{ width:100%; }
-  .book-side{ max-width:none; }
+  .book-side{ max-width:none; order:3; }   /* keep note/cats before the buttons, same order as before this column was widened */
   .ptime{ display:none; }
   .pnow span{ display:none; }
   .player-body{ gap:8px; }
@@ -874,11 +875,11 @@ function bookEl(b, openToc){
           <h2 class="book-title-en">${esc(titleEn)}${noFa?` <span class="no-fa"><span>${LANG==="fa"?"بدون ترجمه‌ی<br>رسمی فارسی":"No official<br>Persian translation"}</span></span>`:""}</h2>
           ${titleFa?`<p class="book-title-fa">${esc(titleFa)}</p>`:""}
           ${author?`<p class="book-author">${esc(author)}</p>`:""}
-          ${note?`<p class="book-note">${esc(note)}</p>`:""}
-          <div class="book-cats"></div>
         </div>
       </div>
       <div class="book-side"></div>
+      ${note?`<p class="book-note">${esc(note)}</p>`:""}
+      <div class="book-cats"></div>
     </div>
     <div class="spine-wrap">
       <div class="spine" role="group" aria-label="${esc(L.chapters)}"></div>
