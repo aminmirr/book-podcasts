@@ -945,10 +945,20 @@ function bookEl(b, openToc){
     const mark = (wholeHist && wholeHist.played) ? ICON_CHECK : "";
     w.innerHTML=`${ICON_PLAY}<span>${esc(L.whole)}</span><small>${mark}${dur(full.seconds)}</small>`;
     w.addEventListener("click",()=>{
+      R.expand();
       if(cur()?.slug===b.slug && cur()?.kind==="full"){ audio.paused?audio.play():audio.pause(); return; }
       start([mkTrack(b,"full",full,0)],0);
     });
     side.append(w); R.whole=w; R.fullTrack=mkTrack(b,"full",full,0);
+    /* Right next to the play button, before the continue button — so on a
+       book with something in progress (where the row wraps), download stays
+       paired with "Full summary" on the first line instead of dropping to
+       its own third line. */
+    const dl=document.createElement("a");
+    dl.className="whole-dl"; dl.href=full.url; dl.setAttribute("download","");
+    dl.title=L.dlWhole; dl.setAttribute("aria-label",L.dlWhole); dl.innerHTML=ICON_DL;
+    dl.addEventListener("click",()=>R.expand());
+    side.append(dl);
     /* A whole-book entry in progress is already covered by the button above
        (load() resumes it automatically since it's the same URL) — a second
        button here would just duplicate it. Only chapters get their own
@@ -959,15 +969,12 @@ function bookEl(b, openToc){
       const label=`${L.continue}: ${continueEntry.label}`;
       c.innerHTML=`${ICON_PLAY}<span>${esc(label)}</span><small>${dur(continueEntry.duration)}</small>`;
       c.addEventListener("click",()=>{
+        R.expand();
         if(cur() && cur().src===continueEntry.url){ audio.paused?audio.play():audio.pause(); return; }
         playHistoryEntry(continueEntry);
       });
       side.append(c); R.continueBtn=c;
     }
-    const dl=document.createElement("a");
-    dl.className="whole-dl"; dl.href=full.url; dl.setAttribute("download","");
-    dl.title=L.dlWhole; dl.setAttribute("aria-label",L.dlWhole); dl.innerHTML=ICON_DL;
-    side.append(dl);
   } else {
     side.innerHTML=`<span class="mono missing">${esc(L.missing)}</span>`;
   }
@@ -986,7 +993,7 @@ function bookEl(b, openToc){
     seg.title=`${L.chShort} ${num(i+1)} — ${title}`;   // hover: no duration
     seg.setAttribute("aria-label",seg.title);
     seg.innerHTML=`<span class="seg-fill"></span>`;
-    seg.addEventListener("click",()=>start(tracks,i));
+    seg.addEventListener("click",()=>{ R.expand(); start(tracks,i); });
     spine.append(seg);
     R.segs.push(seg); R.fills.push($(".seg-fill",seg));
 
