@@ -846,7 +846,7 @@
     "translated_fa": false,
     "title_fa": "SCIENCEعلوم غذایی",
     "author": "Norman N. Potter and Joseph H. Hotchkiss",
-    "cover": "/Users/aminmirlohi/develpment/book-podcasts/covers/food_science.jpg",
+    "cover": "covers/food_science.jpg",
     "note_en": "",
     "note_fa": "",
     "categories": [
@@ -953,7 +953,7 @@
     "translated_fa": false,
     "title_fa": "پایگاه داده ابری",
     "author": "Feifei Li, Xuan Zhou, Peng Cai, Rong Zhang, Gui Huang, XiangWen Liu",
-    "cover": "'/Users/aminmirlohi/develpment/book-podcasts/covers/Cloud Native Database Principle and Practice.jpg'",
+    "cover": "covers/Cloud Native Database Principle and Practice.jpg",
     "note_en": "",
     "note_fa": "",
     "categories": [
